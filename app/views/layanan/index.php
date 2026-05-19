@@ -5,7 +5,7 @@
         <h2 class="text-xl font-bold text-white">Form Pengajuan Surat Online</h2>
     </div>
     
-    <form action="<?= BASEURL; ?>/layanan/ajukan" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
+    <form onsubmit="this.querySelector('button[type=submit]').disabled=true; this.querySelector('button[type=submit]').innerText='Mengirim...'; return true;" action="<?= BASEURL; ?>/layanan/ajukan" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
         <input type="hidden" name="id_warga" value="<?= $data['warga']['id_warga']; ?>">
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

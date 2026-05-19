@@ -1,51 +1,155 @@
 <?php $this->view('templates/header', $data); ?>
 
-<div class="text-center py-12">
-    <h1 class="text-4xl font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-        Pelayanan Desa <span class="text-blue-600">Terpadu</span>
-    </h1>
-    <p class="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-        Sistem Informasi Pelayanan Desa Astambul Kota. Ajukan surat, kirim pengaduan, dan cek penerima bantuan dengan mudah dan transparan.
-    </p>
-    <div class="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
-        <div class="rounded-md shadow">
-            <a href="<?= BASEURL; ?>/layanan" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10">
-                Ajukan Layanan
+<!-- Hero Section -->
+<section class="py-12 lg:py-20 flex flex-col lg:flex-row items-center gap-12">
+    <div class="flex-1 space-y-8">
+
+        <h1 class="text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight">
+            APLIKASI PELAYANAN DESA DAN PENERIMA BLT<br> <span class="text-blue-600">PADA DESA ASTAMBUL KOTA</span>
+        </h1>
+        <p class="text-lg text-gray-600 leading-relaxed max-w-xl">
+            Akses layanan publik lebih cepat, transparan, dan efisien dari mana saja. Komitmen kami untuk kemudahan hidup warga Desa Astambul Kota.
+        </p>
+        <div class="flex flex-wrap gap-4">
+            <a href="<?= BASEURL; ?>/layanan" class="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold flex items-center hover:bg-blue-700 transition shadow-lg shadow-blue-200">
+                Lihat Layanan <i class="fas fa-arrow-right ml-3"></i>
+            </a>
+            <a href="#" class="bg-white text-slate-800 px-8 py-4 rounded-xl font-bold border-2 border-slate-100 hover:border-slate-200 transition">
+                Profil Desa
             </a>
         </div>
-        <div class="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
-            <a href="<?= BASEURL; ?>/pengaduan" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10">
-                Kirim Pengaduan
+    </div>
+    <div class="flex-1 relative">
+        <div class="absolute -top-4 -right-4 w-24 h-24 bg-blue-500 rounded-2xl -z-10 opacity-20 animate-pulse"></div>
+        <div class="rounded-3xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition duration-500">
+            <img src="https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&q=80&w=800" alt="Village Office" class="w-full h-[500px] object-cover">
+            <div class="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-xl border border-white/20">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-xl">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900">Layanan Mandiri 24/7</h4>
+                        <p class="text-sm text-gray-600">Urus dokumen kependudukan kapan saja tanpa antre.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Layanan Desa Section -->
+<section id="layanan" class="py-20 border-t border-gray-50">
+    <div class="text-center mb-16">
+        <h2 class="text-3xl font-extrabold text-slate-900 mb-4">Layanan Desa</h2>
+        <p class="text-gray-500 max-w-2xl mx-auto">
+            Satu portal untuk semua kebutuhan warga. Cepat, tepat, dan tanpa biaya tambahan.
+        </p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Card 1 -->
+        <div class="group bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+            <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <i class="fas fa-id-card"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-3">Administrasi Kependudukan</h3>
+            <p class="text-gray-500 text-sm mb-6 leading-relaxed">
+                Pengurusan KTP, Kartu Keluarga, dan surat keterangan secara daring.
+            </p>
+            <a href="<?= BASEURL; ?>/layanan" class="text-blue-600 font-bold text-sm flex items-center hover:gap-2 transition-all">
+                Selengkapnya <i class="fas fa-arrow-right ml-2 text-xs"></i>
+            </a>
+        </div>
+        <!-- Card 2 -->
+        <div class="group bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+            <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <i class="fas fa-heartbeat"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-3">Layanan Kesehatan</h3>
+            <p class="text-gray-500 text-sm mb-6 leading-relaxed">
+                Pendaftaran Puskesmas pembantu, cek status stunting, dan info ambulans.
+            </p>
+            <a href="#" class="text-blue-600 font-bold text-sm flex items-center hover:gap-2 transition-all">
+                Selengkapnya <i class="fas fa-arrow-right ml-2 text-xs"></i>
+            </a>
+        </div>
+        <!-- Card 3 -->
+        <div class="group bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+            <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-3">Pendidikan & Pelatihan</h3>
+            <p class="text-gray-500 text-sm mb-6 leading-relaxed">
+                Akses beasiswa desa, pendaftaran PAUD, dan pelatihan UMKM digital.
+            </p>
+            <a href="#" class="text-blue-600 font-bold text-sm flex items-center hover:gap-2 transition-all">
+                Selengkapnya <i class="fas fa-arrow-right ml-2 text-xs"></i>
+            </a>
+        </div>
+        <!-- Card 4 -->
+        <div class="group bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+            <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <i class="fas fa-store"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-3">Pasar Desa Digital</h3>
+            <p class="text-gray-500 text-sm mb-6 leading-relaxed">
+                E-commerce lokal untuk mempromosikan produk unggulan warga desa.
+            </p>
+            <a href="#" class="text-blue-600 font-bold text-sm flex items-center hover:gap-2 transition-all">
+                Selengkapnya <i class="fas fa-arrow-right ml-2 text-xs"></i>
             </a>
         </div>
     </div>
-</div>
+</section>
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-    <!-- Feature 1 -->
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
-        <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center mb-4 text-2xl">
-            <i class="fas fa-file-alt"></i>
+<!-- Kabar Terbaru Section -->
+<section id="berita" class="py-20 border-t border-gray-50">
+    <div class="flex justify-between items-end mb-12">
+        <div>
+            <h2 class="text-3xl font-extrabold text-slate-900 mb-2">Kabar Terbaru Desa</h2>
+            <p class="text-gray-500">Ikuti perkembangan dan kegiatan di lingkungan kita.</p>
         </div>
-        <h3 class="text-xl font-semibold mb-2">Surat Online</h3>
-        <p class="text-gray-600">Ajukan berbagai jenis surat keterangan dan dokumen desa secara online tanpa antre lama.</p>
+        <a href="#" class="text-blue-600 font-bold hover:underline">Lihat Semua Berita</a>
     </div>
-    <!-- Feature 2 -->
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
-        <div class="w-12 h-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center mb-4 text-2xl">
-            <i class="fas fa-hand-holding-heart"></i>
-        </div>
-        <h3 class="text-xl font-semibold mb-2">Bantuan (BLT)</h3>
-        <p class="text-gray-600">Transparansi seleksi penerima bantuan menggunakan algoritma SAW yang adil dan akurat.</p>
-    </div>
-    <!-- Feature 3 -->
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
-        <div class="w-12 h-12 bg-red-100 text-red-600 rounded-lg flex items-center justify-center mb-4 text-2xl">
-            <i class="fas fa-exclamation-circle"></i>
-        </div>
-        <h3 class="text-xl font-semibold mb-2">Pengaduan</h3>
-        <p class="text-gray-600">Sampaikan keluhan atau aspirasi Anda langsung kepada pemerintah desa dengan sistem prioritas.</p>
-    </div>
-</div>
 
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- News 1 -->
+        <article class="group">
+            <div class="rounded-2xl overflow-hidden mb-6 aspect-video">
+                <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=80&w=500" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+            </div>
+            <div class="flex items-center gap-3 mb-4">
+                <span class="text-xs font-bold text-gray-400">12 Okt 2023</span>
+                <span class="px-2 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold rounded uppercase">Kegiatan</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition mb-3">Pelatihan Literasi Digital Warga Desa Astambul Kota</h3>
+            <p class="text-gray-500 text-sm line-clamp-2">Pemerintah desa mengadakan workshop penggunaan aplikasi mobile untuk memudahkan...</p>
+        </article>
+        <!-- News 2 -->
+        <article class="group">
+            <div class="rounded-2xl overflow-hidden mb-6 aspect-video">
+                <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=500" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+            </div>
+            <div class="flex items-center gap-3 mb-4">
+                <span class="text-xs font-bold text-gray-400">08 Okt 2023</span>
+                <span class="px-2 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold rounded uppercase">Pembangunan</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition mb-3">Pembangunan Drainase Terintegrasi Musim Hujan</h3>
+            <p class="text-gray-500 text-sm line-clamp-2">Pengerjaan infrastruktur drainase utama telah mencapai 80% guna mengantisipasi banjir...</p>
+        </article>
+        <!-- News 3 -->
+        <article class="group">
+            <div class="rounded-2xl overflow-hidden mb-6 aspect-video">
+                <img src="https://images.unsplash.com/photo-1573163281530-5be9c28aa7bb?auto=format&fit=crop&q=80&w=500" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+            </div>
+            <div class="flex items-center gap-3 mb-4">
+                <span class="text-xs font-bold text-gray-400">05 Okt 2023</span>
+                <span class="px-2 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold rounded uppercase">Keuangan</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition mb-3">Laporan Realisasi Dana Desa Tahap III Tahun 2023</h3>
+            <p class="text-gray-500 text-sm line-clamp-2">Sebagai bentuk transparansi, berikut adalah laporan mendetail mengenai alokasi dana desa...</p>
+        </article>
+    </div>
+</section>
 <?php $this->view('templates/footer', $data); ?>

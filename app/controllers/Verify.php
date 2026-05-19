@@ -19,4 +19,16 @@ class Verify extends Controller {
         
         $this->view('verify/index', $data);
     }
+
+    public function check() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $token = $_POST['token'] ?? null;
+            if ($token) {
+                header('Location: ' . BASEURL . '/verify/' . $token);
+                exit;
+            }
+        }
+        header('Location: ' . BASEURL . '/verify');
+        exit;
+    }
 }

@@ -19,8 +19,8 @@ class PengaduanModel {
     }
 
     public function kirimPengaduan($data) {
-        $query = "INSERT INTO pengaduan (id_warga, judul_aduan, isi_aduan, kategori_aduan, file_bukti, prioritas, status, tanggal_aduan) 
-                  VALUES (:id_warga, :judul_aduan, :isi_aduan, :kategori_aduan, :file_bukti, :prioritas, 'menunggu', NOW())";
+        $query = "INSERT INTO pengaduan (id_warga, judul_aduan, isi_aduan, kategori_aduan, file_bukti, nilai_prioritas, prioritas, status, tanggal_aduan) 
+                  VALUES (:id_warga, :judul_aduan, :isi_aduan, :kategori_aduan, :file_bukti, :nilai_prioritas, :prioritas, 'menunggu', NOW())";
         
         $this->db->query($query);
         $this->db->bind('id_warga', $data['id_warga']);
@@ -28,6 +28,7 @@ class PengaduanModel {
         $this->db->bind('isi_aduan', $data['isi_aduan']);
         $this->db->bind('kategori_aduan', $data['kategori_aduan']);
         $this->db->bind('file_bukti', $data['file_bukti']);
+        $this->db->bind('nilai_prioritas', $data['nilai_prioritas']);
         $this->db->bind('prioritas', $data['prioritas']);
 
         return $this->db->execute();

@@ -58,9 +58,9 @@
                 <h3 class="text-xl font-bold text-gray-800 mb-2">Token Tidak Ditemukan</h3>
                 <p class="text-gray-500 mb-8">Maaf, token verifikasi tidak valid atau dokumen tidak terdaftar dalam sistem kami.</p>
                 
-                <form action="<?= BASEURL; ?>/verify" method="GET" class="max-w-sm mx-auto">
+                <form action="<?= BASEURL; ?>/verify/check" method="POST" class="max-w-sm mx-auto">
                     <div class="flex space-x-2">
-                        <input type="text" name="url" placeholder="Masukkan Token..." class="flex-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
+                        <input type="text" name="token" placeholder="Masukkan Token..." class="flex-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
                         <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">Cek</button>
                     </div>
                 </form>

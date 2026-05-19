@@ -10,7 +10,12 @@ class Dashboard extends Controller {
 
     public function index() {
         $level = $_SESSION['user']['level'];
-        header('Location: ' . BASEURL . '/dashboard/' . $level);
+        if ($level == 'masyarakat') {
+            header('Location: ' . BASEURL . '/dashboard/warga');
+        } else {
+            header('Location: ' . BASEURL . '/dashboard/' . $level);
+        }
+        exit;
     }
 
     public function kades() {
@@ -50,7 +55,23 @@ class Dashboard extends Controller {
         
         $suratModel = $this->model('SuratModel');
         $data['pengajuan'] = $suratModel->getPengajuanByWarga($data['warga']['id_warga']);
+
+        $pengaduanModel = $this->model('PengaduanModel');
+        $data['pengaduan'] = $pengaduanModel->getPengaduanByWarga($data['warga']['id_warga']);
         
         $this->view('dashboard/warga', $data);
+    }
+
+    public function update_profil() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $wargaModel = $this->model('WargaModel');
+            if ($wargaModel->updateWarga($_POST)) {
+                $_SESSION['flash'] = ['type' => 'success', 'message' => 'Profil Anda berhasil diperbarui!'];
+            } else {
+                $_SESSION['flash'] = ['type' => 'error', 'message' => 'Gagal memperbarui profil.'];
+            }
+            header('Location: ' . BASEURL . '/dashboard/warga');
+            exit;
+        }
     }
 }

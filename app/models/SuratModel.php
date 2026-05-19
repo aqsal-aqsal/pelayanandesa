@@ -8,8 +8,29 @@ class SuratModel {
     }
 
     public function getJenisSurat() {
-        $this->db->query('SELECT * FROM jenis_surat');
+        $this->db->query('SELECT * FROM jenis_surat ORDER BY nama_surat ASC');
         return $this->db->resultSet();
+    }
+
+    public function addJenisSurat($data) {
+        $this->db->query("INSERT INTO jenis_surat (nama_surat, prioritas) VALUES (:nama, :prioritas)");
+        $this->db->bind('nama', $data['nama_surat']);
+        $this->db->bind('prioritas', $data['prioritas']);
+        return $this->db->execute();
+    }
+
+    public function updateJenisSurat($data) {
+        $this->db->query("UPDATE jenis_surat SET nama_surat = :nama, prioritas = :prioritas WHERE id_jenis_surat = :id");
+        $this->db->bind('nama', $data['nama_surat']);
+        $this->db->bind('prioritas', $data['prioritas']);
+        $this->db->bind('id', $data['id_jenis_surat']);
+        return $this->db->execute();
+    }
+
+    public function deleteJenisSurat($id) {
+        $this->db->query("DELETE FROM jenis_surat WHERE id_jenis_surat = :id");
+        $this->db->bind('id', $id);
+        return $this->db->execute();
     }
 
     public function getPengajuanByWarga($id_warga) {
@@ -19,8 +40,34 @@ class SuratModel {
     }
 
     public function getAllPengajuan() {
-        $this->db->query('SELECT p.*, j.nama_surat, w.nama_lengkap FROM pengajuan_surat p JOIN jenis_surat j ON p.id_jenis_surat = j.id_jenis_surat JOIN warga w ON p.id_warga = w.id_warga ORDER BY p.prioritas DESC, p.tanggal_pengajuan ASC');
+        $this->db->query('SELECT p.*, j.nama_surat, w.nama_lengkap, w.nik FROM pengajuan_surat p JOIN jenis_surat j ON p.id_jenis_surat = j.id_jenis_surat JOIN warga w ON p.id_warga = w.id_warga ORDER BY p.prioritas DESC, p.tanggal_pengajuan ASC');
         return $this->db->resultSet();
+    }
+
+    public function getPengajuanById($id_pengajuan) {
+        $this->db->query('SELECT p.*, j.nama_surat, j.kode_surat, w.nama_lengkap, w.nik, w.tempat_lahir, w.tanggal_lahir, w.jenis_kelamin, w.alamat, w.rt_rw, pt.nama_petugas AS nama_kades, pt.ttd AS ttd_kades
+                          FROM pengajuan_surat p 
+                          JOIN jenis_surat j ON p.id_jenis_surat = j.id_jenis_surat 
+                          JOIN warga w ON p.id_warga = w.id_warga 
+                          LEFT JOIN petugas pt ON p.id_kades_ttd = pt.id_petugas
+                          WHERE p.id_pengajuan = :id');
+        $this->db->bind('id', $id_pengajuan);
+        return $this->db->single();
+    }
+
+    public function setNoSurat($id_pengajuan, $no_surat) {
+        $this->db->query('UPDATE pengajuan_surat SET no_surat = :no_surat WHERE id_pengajuan = :id');
+        $this->db->bind('no_surat', $no_surat);
+        $this->db->bind('id', $id_pengajuan);
+        return $this->db->execute();
+    }
+
+    public function setQr($id_pengajuan, $token, $url) {
+        $this->db->query('UPDATE pengajuan_surat SET qr_token = :token, qr_url = :url WHERE id_pengajuan = :id');
+        $this->db->bind('token', $token);
+        $this->db->bind('url', $url);
+        $this->db->bind('id', $id_pengajuan);
+        return $this->db->execute();
     }
 
     public function ajukanSurat($data) {
@@ -36,9 +83,7 @@ class SuratModel {
         $this->db->bind('prioritas', $data['prioritas']); // Priority logic here
 
         if ($this->db->execute()) {
-            $id_pengajuan = $this->db->single()['id_pengajuan'] ?? null; // Need to get last insert ID
-            // Logic to add to antrian_layanan
-            return true;
+            return $this->db->lastInsertId();
         }
         return false;
     }
@@ -49,6 +94,35 @@ class SuratModel {
         $this->db->bind('status', $status);
         $this->db->bind('catatan', $catatan);
         $this->db->bind('petugas_id', $petugas_id);
+        $this->db->bind('id', $id);
+        return $this->db->execute();
+    }
+
+    public function kadesTandaTangan($id, $kades_id) {
+        $this->db->query('SELECT qr_token FROM pengajuan_surat WHERE id_pengajuan = :id');
+        $this->db->bind('id', $id);
+        $row = $this->db->single();
+        $token = $row['qr_token'] ?? null;
+
+        if (!$token) {
+            $token = bin2hex(random_bytes(16));
+        }
+
+        $url = defined('BASEURL') ? (BASEURL . '/verify/' . $token) : null;
+
+        $query = "UPDATE pengajuan_surat 
+                  SET status = 'selesai', id_kades_ttd = :kades_id, tanggal_selesai = NOW(), is_verified = 1, qr_token = :token, qr_url = :url 
+                  WHERE id_pengajuan = :id";
+        $this->db->query($query);
+        $this->db->bind('kades_id', $kades_id);
+        $this->db->bind('token', $token);
+        $this->db->bind('url', $url);
+        $this->db->bind('id', $id);
+        return $this->db->execute();
+    }
+
+    public function deletePengajuan($id) {
+        $this->db->query("DELETE FROM pengajuan_surat WHERE id_pengajuan = :id AND status = 'menunggu'");
         $this->db->bind('id', $id);
         return $this->db->execute();
     }

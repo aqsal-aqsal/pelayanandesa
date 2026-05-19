@@ -1,122 +1,137 @@
 <?php $this->view('templates/header', $data); ?>
 
-<div class="flex flex-col md:flex-row gap-6">
-    <!-- Sidebar -->
-    <aside class="w-full md:w-64 bg-white rounded-xl shadow-sm border border-gray-100 p-6 h-fit">
-        <div class="flex items-center space-x-3 mb-8">
-            <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
-                <?= substr($data['user']['nik'], 0, 1); ?>
-            </div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+    <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden group">
+        <div class="absolute top-4 right-4 text-gray-300 group-hover:text-emerald-500 transition">
+            <i class="fas fa-ellipsis-v"></i>
+        </div>
+        <p class="text-sm font-semibold text-gray-500 mb-4">Total Surat Diajukan</p>
+        <div class="flex items-end justify-between">
             <div>
-                <p class="text-sm font-semibold text-gray-900">Kepala Desa</p>
-                <p class="text-xs text-gray-500"><?= $data['user']['nik']; ?></p>
+                <h3 class="text-4xl font-bold text-slate-900 mb-2"><?= $data['total_surat']; ?></h3>
+                <p class="text-xs font-bold text-emerald-500 flex items-center">
+                    <i class="fas fa-arrow-up mr-1"></i> 40% <span class="text-gray-400 font-normal ml-1">vs last month</span>
+                </p>
+            </div>
+            <div class="w-24 h-12">
+                <canvas id="miniChart1"></canvas>
             </div>
         </div>
-        
-        <nav class="space-y-2">
-            <a href="<?= BASEURL; ?>/dashboard/kades" class="flex items-center space-x-3 p-3 rounded-lg bg-blue-50 text-blue-600 font-medium">
-                <i class="fas fa-chart-line"></i>
-                <span>Statistik</span>
-            </a>
-            <a href="<?= BASEURL; ?>/layanan/admin" class="flex items-center space-x-3 p-3 rounded-lg text-gray-600 hover:bg-gray-50">
-                <i class="fas fa-file-invoice"></i>
-                <span>Data Layanan</span>
-            </a>
-            <a href="<?= BASEURL; ?>/pengaduan/admin" class="flex items-center space-x-3 p-3 rounded-lg text-gray-600 hover:bg-gray-50">
-                <i class="fas fa-exclamation-triangle"></i>
-                <span>Data Pengaduan</span>
-            </a>
-            <a href="<?= BASEURL; ?>/blt/admin" class="flex items-center space-x-3 p-3 rounded-lg text-gray-600 hover:bg-gray-50">
-                <i class="fas fa-users"></i>
-                <span>Data BLT (SAW)</span>
-            </a>
-            <hr class="my-4">
-            <a href="<?= BASEURL; ?>/auth/logout" class="flex items-center space-x-3 p-3 rounded-lg text-red-600 hover:bg-red-50">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Keluar</span>
-            </a>
-        </nav>
-    </aside>
+    </div>
 
-    <!-- Main Content -->
-    <div class="flex-1 space-y-6">
-        <!-- Stats Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <p class="text-sm text-gray-500 font-medium">Total Surat</p>
-                <p class="text-2xl font-bold text-gray-900"><?= $data['total_surat']; ?></p>
+    <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden group">
+        <div class="absolute top-4 right-4 text-gray-300 group-hover:text-rose-500 transition">
+            <i class="fas fa-ellipsis-v"></i>
+        </div>
+        <p class="text-sm font-semibold text-gray-500 mb-4">Pengaduan Selesai</p>
+        <div class="flex items-end justify-between">
+            <div>
+                <h3 class="text-4xl font-bold text-slate-900 mb-2">1,210</h3>
+                <p class="text-xs font-bold text-rose-500 flex items-center">
+                    <i class="fas fa-arrow-down mr-1"></i> 10% <span class="text-gray-400 font-normal ml-1">vs last month</span>
+                </p>
             </div>
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <p class="text-sm text-gray-500 font-medium">Total Pengaduan</p>
-                <p class="text-2xl font-bold text-gray-900"><?= $data['total_pengaduan']; ?></p>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <p class="text-sm text-gray-500 font-medium">Penerima BLT</p>
-                <p class="text-2xl font-bold text-gray-900">120</p>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <p class="text-sm text-gray-500 font-medium">Warga Terdaftar</p>
-                <p class="text-2xl font-bold text-gray-900">1.250</p>
+            <div class="w-24 h-12">
+                <canvas id="miniChart2"></canvas>
             </div>
         </div>
+    </div>
 
-        <!-- Charts -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <h3 class="text-lg font-semibold mb-4 text-gray-800">Jumlah Surat per Bulan</h3>
-                <canvas id="suratChart"></canvas>
+    <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden group">
+        <div class="absolute top-4 right-4 text-gray-300 group-hover:text-emerald-500 transition">
+            <i class="fas fa-ellipsis-v"></i>
+        </div>
+        <p class="text-sm font-semibold text-gray-500 mb-4">Permintaan Verifikasi</p>
+        <div class="flex items-end justify-between">
+            <div>
+                <h3 class="text-4xl font-bold text-slate-900 mb-2">316</h3>
+                <p class="text-xs font-bold text-emerald-500 flex items-center">
+                    <i class="fas fa-arrow-up mr-1"></i> 20% <span class="text-gray-400 font-normal ml-1">vs last month</span>
+                </p>
             </div>
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <h3 class="text-lg font-semibold mb-4 text-gray-800">Status Pengaduan</h3>
-                <canvas id="pengaduanChart"></canvas>
+            <div class="w-24 h-12">
+                <canvas id="miniChart3"></canvas>
             </div>
         </div>
     </div>
 </div>
 
-<script>
-    // Surat Chart
-    const ctxSurat = document.getElementById('suratChart').getContext('2d');
-    new Chart(ctxSurat, {
-        type: 'line',
-        data: {
-            labels: <?= json_encode($data['chart_surat']['labels']); ?>,
-            datasets: [{
-                label: 'Jumlah Pengajuan',
-                data: <?= json_encode($data['chart_surat']['data']); ?>,
-                borderColor: 'rgb(37, 99, 235)',
-                backgroundColor: 'rgba(37, 99, 235, 0.1)',
-                tension: 0.4,
-                fill: true
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: { legend: { display: false } }
-        }
-    });
+<!-- Section: Pengajuan Terbaru -->
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-10">
+    <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+        <h3 class="font-bold text-slate-800">Daftar Pengajuan Terbaru</h3>
+        <div class="relative">
+            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+            <input type="text" placeholder="Search" class="pl-8 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
+        </div>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead class="bg-gray-50/50">
+                <tr>
+                    <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Warga</th>
+                    <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Jenis Surat</th>
+                    <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Tanggal</th>
+                    <th class="px-6 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest text-right">Aksi</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                <!-- Data will come from backend, this is matching UI ref -->
+                <tr class="hover:bg-gray-50/50 transition">
+                    <td class="px-6 py-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs">A</div>
+                            <span class="text-sm font-medium text-slate-700">Ahmad Sahid</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-500">Surat Keterangan Usaha</td>
+                    <td class="px-6 py-4 text-sm text-gray-500">24 Januari 2026</td>
+                    <td class="px-6 py-4 text-right">
+                        <button class="text-gray-400 hover:text-blue-600 transition mx-2"><i class="fas fa-edit text-xs"></i></button>
+                        <button class="text-gray-400 hover:text-rose-600 transition mx-2"><i class="fas fa-trash text-xs"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="p-6 border-t border-gray-100 flex justify-between items-center bg-gray-50/30">
+        <div class="flex space-x-2">
+            <button class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-50">Sebelumnya</button>
+            <button class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-50">Selanjutnya</button>
+        </div>
+        <span class="text-xs text-gray-400">Halaman 1 dari 10</span>
+    </div>
+</div>
 
-    // Pengaduan Chart
-    const ctxPengaduan = document.getElementById('pengaduanChart').getContext('2d');
-    new Chart(ctxPengaduan, {
-        type: 'doughnut',
-        data: {
-            labels: ['Selesai', 'Diproses', 'Menunggu', 'Ditolak'],
-            datasets: [{
-                data: [45, 25, 15, 5],
-                backgroundColor: [
-                    'rgb(34, 197, 94)',
-                    'rgb(234, 179, 8)',
-                    'rgb(59, 130, 246)',
-                    'rgb(239, 68, 68)'
-                ]
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: { legend: { position: 'bottom' } }
-        }
-    });
+<script>
+    // Mock Mini Charts
+    const createMiniChart = (id, color) => {
+        new Chart(document.getElementById(id), {
+            type: 'line',
+            data: {
+                labels: [1,2,3,4,5,6],
+                datasets: [{
+                    data: [10, 25, 15, 30, 20, 35],
+                    borderColor: color,
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    tension: 0.4,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { x: { display: false }, y: { display: false } }
+            }
+        });
+    };
+
+    createMiniChart('miniChart1', '#10B981');
+    createMiniChart('miniChart2', '#F43F5E');
+    createMiniChart('miniChart3', '#10B981');
 </script>
 
 <?php $this->view('templates/footer', $data); ?>
