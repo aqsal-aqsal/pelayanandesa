@@ -52,16 +52,20 @@
                                         <?= $c['status']; ?>
                                     </span>
                                 </td>
-                                <td class="px-8 py-5 text-right">
+                                <td class="px-8 py-5 text-right flex justify-end items-center gap-2">
                                     <?php if($_SESSION['user']['level'] == 'petugas'): ?>
-                                        <button onclick='openNilaiModal(<?= $c['id_calon']; ?>, <?= json_encode($c); ?>)' class="px-4 py-2 bg-slate-900 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition">
+                                        <button onclick='openNilaiModal(<?= $c['id_calon']; ?>, <?= json_encode($c); ?>)' class="px-4 py-2 bg-slate-900 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition flex items-center">
                                             Input Nilai
                                         </button>
                                         <?php if($c['status'] == 'diusulkan'): ?>
-                                            <a href="<?= BASEURL; ?>/blt/ajukan_kades/<?= $data['id_program']; ?>/<?= $c['id_calon']; ?>" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-700 transition shadow-lg shadow-blue-100">
+                                            <a href="<?= BASEURL; ?>/blt/ajukan_kades/<?= $data['id_program']; ?>/<?= $c['id_calon']; ?>" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-700 transition shadow-lg shadow-blue-100 flex items-center">
                                                 Ajukan Kades
                                             </a>
                                         <?php endif; ?>
+                                    <?php elseif($_SESSION['user']['level'] == 'kades'): ?>
+                                        <button onclick='openNilaiModal(<?= $c['id_calon']; ?>, <?= json_encode($c); ?>, true)' class="px-4 py-2 bg-blue-50 text-blue-600 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-100 transition flex items-center">
+                                            Lihat Nilai
+                                        </button>
                                     <?php else: ?>
                                         <span class="text-[10px] font-black text-gray-300 uppercase tracking-widest">No Action</span>
                                     <?php endif; ?>
@@ -99,15 +103,15 @@
 <div id="nilaiModal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm overflow-y-auto h-full w-full z-50 transition-all duration-300">
     <div class="relative top-20 mx-auto p-10 border w-[650px] shadow-2xl rounded-[32px] bg-white mb-20">
         <div class="text-center mb-8">
-            <h3 class="text-2xl font-black text-slate-900">Input Nilai Kriteria</h3>
+            <h3 class="text-2xl font-black text-slate-900" id="nilaiTitle">Input Nilai Kriteria</h3>
             <p class="text-sm text-gray-400 mt-2" id="nilaiSubtitle"></p>
         </div>
 
-        <form action="<?= BASEURL; ?>/blt/simpan_nilai" method="POST" class="space-y-6 text-left">
+        <form id="nilaiForm" action="<?= BASEURL; ?>/blt/simpan_nilai" method="POST" class="space-y-6 text-left">
             <input type="hidden" name="id_program" value="<?= $data['id_program']; ?>">
             <input type="hidden" name="id_calon" id="nilai_id_calon">
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="nilaiInputsContainer">
                 <?php if(empty($data['kriteria'])): ?>
                     <div class="col-span-full bg-amber-50 border border-amber-100 text-amber-700 p-5 rounded-2xl text-sm">
                         Belum ada kriteria. Tambahkan kriteria terlebih dahulu.
@@ -126,7 +130,7 @@
 
             <div class="flex space-x-3 pt-4">
                 <button type="button" onclick="closeNilaiModal()" class="flex-1 py-4 bg-gray-100 text-gray-500 font-bold rounded-2xl hover:bg-gray-200 transition">Batal</button>
-                <button type="submit" class="flex-[2] py-4 bg-blue-600 text-white font-black rounded-2xl shadow-lg shadow-blue-100 hover:bg-blue-700 transition">Simpan Nilai</button>
+                <button type="submit" id="nilaiSubmitBtn" class="flex-[2] py-4 bg-blue-600 text-white font-black rounded-2xl shadow-lg shadow-blue-100 hover:bg-blue-700 transition">Simpan Nilai</button>
             </div>
         </form>
     </div>
@@ -142,10 +146,32 @@
         document.body.style.overflow = 'auto';
     }
 
-    function openNilaiModal(idCalon, dataCalon) {
+    function openNilaiModal(idCalon, dataCalon, isDetail = false) {
+        const modal = document.getElementById('nilaiModal');
+        const form = document.getElementById('nilaiForm');
+        const title = document.getElementById('nilaiTitle');
+        const submitBtn = document.getElementById('nilaiSubmitBtn');
+        const inputs = form.querySelectorAll('input:not([type="hidden"])');
+
         document.getElementById('nilai_id_calon').value = idCalon;
         document.getElementById('nilaiSubtitle').innerText = 'NIK: ' + dataCalon.nik + ' | Nama: ' + dataCalon.nama_lengkap;
-        document.getElementById('nilaiModal').classList.remove('hidden');
+        
+        if (isDetail) {
+            title.innerText = 'Detail Nilai Kriteria';
+            submitBtn.classList.add('hidden');
+            inputs.forEach(input => input.readOnly = true);
+            
+            // Note: In a real app, you'd fetch the existing values here
+            // For now, we just show the readonly fields
+        } else {
+            title.innerText = 'Input Nilai Kriteria';
+            submitBtn.classList.remove('hidden');
+            inputs.forEach(input => input.readOnly = false);
+            form.reset();
+            document.getElementById('nilai_id_calon').value = idCalon;
+        }
+
+        modal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
     }
     function closeNilaiModal() {

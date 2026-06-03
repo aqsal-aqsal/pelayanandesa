@@ -9,19 +9,26 @@ class Blt extends Controller {
     }
 
     public function index() {
+        if ($_SESSION['user']['level'] != 'masyarakat') {
+            header('Location: ' . BASEURL . '/blt/admin');
+            exit;
+        }
+
         $data['judul'] = 'Bantuan Langsung Tunai (BLT)';
         $bltModel = $this->model('BltModel');
         $data['programs'] = $bltModel->getPrograms();
         
-        // If user is warga, auto-check their result
-        if ($_SESSION['user']['level'] == 'masyarakat') {
-            $data['hasil_saya'] = $bltModel->getHasilByNik($_SESSION['user']['nik']);
-        }
+        $data['hasil_saya'] = $bltModel->getHasilByNik($_SESSION['user']['nik']);
         
         $this->view('blt/index', $data);
     }
 
     public function cek_hasil() {
+        if ($_SESSION['user']['level'] != 'masyarakat') {
+            header('Location: ' . BASEURL . '/blt/admin');
+            exit;
+        }
+
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $nik = $_POST['nik'];
             $bltModel = $this->model('BltModel');
@@ -33,6 +40,11 @@ class Blt extends Controller {
     }
 
     public function detail($id_program) {
+        if ($_SESSION['user']['level'] != 'kades' && $_SESSION['user']['level'] != 'petugas') {
+            header('Location: ' . BASEURL . '/dashboard');
+            exit;
+        }
+
         $bltModel = $this->model('BltModel');
         $data['judul'] = 'Detail Seleksi BLT';
         $data['program'] = null; // Get from DB

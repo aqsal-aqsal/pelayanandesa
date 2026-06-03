@@ -20,6 +20,10 @@ class Warga extends Controller {
     }
 
     public function tambah() {
+        if ($_SESSION['user']['level'] == 'kades') {
+            header('Location: ' . BASEURL . '/warga/admin');
+            exit;
+        }
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($this->model('WargaModel')->addWarga($_POST)) {
                 $_SESSION['flash'] = ['type' => 'success', 'message' => 'Data warga berhasil ditambahkan!'];
@@ -32,6 +36,10 @@ class Warga extends Controller {
     }
 
     public function edit() {
+        if ($_SESSION['user']['level'] == 'kades') {
+            header('Location: ' . BASEURL . '/warga/admin');
+            exit;
+        }
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($this->model('WargaModel')->updateWarga($_POST)) {
                 $_SESSION['flash'] = ['type' => 'success', 'message' => 'Data warga berhasil diperbarui!'];
@@ -44,6 +52,10 @@ class Warga extends Controller {
     }
 
     public function hapus($id) {
+        if ($_SESSION['user']['level'] == 'kades') {
+            header('Location: ' . BASEURL . '/warga/admin');
+            exit;
+        }
         if ($this->model('WargaModel')->deleteWarga($id)) {
             $_SESSION['flash'] = ['type' => 'success', 'message' => 'Data warga berhasil dihapus!'];
         } else {

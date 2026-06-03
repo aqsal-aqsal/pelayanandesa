@@ -5,7 +5,7 @@ require_once 'core/App.php';
 require_once 'core/Controller.php';
 require_once 'core/Database.php';
 
-if (PHP_VERSION_ID >= 80200 && file_exists('../vendor/autoload.php')) {
+if (file_exists('../vendor/autoload.php')) {
     require_once '../vendor/autoload.php';
 }
 

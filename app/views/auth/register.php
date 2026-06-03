@@ -6,6 +6,9 @@
             <img src="<?= BASEURL; ?>/assets/img/logokabbanjar.png" alt="Logo Kabupaten Banjar" class="w-20 h-20 object-contain mx-auto mb-4">
             <h2 class="text-2xl font-black text-slate-900 tracking-tight">Registrasi Warga</h2>
             <p class="text-gray-500 font-medium">Daftar untuk mengakses layanan desa</p>
+            <button type="button" onclick="autofill()" class="mt-4 text-xs font-bold text-blue-600 hover:text-blue-800 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full transition-all">
+                <i class="fas fa-magic mr-1"></i> Autofill Data
+            </button>
         </div>
 
         <?php if(isset($_SESSION['flash'])): ?>
@@ -75,6 +78,26 @@
                 <i class="fas fa-arrow-left mr-2 text-xs"></i> Kembali ke Beranda
             </a>
         </div>
+<script>
+    function autofill() {
+        const names = ['Ahmad Fauzi', 'Siti Aminah', 'Budi Santoso', 'Dewi Lestari', 'Eko Prasetyo', 'Rina Wijaya'];
+        const address = ['Jl. Melati No. 12, Astambul', 'Jl. Mawar No. 5, Astambul Kota', 'RT 002 RW 001, Astambul', 'Kec. Astambul, Kab. Banjar'];
+        
+        const randomName = names[Math.floor(Math.random() * names.length)];
+        const randomAddress = address[Math.floor(Math.random() * address.length)];
+        const randomNIK = '6303' + Math.floor(Math.random() * 1000000000000).toString().padStart(12, '0');
+        const randomHP = '08' + Math.floor(Math.random() * 1000000000).toString().padStart(10, '0');
+        const email = randomName.toLowerCase().replace(' ', '.') + '@gmail.com';
+
+        document.querySelector('input[name="nik"]').value = randomNIK;
+        document.querySelector('input[name="nama_lengkap"]').value = randomName;
+        document.querySelector('input[name="alamat"]').value = randomAddress;
+        document.querySelector('input[name="no_hp"]').value = randomHP;
+        document.querySelector('input[name="email"]').value = email;
+        document.querySelector('input[name="password"]').value = 'password123';
+    }
+</script>
+
     </div>
 </div>
 

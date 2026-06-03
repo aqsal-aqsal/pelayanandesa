@@ -9,7 +9,9 @@ class WargaModel {
     }
 
     public function getAllWarga() {
-        $this->db->query('SELECT * FROM ' . $this->table);
+        $this->db->query('SELECT w.* FROM ' . $this->table . ' w 
+                          LEFT JOIN user u ON w.nik = u.nik 
+                          WHERE u.level = "masyarakat" OR u.level IS NULL');
         return $this->db->resultSet();
     }
 

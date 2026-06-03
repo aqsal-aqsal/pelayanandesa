@@ -13,7 +13,12 @@
             </div>
         <?php else: ?>
             <?php foreach($data['informasi'] as $i): ?>
-                <a href="<?= BASEURL; ?>/informasi/detail/<?= $i['id_informasi']; ?>" class="block bg-white rounded-[32px] shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
+                <a href="<?= BASEURL; ?>/informasi/detail/<?= $i['id_informasi']; ?>" class="block bg-white rounded-[32px] shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group">
+                    <?php if($i['file_lampiran']): ?>
+                        <div class="h-48 overflow-hidden">
+                            <img src="<?= BASEURL; ?>/assets/img/informasi/<?= $i['file_lampiran']; ?>" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="<?= $i['judul']; ?>">
+                        </div>
+                    <?php endif; ?>
                     <div class="p-8">
                         <div class="flex items-center space-x-3 mb-4">
                             <span class="px-3 py-1 bg-blue-50 text-blue-600 text-[10px] font-black rounded-lg uppercase tracking-widest">Berita Desa</span>

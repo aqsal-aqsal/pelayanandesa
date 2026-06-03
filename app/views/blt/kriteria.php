@@ -52,9 +52,9 @@
                                         <?= $k['tipe_kriteria']; ?>
                                     </span>
                                 </td>
-                                <td class="px-8 py-5 text-right">
+                                <td class="px-8 py-5 text-right flex justify-end items-center gap-2">
                                     <?php if($_SESSION['user']['level'] == 'petugas'): ?>
-                                        <a href="<?= BASEURL; ?>/blt/hapus_kriteria/<?= $k['id_kriteria']; ?>" onclick="return confirm('Hapus kriteria ini?')" class="text-rose-500 hover:text-rose-700 font-black text-[10px] uppercase tracking-widest">
+                                        <a href="<?= BASEURL; ?>/blt/hapus_kriteria/<?= $k['id_kriteria']; ?>" onclick="return confirm('Hapus kriteria ini?')" class="px-4 py-2 bg-rose-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-rose-700 transition shadow-lg shadow-rose-100 flex items-center">
                                             Hapus
                                         </a>
                                     <?php else: ?>

@@ -44,6 +44,33 @@ class SuratModel {
         return $this->db->resultSet();
     }
 
+    public function getFilteredPengajuan($status = 'semua', $id_jenis = 'semua', $tgl_mulai = null, $tgl_selesai = null) {
+        $query = 'SELECT p.*, j.nama_surat, w.nama_lengkap, w.nik FROM pengajuan_surat p JOIN jenis_surat j ON p.id_jenis_surat = j.id_jenis_surat JOIN warga w ON p.id_warga = w.id_warga WHERE 1=1';
+        
+        if ($status != 'semua') {
+            $query .= ' AND p.status = :status';
+        }
+        if ($id_jenis != 'semua') {
+            $query .= ' AND p.id_jenis_surat = :id_jenis';
+        }
+        if ($tgl_mulai) {
+            $query .= ' AND p.tanggal_pengajuan >= :tgl_mulai';
+        }
+        if ($tgl_selesai) {
+            $query .= ' AND p.tanggal_pengajuan <= :tgl_selesai';
+        }
+        
+        $query .= ' ORDER BY p.tanggal_pengajuan DESC';
+        
+        $this->db->query($query);
+        if ($status != 'semua') $this->db->bind('status', $status);
+        if ($id_jenis != 'semua') $this->db->bind('id_jenis', $id_jenis);
+        if ($tgl_mulai) $this->db->bind('tgl_mulai', $tgl_mulai . ' 00:00:00');
+        if ($tgl_selesai) $this->db->bind('tgl_selesai', $tgl_selesai . ' 23:59:59');
+        
+        return $this->db->resultSet();
+    }
+
     public function getPengajuanById($id_pengajuan) {
         $this->db->query('SELECT p.*, j.nama_surat, j.kode_surat, w.nama_lengkap, w.nik, w.tempat_lahir, w.tanggal_lahir, w.jenis_kelamin, w.alamat, w.rt_rw, pt.nama_petugas AS nama_kades, pt.ttd AS ttd_kades
                           FROM pengajuan_surat p 
@@ -62,11 +89,27 @@ class SuratModel {
         return $this->db->execute();
     }
 
-    public function setQr($id_pengajuan, $token, $url) {
-        $this->db->query('UPDATE pengajuan_surat SET qr_token = :token, qr_url = :url WHERE id_pengajuan = :id');
-        $this->db->bind('token', $token);
-        $this->db->bind('url', $url);
-        $this->db->bind('id', $id_pengajuan);
+    public function updatePengajuan($data) {
+        if (!empty($data['file_berkas'])) {
+            $query = 'UPDATE pengajuan_surat 
+                      SET id_jenis_surat = :id_jenis_surat, keperluan = :keperluan, file_berkas = :file_berkas, nilai_prioritas = :nilai_prioritas, prioritas = :prioritas, updated_at = NOW()
+                      WHERE id_pengajuan = :id_pengajuan AND id_warga = :id_warga AND status = \'menunggu\'';
+        } else {
+            $query = 'UPDATE pengajuan_surat 
+                      SET id_jenis_surat = :id_jenis_surat, keperluan = :keperluan, nilai_prioritas = :nilai_prioritas, prioritas = :prioritas, updated_at = NOW()
+                      WHERE id_pengajuan = :id_pengajuan AND id_warga = :id_warga AND status = \'menunggu\'';
+        }
+
+        $this->db->query($query);
+        $this->db->bind('id_jenis_surat', $data['id_jenis_surat']);
+        $this->db->bind('keperluan', $data['keperluan']);
+        if (!empty($data['file_berkas'])) {
+            $this->db->bind('file_berkas', $data['file_berkas']);
+        }
+        $this->db->bind('nilai_prioritas', $data['nilai_prioritas']);
+        $this->db->bind('prioritas', $data['prioritas']);
+        $this->db->bind('id_pengajuan', $data['id_pengajuan']);
+        $this->db->bind('id_warga', $data['id_warga']);
         return $this->db->execute();
     }
 
@@ -99,24 +142,11 @@ class SuratModel {
     }
 
     public function kadesTandaTangan($id, $kades_id) {
-        $this->db->query('SELECT qr_token FROM pengajuan_surat WHERE id_pengajuan = :id');
-        $this->db->bind('id', $id);
-        $row = $this->db->single();
-        $token = $row['qr_token'] ?? null;
-
-        if (!$token) {
-            $token = bin2hex(random_bytes(16));
-        }
-
-        $url = defined('BASEURL') ? (BASEURL . '/verify/' . $token) : null;
-
         $query = "UPDATE pengajuan_surat 
-                  SET status = 'selesai', id_kades_ttd = :kades_id, tanggal_selesai = NOW(), is_verified = 1, qr_token = :token, qr_url = :url 
+                  SET status = 'selesai', id_kades_ttd = :kades_id, tanggal_selesai = NOW(), is_verified = 1 
                   WHERE id_pengajuan = :id";
         $this->db->query($query);
         $this->db->bind('kades_id', $kades_id);
-        $this->db->bind('token', $token);
-        $this->db->bind('url', $url);
         $this->db->bind('id', $id);
         return $this->db->execute();
     }

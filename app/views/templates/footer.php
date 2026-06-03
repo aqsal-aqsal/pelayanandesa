@@ -2,7 +2,7 @@
     
     <?php $use_sidebar_layout = isset($_SESSION['user']) && empty($data['public_page']); ?>
     <?php if (!$use_sidebar_layout): ?>
-        <?php if ($data['judul'] == 'Login' && $data['judul'] == 'Registrasi'): ?>
+        <?php if ($data['judul'] != 'Login' && $data['judul'] != 'Registrasi'): ?>
         <footer class="bg-gray-50 border-t border-gray-100 pt-16 pb-8">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">

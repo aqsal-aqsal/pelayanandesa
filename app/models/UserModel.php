@@ -42,4 +42,19 @@ class UserModel {
 
         return $this->db->execute();
     }
+
+    public function updateProfile($data) {
+        $this->db->query("UPDATE " . $this->table . " SET email = :email, no_hp = :no_hp WHERE id_user = :id");
+        $this->db->bind('email', $data['email']);
+        $this->db->bind('no_hp', $data['no_hp']);
+        $this->db->bind('id', $data['id_user']);
+        return $this->db->execute();
+    }
+
+    public function updatePassword($id_user, $password) {
+        $this->db->query("UPDATE " . $this->table . " SET password = :password WHERE id_user = :id");
+        $this->db->bind('password', password_hash($password, PASSWORD_DEFAULT));
+        $this->db->bind('id', $id_user);
+        return $this->db->execute();
+    }
 }

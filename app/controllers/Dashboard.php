@@ -22,20 +22,21 @@ class Dashboard extends Controller {
         $data['judul'] = 'Dashboard Kepala Desa';
         $data['user'] = $_SESSION['user'];
         
-        // Load Models for Analytics
+        // Load Models
         $suratModel = $this->model('SuratModel');
-        $pengaduanModel = $this->model('PengaduanModel');
         $bltModel = $this->model('BltModel');
+        $wargaModel = $this->model('WargaModel');
+        $pengaduanModel = $this->model('PengaduanModel');
 
         // Analytics Data
-        $data['total_surat'] = count($suratModel->getAllPengajuan());
-        $data['total_pengaduan'] = count($pengaduanModel->getAllPengaduan());
+        $all_surat = $suratModel->getAllPengajuan();
+        $data['surat_perlu_ttd'] = count(array_filter($all_surat, function($s) { 
+            return $s['status'] == 'disetujui' && empty($s['id_kades_ttd']); 
+        }));
         
-        // Mock data for charts (in real app, query from DB)
-        $data['chart_surat'] = [
-            'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-            'data' => [12, 19, 3, 5, 2, 3]
-        ];
+        $data['total_program'] = count($bltModel->getPrograms());
+        $data['total_warga'] = count($wargaModel->getAllWarga());
+        $data['total_pengaduan'] = count($pengaduanModel->getAllPengaduan());
         
         $this->view('dashboard/kades', $data);
     }
@@ -43,6 +44,19 @@ class Dashboard extends Controller {
     public function petugas() {
         $data['judul'] = 'Dashboard Petugas';
         $data['user'] = $_SESSION['user'];
+
+        // Load Models
+        $suratModel = $this->model('SuratModel');
+        $pengaduanModel = $this->model('PengaduanModel');
+        $wargaModel = $this->model('WargaModel');
+        $bltModel = $this->model('BltModel');
+
+        // Get Counts
+        $data['total_surat_masuk'] = count(array_filter($suratModel->getAllPengajuan(), function($s) { return $s['status'] == 'menunggu'; }));
+        $data['total_aduan_masuk'] = count(array_filter($pengaduanModel->getAllPengaduan(), function($p) { return $p['status'] == 'menunggu'; }));
+        $data['total_warga'] = count($wargaModel->getAllWarga());
+        $data['total_program'] = count($bltModel->getPrograms());
+
         $this->view('dashboard/petugas', $data);
     }
 
@@ -54,10 +68,17 @@ class Dashboard extends Controller {
         $data['warga'] = $wargaModel->getWargaByNik($data['user']['nik']);
         
         $suratModel = $this->model('SuratModel');
-        $data['pengajuan'] = $suratModel->getPengajuanByWarga($data['warga']['id_warga']);
+        $my_surat = $suratModel->getPengajuanByWarga($data['warga']['id_warga']);
+        $data['surat_menunggu'] = count(array_filter($my_surat, function($s) { return $s['status'] == 'menunggu'; }));
+        $data['surat_selesai'] = count(array_filter($my_surat, function($s) { return $s['status'] == 'selesai'; }));
 
         $pengaduanModel = $this->model('PengaduanModel');
-        $data['pengaduan'] = $pengaduanModel->getPengaduanByWarga($data['warga']['id_warga']);
+        $my_aduan = $pengaduanModel->getPengaduanByWarga($data['warga']['id_warga']);
+        $data['aduan_total'] = count($my_aduan);
+
+        $bltModel = $this->model('BltModel');
+        $hasil_blt = $bltModel->getHasilByNik($data['user']['nik']);
+        $data['hasil_blt'] = !empty($hasil_blt) ? $hasil_blt[0] : null;
         
         $this->view('dashboard/warga', $data);
     }

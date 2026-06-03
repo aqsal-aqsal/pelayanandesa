@@ -14,6 +14,12 @@
 
         <h1 class="text-3xl font-black text-slate-900 mb-4"><?= $data['informasi']['judul']; ?></h1>
 
+        <?php if($data['informasi']['file_lampiran']): ?>
+            <div class="mb-10 rounded-[24px] overflow-hidden">
+                <img src="<?= BASEURL; ?>/assets/img/informasi/<?= $data['informasi']['file_lampiran']; ?>" class="w-full h-auto object-cover" alt="<?= $data['informasi']['judul']; ?>">
+            </div>
+        <?php endif; ?>
+
         <div class="flex items-center text-sm text-gray-500 mb-10">
             <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mr-3">
                 <i class="fas fa-user text-gray-400 text-xs"></i>

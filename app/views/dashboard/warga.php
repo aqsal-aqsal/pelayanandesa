@@ -7,9 +7,40 @@
             <h2 class="text-3xl font-black text-slate-900 mb-2">Selamat Datang, <?= $data['warga']['nama_lengkap'] ?? 'Warga'; ?>!</h2>
             <p class="text-gray-500">Kelola profil dan pantau status layanan Anda di sini.</p>
         </div>
-        <button onclick='openProfileModal(<?= json_encode($data["warga"]); ?>)' class="px-6 py-3 bg-blue-50 text-blue-600 rounded-2xl font-bold text-sm hover:bg-blue-100 transition flex items-center">
-            <i class="fas fa-user-edit mr-2"></i> EDIT PROFIL SAYA
-        </button>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white p-8 rounded-[32px] shadow-sm border border-gray-100">
+            <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-xl mb-4">
+                <i class="fas fa-file-invoice"></i>
+            </div>
+            <h3 class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Surat Menunggu</h3>
+            <p class="text-2xl font-black text-slate-900"><?= $data['surat_menunggu']; ?></p>
+        </div>
+        <div class="bg-white p-8 rounded-[32px] shadow-sm border border-gray-100">
+            <div class="w-12 h-12 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center text-xl mb-4">
+                <i class="fas fa-file-check"></i>
+            </div>
+            <h3 class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Surat Selesai</h3>
+            <p class="text-2xl font-black text-slate-900"><?= $data['surat_selesai']; ?></p>
+        </div>
+        <div class="bg-white p-8 rounded-[32px] shadow-sm border border-gray-100">
+            <div class="w-12 h-12 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center text-xl mb-4">
+                <i class="fas fa-bullhorn"></i>
+            </div>
+            <h3 class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Total Pengaduan</h3>
+            <p class="text-2xl font-black text-slate-900"><?= $data['aduan_total']; ?></p>
+        </div>
+        <div class="bg-white p-8 rounded-[32px] shadow-sm border border-gray-100">
+            <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-xl mb-4">
+                <i class="fas fa-hand-holding-heart"></i>
+            </div>
+            <h3 class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Status Bantuan</h3>
+            <p class="text-sm font-black text-slate-900 truncate">
+                <?= isset($data['hasil_blt']['status_penerimaan']) ? strtoupper((string)$data['hasil_blt']['status_penerimaan']) : 'TIDAK TERDAFTAR'; ?>
+            </p>
+        </div>
     </div>
 
     <?php if(isset($_SESSION['flash'])): ?>

@@ -78,17 +78,17 @@
                                         <?= $p['status']; ?>
                                     </span>
                                 </td>
-                                <td class="px-8 py-5 text-right">
+                                <td class="px-8 py-5 text-right flex justify-end items-center gap-2">
                                     <?php if($_SESSION['user']['level'] == 'kades' && $p['status'] == 'diproses'): ?>
-                                        <button onclick="openModal(<?= $p['id_pengajuan']; ?>, 'selesai')" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-700 transition shadow-lg shadow-blue-100">
-                                            <i class="fas fa-signature mr-1"></i> Tanda Tangani
+                                        <button onclick="openModal(<?= $p['id_pengajuan']; ?>, 'selesai')" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-700 transition shadow-lg shadow-blue-100 flex items-center">
+                                            Tanda Tangani
                                         </button>
                                     <?php elseif($_SESSION['user']['level'] == 'petugas' && $p['status'] == 'menunggu'): ?>
-                                        <button onclick="openModal(<?= $p['id_pengajuan']; ?>)" class="px-4 py-2 bg-slate-900 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition">
+                                        <button onclick="openModal(<?= $p['id_pengajuan']; ?>)" class="px-4 py-2 bg-slate-900 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition flex items-center">
                                             Verifikasi
                                         </button>
                                     <?php elseif($p['status'] == 'selesai'): ?>
-                                        <a href="<?= BASEURL; ?>/layanan/unduh/<?= $p['id_pengajuan']; ?>" target="_blank" class="px-4 py-2 bg-blue-50 text-blue-600 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-100 transition">
+                                        <a href="<?= BASEURL; ?>/layanan/unduh/<?= $p['id_pengajuan']; ?>" target="_blank" class="px-4 py-2 bg-blue-50 text-blue-600 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-100 transition flex items-center">
                                             Unduh
                                         </a>
                                     <?php else: ?>

@@ -19,13 +19,13 @@
     <?php if ($use_sidebar_layout): ?>
         <div class="flex min-h-screen">
             <!-- Sidebar -->
-            <aside class="w-72 bg-white border-r border-gray-200 flex flex-col fixed h-full z-40">
-                <div class="p-8 flex items-center space-x-3">
+            <aside class="w-72 bg-white border-r border-gray-200 flex flex-col fixed h-full z-40 overflow-y-auto">
+                <div class="p-6 flex items-center space-x-3 flex-shrink-0">
                     <img src="<?= BASEURL; ?>/assets/img/logokabbanjar.png" alt="Logo Kabupaten Banjar" class="w-8 h-8 object-contain">
                     <span class="font-bold text-slate-800 tracking-tight">Desa Astambul</span>
                 </div>
 
-                <nav class="flex-1 px-4 space-y-1">
+                <nav class="flex-1 px-4 space-y-0.5">
                     <?php 
                         $level = $_SESSION['user']['level'];
                         $current_page = $data['judul'];
@@ -34,28 +34,67 @@
                     <?php if ($level == 'masyarakat'): ?>
                         <a href="<?= BASEURL; ?>/dashboard" class="flex items-center space-x-3 px-4 py-3 rounded-xl <?= strpos($current_page, 'Dashboard') !== false ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition">
                             <i class="fas fa-th-large w-5"></i>
-                            <span>Dashboard</span>
+                            <span>Dashboard Warga</span>
                         </a>
-                        <a href="<?= BASEURL; ?>/layanan" class="flex items-center space-x-3 px-4 py-3 rounded-xl <?= $current_page == 'Layanan Surat Online' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition">
-                            <i class="fas fa-file-alt w-5"></i>
-                            <span>Layanan Surat</span>
+                        <div class="px-4 py-2 mt-2">
+                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Pengajuan Surat</span>
+                        </div>
+                        <a href="<?= BASEURL; ?>/layanan" class="flex items-center space-x-3 px-4 py-2 rounded-xl <?= $current_page == 'Layanan Surat Online' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition ml-2">
+                            <i class="fas fa-circle text-[6px] w-5 text-center"></i>
+                            <span>Ajukan surat</span>
                         </a>
-                        <a href="<?= BASEURL; ?>/pengaduan" class="flex items-center space-x-3 px-4 py-3 rounded-xl <?= $current_page == 'Pengaduan' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition">
-                            <i class="fas fa-exclamation-circle w-5"></i>
-                            <span>Pengaduan</span>
+                        <div class="px-4 py-2 mt-2">
+                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Pengaduan</span>
+                        </div>
+                        <a href="<?= BASEURL; ?>/pengaduan" class="flex items-center space-x-3 px-4 py-2 rounded-xl <?= $current_page == 'Pengaduan' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition ml-2">
+                            <i class="fas fa-circle text-[6px] w-5 text-center"></i>
+                            <span>Ajukan Pengaduan</span>
                         </a>
-                        <a href="<?= BASEURL; ?>/blt" class="flex items-center space-x-3 px-4 py-3 rounded-xl <?= strpos($current_page, 'Bantuan') !== false ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition">
-                            <i class="fas fa-hand-holding-heart w-5"></i>
-                            <span>Cek BLT</span>
+                        <a href="<?= BASEURL; ?>/blt" class="flex items-center space-x-3 px-4 py-3 rounded-xl <?= strpos($current_page, 'Bantuan') !== false ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition mt-2">
+                            <i class="fas fa-info-circle w-5"></i>
+                            <span>Informasi Bantuan</span>
                         </a>
-                        <a href="<?= BASEURL; ?>/informasi" class="flex items-center space-x-3 px-4 py-3 rounded-xl <?= $current_page == 'Informasi Publik' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition">
+                    <?php elseif ($level == 'kades'): ?>
+                        <a href="<?= BASEURL; ?>/dashboard" class="flex items-center space-x-3 px-4 py-3 rounded-xl <?= strpos($current_page, 'Dashboard') !== false ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition">
+                            <i class="fas fa-chart-pie w-5"></i>
+                            <span>Dashboard Kades</span>
+                        </a>
+                        <a href="<?= BASEURL; ?>/layanan/admin" class="flex items-center space-x-3 px-4 py-3 rounded-xl <?= $current_page == 'Manajemen Layanan' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition">
+                            <i class="fas fa-file-signature w-5"></i>
+                            <span>Daftar Surat</span>
+                        </a>
+                        <a href="<?= BASEURL; ?>/pengaduan/admin" class="flex items-center space-x-3 px-4 py-3 rounded-xl <?= $current_page == 'Manajemen Pengaduan' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition">
+                            <i class="fas fa-bullhorn w-5"></i>
+                            <span>Daftar Aduan</span>
+                        </a>
+                        <a href="<?= BASEURL; ?>/warga/admin" class="flex items-center space-x-3 px-4 py-3 rounded-xl <?= $current_page == 'Data Kependudukan' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition">
+                            <i class="fas fa-users w-5"></i>
+                            <span>Data Warga</span>
+                        </a>
+                        <a href="<?= BASEURL; ?>/blt/admin" class="flex items-center space-x-3 px-4 py-3 rounded-xl <?= $current_page == 'Manajemen Seleksi BLT' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition">
+                            <i class="fas fa-gift w-5"></i>
+                            <span>Program Bantuan</span>
+                        </a>
+                        <a href="<?= BASEURL; ?>/informasi/admin" class="flex items-center space-x-3 px-4 py-3 rounded-xl <?= $current_page == 'Kelola Informasi' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition">
                             <i class="fas fa-newspaper w-5"></i>
-                            <span>Kabar Desa</span>
+                            <span>Informasi Publik</span>
+                        </a>
+                        <a href="<?= BASEURL; ?>/laporan" class="flex items-center space-x-3 px-4 py-3 rounded-xl <?= $current_page == 'Laporan & Statistik' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition">
+                            <i class="fas fa-file-pdf w-5"></i>
+                            <span>Cetak Laporan</span>
                         </a>
                     <?php else: ?>
                         <a href="<?= BASEURL; ?>/dashboard" class="flex items-center space-x-3 px-4 py-3 rounded-xl <?= strpos($current_page, 'Dashboard') !== false ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition">
                             <i class="fas fa-chart-pie w-5"></i>
-                            <span>Statistik</span>
+                            <span>Dashboard Petugas</span>
+                        </a>
+                        <a href="<?= BASEURL; ?>/layanan/admin" class="flex items-center space-x-3 px-4 py-3 rounded-xl <?= $current_page == 'Manajemen Layanan' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition">
+                            <i class="fas fa-tasks w-5"></i>
+                            <span>Daftar Surat</span>
+                        </a>
+                        <a href="<?= BASEURL; ?>/pengaduan/admin" class="flex items-center space-x-3 px-4 py-3 rounded-xl <?= $current_page == 'Manajemen Pengaduan' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition">
+                            <i class="fas fa-bullhorn w-5"></i>
+                            <span>Daftar Aduan</span>
                         </a>
                         <a href="<?= BASEURL; ?>/warga/admin" class="flex items-center space-x-3 px-4 py-3 rounded-xl <?= $current_page == 'Data Kependudukan' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition">
                             <i class="fas fa-users w-5"></i>
@@ -63,23 +102,15 @@
                         </a>
                         <a href="<?= BASEURL; ?>/pejabat/admin" class="flex items-center space-x-3 px-4 py-3 rounded-xl <?= $current_page == 'Data Pejabat' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition">
                             <i class="fas fa-user-tie w-5"></i>
-                            <span>Data Pejabat</span>
-                        </a>
-                        <a href="<?= BASEURL; ?>/layanan/admin" class="flex items-center space-x-3 px-4 py-3 rounded-xl <?= $current_page == 'Manajemen Layanan' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition">
-                            <i class="fas fa-tasks w-5"></i>
-                            <span>Layanan Surat</span>
-                        </a>
-                        <a href="<?= BASEURL; ?>/pengaduan/admin" class="flex items-center space-x-3 px-4 py-3 rounded-xl <?= $current_page == 'Manajemen Pengaduan' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition">
-                            <i class="fas fa-bullhorn w-5"></i>
-                            <span>Pengaduan</span>
+                            <span>Data Petugas</span>
                         </a>
                         <a href="<?= BASEURL; ?>/blt/admin" class="flex items-center space-x-3 px-4 py-3 rounded-xl <?= $current_page == 'Manajemen Seleksi BLT' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition">
-                            <i class="fas fa-hand-holding-heart w-5"></i>
-                            <span>Seleksi BLT</span>
+                            <i class="fas fa-gift w-5"></i>
+                            <span>Program Bantuan</span>
                         </a>
                         <a href="<?= BASEURL; ?>/informasi/admin" class="flex items-center space-x-3 px-4 py-3 rounded-xl <?= $current_page == 'Kelola Informasi' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition">
                             <i class="fas fa-newspaper w-5"></i>
-                            <span>Kelola Berita</span>
+                            <span>Informasi Publik</span>
                         </a>
                         <a href="<?= BASEURL; ?>/laporan" class="flex items-center space-x-3 px-4 py-3 rounded-xl <?= $current_page == 'Laporan & Statistik' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition">
                             <i class="fas fa-file-pdf w-5"></i>
@@ -89,13 +120,13 @@
                 </nav>
 
                 <div class="px-4 py-6 space-y-1 border-t border-gray-100">
+                    <a href="<?= BASEURL; ?>/profile" class="flex items-center space-x-3 px-4 py-3 rounded-xl <?= $data['judul'] == 'Pengaturan Profil' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-500 hover:bg-gray-50'; ?> transition">
+                        <i class="fas fa-cog w-5"></i>
+                        <span>Pengaturan Profil</span>
+                    </a>
                     <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-500 hover:bg-gray-50 transition">
                         <i class="fas fa-headset w-5"></i>
                         <span>Bantuan</span>
-                    </a>
-                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-500 hover:bg-gray-50 transition">
-                        <i class="fas fa-cog w-5"></i>
-                        <span>Pengaturan</span>
                     </a>
                 </div>
 
@@ -142,8 +173,7 @@
                     <!-- Desktop Menu -->
                     <div class="hidden md:flex items-center space-x-8">
                         <a href="#layanan" class="text-gray-600 hover:text-blue-600 font-medium transition">Layanan</a>
-                        <a href="<?= BASEURL; ?>/informasi" class="text-gray-600 hover:text-blue-600 font-medium transition">Kabar Desa</a>
-                        <a href="#transparansi" class="text-gray-600 hover:text-blue-600 font-medium transition">Transparansi</a>
+                        <a href="<?= BASEURL; ?>/informasi" class="text-gray-600 hover:text-blue-600 font-medium transition">Berita</a>
                         <a href="#" class="text-gray-600 hover:text-blue-600 font-medium transition">Profil Desa</a>
                         <?php if (!isset($_SESSION['user'])): ?>
                             <a href="<?= BASEURL; ?>/auth/register" class="text-gray-600 hover:text-blue-600 font-bold transition">Daftar</a>

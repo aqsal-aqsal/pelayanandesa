@@ -110,46 +110,42 @@
             <h2 class="text-3xl font-extrabold text-slate-900 mb-2">Kabar Terbaru Desa</h2>
             <p class="text-gray-500">Ikuti perkembangan dan kegiatan di lingkungan kita.</p>
         </div>
-        <a href="#" class="text-blue-600 font-bold hover:underline">Lihat Semua Berita</a>
+        <a href="<?= BASEURL; ?>/informasi" class="text-blue-600 font-bold hover:underline">Lihat Semua Berita</a>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- News 1 -->
-        <article class="group">
-            <div class="rounded-2xl overflow-hidden mb-6 aspect-video">
-                <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=80&w=500" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+        <?php if (empty($data['berita'])): ?>
+            <div class="col-span-full bg-white p-12 rounded-2xl border border-slate-100 text-center text-gray-500 italic">
+                Belum ada berita yang dipublikasikan.
             </div>
-            <div class="flex items-center gap-3 mb-4">
-                <span class="text-xs font-bold text-gray-400">12 Okt 2023</span>
-                <span class="px-2 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold rounded uppercase">Kegiatan</span>
-            </div>
-            <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition mb-3">Pelatihan Literasi Digital Warga Desa Astambul Kota</h3>
-            <p class="text-gray-500 text-sm line-clamp-2">Pemerintah desa mengadakan workshop penggunaan aplikasi mobile untuk memudahkan...</p>
-        </article>
-        <!-- News 2 -->
-        <article class="group">
-            <div class="rounded-2xl overflow-hidden mb-6 aspect-video">
-                <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=500" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-            </div>
-            <div class="flex items-center gap-3 mb-4">
-                <span class="text-xs font-bold text-gray-400">08 Okt 2023</span>
-                <span class="px-2 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold rounded uppercase">Pembangunan</span>
-            </div>
-            <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition mb-3">Pembangunan Drainase Terintegrasi Musim Hujan</h3>
-            <p class="text-gray-500 text-sm line-clamp-2">Pengerjaan infrastruktur drainase utama telah mencapai 80% guna mengantisipasi banjir...</p>
-        </article>
-        <!-- News 3 -->
-        <article class="group">
-            <div class="rounded-2xl overflow-hidden mb-6 aspect-video">
-                <img src="https://images.unsplash.com/photo-1573163281530-5be9c28aa7bb?auto=format&fit=crop&q=80&w=500" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-            </div>
-            <div class="flex items-center gap-3 mb-4">
-                <span class="text-xs font-bold text-gray-400">05 Okt 2023</span>
-                <span class="px-2 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold rounded uppercase">Keuangan</span>
-            </div>
-            <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition mb-3">Laporan Realisasi Dana Desa Tahap III Tahun 2023</h3>
-            <p class="text-gray-500 text-sm line-clamp-2">Sebagai bentuk transparansi, berikut adalah laporan mendetail mengenai alokasi dana desa...</p>
-        </article>
+        <?php else: ?>
+            <?php foreach ($data['berita'] as $b): ?>
+                <?php
+                    $excerpt = trim(strip_tags($b['konten'] ?? ''));
+                    if (function_exists('mb_strlen') && function_exists('mb_substr')) {
+                        if (mb_strlen($excerpt) > 140) {
+                            $excerpt = mb_substr($excerpt, 0, 140) . '...';
+                        }
+                    } else {
+                        if (strlen($excerpt) > 140) {
+                            $excerpt = substr($excerpt, 0, 140) . '...';
+                        }
+                    }
+                ?>
+                <a href="<?= BASEURL; ?>/informasi/detail/<?= (int)$b['id_informasi']; ?>" class="group block bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="text-xs font-bold text-gray-400"><?= $b['tgl_publikasi'] ? date('d M Y', strtotime($b['tgl_publikasi'])) : '-'; ?></span>
+                        <span class="px-2 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold rounded uppercase">Berita</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition mb-3"><?= htmlspecialchars($b['judul']); ?></h3>
+                    <p class="text-gray-500 text-sm"><?= htmlspecialchars($excerpt); ?></p>
+                    <div class="mt-6 pt-6 border-t border-gray-100 flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-600"><?= htmlspecialchars($b['nama_petugas'] ?? '-'); ?></span>
+                        <span class="text-blue-600 font-black text-[10px] uppercase tracking-widest">Baca</span>
+                    </div>
+                </a>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </div>
 </section>
 <?php $this->view('templates/footer', $data); ?>

@@ -1,6 +1,7 @@
 <?php
 
 class BltModel {
+    private $table = 'program_bantuan';
     private $db;
 
     public function __construct() {
@@ -8,7 +9,17 @@ class BltModel {
     }
 
     public function getPrograms() {
-        $this->db->query('SELECT * FROM program_bantuan ORDER BY created_at DESC');
+        $this->db->query('SELECT * FROM ' . $this->table . ' ORDER BY created_at DESC');
+        return $this->db->resultSet();
+    }
+
+    public function getAllPenerima() {
+        $this->db->query("SELECT c.*, w.nama_lengkap, w.nik, p.nama_program, p.periode 
+                          FROM calon_penerima c 
+                          JOIN warga w ON c.id_warga = w.id_warga 
+                          JOIN program_bantuan p ON c.id_program = p.id_program 
+                          WHERE c.status = 'penerima' 
+                          ORDER BY p.id_program DESC, w.nama_lengkap ASC");
         return $this->db->resultSet();
     }
 
@@ -215,7 +226,7 @@ class BltModel {
     }
 
     public function getHasilByNik($nik) {
-        $this->db->query('SELECT h.*, p.nama_program, p.periode, w.nama_lengkap 
+        $this->db->query('SELECT h.*, p.nama_program, p.periode, w.nama_lengkap, c.status as status_penerimaan 
                           FROM hasil_saw_blt h 
                           JOIN calon_penerima c ON h.id_calon = c.id_calon 
                           JOIN program_bantuan p ON h.id_program = p.id_program 

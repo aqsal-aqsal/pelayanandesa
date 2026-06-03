@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 19, 2026 at 12:51 PM
+-- Generation Time: Jun 02, 2026 at 12:27 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -54,6 +54,15 @@ CREATE TABLE `calon_penerima` (
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `calon_penerima`
+--
+
+INSERT INTO `calon_penerima` (`id_calon`, `id_warga`, `id_program`, `tanggal_usulan`, `status`, `created_at`, `updated_at`) VALUES
+(1, 4, 1, '2026-05-20', 'terpilih', '2026-05-20 01:38:22', '2026-05-24 17:05:24'),
+(2, 4, 1, '2026-05-21', 'terpilih', '2026-05-21 11:04:34', '2026-05-24 17:05:24'),
+(3, 5, 1, '2026-05-26', 'diproses', '2026-05-26 14:13:02', '2026-05-26 14:13:12');
+
 -- --------------------------------------------------------
 
 --
@@ -68,6 +77,14 @@ CREATE TABLE `hasil_saw_blt` (
   `ranking` int NOT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `hasil_saw_blt`
+--
+
+INSERT INTO `hasil_saw_blt` (`id`, `id_program`, `id_calon`, `nilai_total`, `ranking`, `created_at`) VALUES
+(6, 1, 1, '0.50000', 1, '2026-05-24 17:05:24'),
+(7, 1, 2, '0.00000', 2, '2026-05-24 17:05:24');
 
 -- --------------------------------------------------------
 
@@ -102,6 +119,14 @@ CREATE TABLE `informasi_publik` (
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `informasi_publik`
+--
+
+INSERT INTO `informasi_publik` (`id_informasi`, `judul`, `konten`, `file_lampiran`, `tgl_publikasi`, `created_by`, `created_at`, `updated_at`) VALUES
+(1, 'Tes Berita', 'Isi berita', NULL, '2026-05-20', 1, '2026-05-20 00:56:00', '2026-05-20 00:56:00'),
+(2, 'tes', 'tes', '1779611313.png', '2026-05-24', 1, '2026-05-24 16:28:33', '2026-05-24 16:28:33');
+
 -- --------------------------------------------------------
 
 --
@@ -119,6 +144,18 @@ CREATE TABLE `jenis_surat` (
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `jenis_surat`
+--
+
+INSERT INTO `jenis_surat` (`id_jenis_surat`, `kode_surat`, `nama_surat`, `template_file`, `prioritas`, `keterangan`, `created_at`, `updated_at`) VALUES
+(1, NULL, 'Surat Keterangan Domisili', NULL, 3, NULL, '2026-05-19 22:17:57', '2026-05-19 22:17:57'),
+(2, NULL, 'Surat Keterangan Tidak Mampu', NULL, 2, NULL, '2026-05-19 22:18:10', '2026-05-19 22:18:10'),
+(3, NULL, 'Surat Keterangan Izin Usaha', NULL, 4, NULL, '2026-05-20 11:59:48', '2026-05-20 11:59:48'),
+(4, NULL, 'Surat Keterangan Kematian', NULL, 1, NULL, '2026-05-20 12:00:00', '2026-05-20 12:00:00'),
+(5, NULL, 'Surat Keterangan Pindah', NULL, 3, NULL, '2026-05-20 12:00:13', '2026-05-20 12:00:13'),
+(6, NULL, 'Surat Izin Keramaian', NULL, 3, NULL, '2026-05-20 12:00:33', '2026-05-20 12:00:33');
+
 -- --------------------------------------------------------
 
 --
@@ -133,6 +170,16 @@ CREATE TABLE `kriteria_bantuan` (
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `kriteria_bantuan`
+--
+
+INSERT INTO `kriteria_bantuan` (`id_kriteria`, `nama_kriteria`, `bobot`, `tipe_kriteria`, `created_at`, `updated_at`) VALUES
+(2, 'Penghasilan', '40.00', 'cost', '2026-05-20 12:09:58', '2026-05-20 12:09:58'),
+(3, 'Jumlah Tanggungan', '30.00', 'benefit', '2026-05-21 10:35:03', '2026-05-21 10:35:03'),
+(4, 'Kondisi Rumah', '20.00', 'benefit', '2026-05-21 10:35:21', '2026-05-21 10:35:21'),
+(5, 'Kepemilikan Kendaraan', '10.00', 'cost', '2026-05-21 10:35:43', '2026-05-21 10:35:43');
 
 -- --------------------------------------------------------
 
@@ -149,6 +196,16 @@ CREATE TABLE `nilai_kriteria_calon` (
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `nilai_kriteria_calon`
+--
+
+INSERT INTO `nilai_kriteria_calon` (`id_nilai`, `id_calon`, `id_kriteria`, `nilai_asli`, `nilai_normalisasi`, `created_at`, `updated_at`) VALUES
+(1, 1, 2, '30.000', '0.000', '2026-05-21 11:07:04', '2026-05-21 11:07:25'),
+(2, 1, 3, '10.000', '1.000', '2026-05-21 11:07:04', '2026-05-21 11:07:25'),
+(3, 1, 4, '30.000', '1.000', '2026-05-21 11:07:04', '2026-05-21 11:07:25'),
+(4, 1, 5, '30.000', '0.000', '2026-05-21 11:07:04', '2026-05-21 11:07:25');
 
 -- --------------------------------------------------------
 
@@ -212,6 +269,13 @@ CREATE TABLE `pengaduan` (
   `waktu_proses` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `pengaduan`
+--
+
+INSERT INTO `pengaduan` (`id_pengaduan`, `id_warga`, `judul_aduan`, `isi_aduan`, `kategori_aduan`, `file_bukti`, `nilai_prioritas`, `status`, `catatan_penolakan`, `id_petugas_verif`, `tanggal_aduan`, `tanggal_selesai`, `created_at`, `updated_at`, `prioritas`, `waktu_proses`) VALUES
+(1, 4, 'Helm Hilang', 'helm hilang di pasar', 'keamanan', '1779210567_images.png', 3, 'diproses', '', 1, '2026-05-20 01:09:27', NULL, '2026-05-20 01:09:27', '2026-05-20 14:00:14', 3, '2026-05-20 14:00:14');
+
 -- --------------------------------------------------------
 
 --
@@ -242,6 +306,17 @@ CREATE TABLE `pengajuan_surat` (
   `waktu_proses` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `pengajuan_surat`
+--
+
+INSERT INTO `pengajuan_surat` (`id_pengajuan`, `id_warga`, `id_jenis_surat`, `no_surat`, `keperluan`, `file_berkas`, `nilai_prioritas`, `status`, `catatan_penolakan`, `id_petugas_verif`, `id_kades_ttd`, `tanggal_pengajuan`, `tanggal_verif`, `tanggal_selesai`, `created_at`, `updated_at`, `qr_token`, `qr_url`, `is_verified`, `prioritas`, `waktu_proses`) VALUES
+(2, 2, 1, 'SK/2/05/2026', 'Urgensi', '1779200327_images.png', 1, 'selesai', '', 1, 3, '2026-05-19 22:18:47', '2026-05-20 00:51:27', '2026-05-20 00:51:41', '2026-05-19 22:18:47', '2026-05-20 00:51:41', 'f5c20763e2b221b315d0932ab0f58934', 'http://localhost/pelayanandesa/public/verify/f5c20763e2b221b315d0932ab0f58934', 1, 3, NULL),
+(3, 2, 2, NULL, 'Untuk memenuhi kebutuhan UKT Kampus', '1779200355_images.png', 1, 'menunggu', NULL, NULL, NULL, '2026-05-19 22:19:15', NULL, NULL, '2026-05-19 22:19:15', '2026-05-19 22:19:15', NULL, NULL, 0, 2, NULL),
+(5, 4, 1, 'SK/5/05/2026', 'Untuk keperluan pekerjaan', '1779210521_images.png', 1, 'selesai', '', 1, 3, '2026-05-20 01:08:41', '2026-05-20 01:09:56', '2026-05-20 07:38:34', '2026-05-20 01:08:41', '2026-05-20 07:38:34', '75e82e7455387afae9728e3f66708964', 'http://localhost/pelayanandesa/public/verify/75e82e7455387afae9728e3f66708964', 1, 3, NULL),
+(6, 4, 5, 'SK/6/05/2026', 'Untuk Pindah Rumah', '1779254180_images.png', 1, 'selesai', '', 1, 3, '2026-05-20 13:16:20', '2026-05-20 13:16:38', '2026-05-20 13:16:58', '2026-05-20 13:16:20', '2026-05-20 13:16:58', 'bba98533419ed83b85b50a7ed86116b4', 'http://localhost/pelayanandesa/public/verify/bba98533419ed83b85b50a7ed86116b4', 1, 3, NULL),
+(7, 4, 6, 'SK/7/05/2026', 'Untuk Keperluan Acara Syukuran', '1779256775_images.png', 1, 'selesai', '', 1, 3, '2026-05-20 13:59:35', '2026-05-20 14:00:51', '2026-05-20 14:01:10', '2026-05-20 13:59:35', '2026-05-20 14:01:10', NULL, NULL, 1, 3, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -257,6 +332,14 @@ CREATE TABLE `petugas` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `petugas`
+--
+
+INSERT INTO `petugas` (`id_petugas`, `nama_petugas`, `jabatan`, `ttd`, `status_aktif`, `created_at`, `updated_at`) VALUES
+(1, 'admin', 'Petugas', NULL, 1, '2026-05-20 00:48:37', NULL),
+(3, 'MULYONO', 'Kepala Desa', '1779668930_2cffa9e5.png', 1, '2026-05-20 00:49:42', '2026-05-25 08:29:48');
 
 -- --------------------------------------------------------
 
@@ -276,6 +359,13 @@ CREATE TABLE `program_bantuan` (
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `program_bantuan`
+--
+
+INSERT INTO `program_bantuan` (`id_program`, `nama_program`, `sumber_dana`, `periode`, `total_anggaran`, `kuota_penerima`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'MBG', 'APBN', '2026', '1900000000.00', 3000, 'direncanakan', '2026-05-20 01:38:11', '2026-05-20 01:38:11');
+
 -- --------------------------------------------------------
 
 --
@@ -293,6 +383,17 @@ CREATE TABLE `user` (
   `email` varchar(100) DEFAULT NULL,
   `no_hp` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id_user`, `nik`, `password`, `level`, `status_aktif`, `created_at`, `updated_at`, `email`, `no_hp`) VALUES
+(1, 'admin', '$2y$10$bnwW3TJtYEC1dCRKNU.QQO0BU3OU6rh/cBjkoszJY5ReDAoQc2uoe', 'petugas', 1, '2026-05-19 21:26:10', NULL, NULL, NULL),
+(2, 'warga', '$2y$10$p403zowaJPWmSiz0EVdrte8LDsOoSBmWlzbF0rAZ83m2Zk8zhiyWu', 'masyarakat', 1, '2026-05-19 21:26:10', NULL, NULL, NULL),
+(3, 'kades', '$2y$10$x.9jme.kAgf0964Yf81aieyCJvuDFwGrERw4rc8hC97ezyD5QFhuq', 'kades', 1, '2026-05-19 21:26:10', NULL, NULL, NULL),
+(4, '6203011308010004', '$2y$10$lCQ710x5gyCxj4mB2dEffOR6CfSk62qAN5tvztmTh7WK8oRW3SbTu', 'masyarakat', 1, '2026-05-20 01:07:24', NULL, 'aqsalbuana@gmail.com', '081904158932'),
+(5, '6303955901532154', '$2y$10$y.gYoW6.z.SIyDrgse9XieBqcwwl/56SQXOCmNgbS2ASDuErD1Mka', 'masyarakat', 1, '2026-05-21 12:40:39', NULL, 'eko.prasetyo@gmail.com', '080174074380');
 
 -- --------------------------------------------------------
 
@@ -317,6 +418,17 @@ CREATE TABLE `warga` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `warga`
+--
+
+INSERT INTO `warga` (`id_warga`, `nik`, `nama_lengkap`, `tempat_lahir`, `tanggal_lahir`, `jenis_kelamin`, `alamat`, `rt_rw`, `pekerjaan`, `penghasilan`, `jumlah_tanggungan`, `kondisi_rumah`, `status_kawin`, `created_at`, `updated_at`) VALUES
+(1, 'admin', 'Administrator Sistem', NULL, NULL, NULL, 'Kantor Desa', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-19 21:26:10', NULL),
+(2, 'warga', 'Riswan', 'Astambul', '2004-01-01', 'L', 'Jl. Desa No. 1', NULL, 'PNS', '2500000.00', 0, NULL, NULL, '2026-05-19 21:26:10', NULL),
+(3, 'kades', 'Kepala Desa Astambul', NULL, NULL, NULL, 'Rumah Dinas Kades', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-19 21:26:10', NULL),
+(4, '6203011308010004', 'Aqsal Arya Buana', 'Banjarbaru', '2001-08-13', 'L', 'Jl. Indra Sari', '04', 'Tenaga Kontrak', '3400000.00', 1, 'kurang_layak', 'belum_kawin', '2026-05-20 01:07:23', NULL),
+(5, '6303955901532154', 'Eko Prasetyo', NULL, NULL, NULL, 'Jl. Melati No. 12, Astambul', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-21 12:40:39', NULL);
 
 --
 -- Indexes for dumped tables
@@ -458,13 +570,13 @@ ALTER TABLE `antrian_layanan`
 -- AUTO_INCREMENT for table `calon_penerima`
 --
 ALTER TABLE `calon_penerima`
-  MODIFY `id_calon` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_calon` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `hasil_saw_blt`
 --
 ALTER TABLE `hasil_saw_blt`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `hasil_seleksi_saw`
@@ -476,25 +588,25 @@ ALTER TABLE `hasil_seleksi_saw`
 -- AUTO_INCREMENT for table `informasi_publik`
 --
 ALTER TABLE `informasi_publik`
-  MODIFY `id_informasi` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_informasi` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `jenis_surat`
 --
 ALTER TABLE `jenis_surat`
-  MODIFY `id_jenis_surat` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_jenis_surat` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `kriteria_bantuan`
 --
 ALTER TABLE `kriteria_bantuan`
-  MODIFY `id_kriteria` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_kriteria` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `nilai_kriteria_calon`
 --
 ALTER TABLE `nilai_kriteria_calon`
-  MODIFY `id_nilai` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_nilai` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `notifications`
@@ -512,37 +624,37 @@ ALTER TABLE `penetapan_bantuan`
 -- AUTO_INCREMENT for table `pengaduan`
 --
 ALTER TABLE `pengaduan`
-  MODIFY `id_pengaduan` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_pengaduan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `pengajuan_surat`
 --
 ALTER TABLE `pengajuan_surat`
-  MODIFY `id_pengajuan` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_pengajuan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `petugas`
 --
 ALTER TABLE `petugas`
-  MODIFY `id_petugas` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_petugas` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `program_bantuan`
 --
 ALTER TABLE `program_bantuan`
-  MODIFY `id_program` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_program` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_user` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `warga`
 --
 ALTER TABLE `warga`
-  MODIFY `id_warga` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_warga` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables

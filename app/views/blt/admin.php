@@ -57,20 +57,20 @@
                                         <?= $p['status']; ?>
                                     </span>
                                 </td>
-                                <td class="px-8 py-5 text-right space-x-2">
-                                    <a href="<?= BASEURL; ?>/blt/calon/<?= $p['id_program']; ?>" class="px-4 py-2 bg-slate-900 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition">
-                                        Kelola Calon
+                                <td class="px-8 py-5 text-right flex justify-end items-center gap-2">
+                                    <a href="<?= BASEURL; ?>/blt/calon/<?= $p['id_program']; ?>" class="px-4 py-2 bg-slate-900 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition flex items-center">
+                                        <?= $_SESSION['user']['level'] == 'kades' ? 'Lihat Calon' : 'Kelola Calon'; ?>
                                     </a>
                                     <?php if($_SESSION['user']['level'] == 'kades'): ?>
-                                        <a href="<?= BASEURL; ?>/blt/hitung/<?= $p['id_program']; ?>" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-700 transition shadow-lg shadow-blue-100">
+                                        <a href="<?= BASEURL; ?>/blt/hitung/<?= $p['id_program']; ?>" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-700 transition shadow-lg shadow-blue-100 flex items-center">
                                             Hitung SAW
                                         </a>
                                     <?php endif; ?>
-                                    <a href="<?= BASEURL; ?>/blt/detail/<?= $p['id_program']; ?>" class="px-4 py-2 bg-blue-50 text-blue-600 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-100 transition">
+                                    <a href="<?= BASEURL; ?>/blt/detail/<?= $p['id_program']; ?>" class="px-4 py-2 bg-blue-50 text-blue-600 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-100 transition flex items-center">
                                         Lihat Hasil
                                     </a>
                                     <?php if($_SESSION['user']['level'] == 'petugas'): ?>
-                                        <a href="<?= BASEURL; ?>/blt/hapus_program/<?= $p['id_program']; ?>" onclick="return confirm('Hapus program bantuan ini?')" class="px-4 py-2 bg-rose-50 text-rose-600 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-rose-100 transition">
+                                        <a href="<?= BASEURL; ?>/blt/hapus_program/<?= $p['id_program']; ?>" onclick="return confirm('Hapus program bantuan ini?')" class="px-4 py-2 bg-rose-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-rose-700 transition shadow-lg shadow-rose-100 flex items-center">
                                             Hapus
                                         </a>
                                     <?php endif; ?>

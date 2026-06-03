@@ -13,8 +13,33 @@ class PengaduanModel {
         return $this->db->resultSet();
     }
 
+    public function getPengaduanById($id) {
+        $this->db->query('SELECT * FROM pengaduan WHERE id_pengaduan = :id');
+        $this->db->bind('id', $id);
+        return $this->db->single();
+    }
+
     public function getAllPengaduan() {
         $this->db->query('SELECT p.*, w.nama_lengkap FROM pengaduan p JOIN warga w ON p.id_warga = w.id_warga ORDER BY p.prioritas DESC, p.tanggal_aduan ASC');
+        return $this->db->resultSet();
+    }
+
+    public function getFilteredPengaduan($tgl_mulai = null, $tgl_selesai = null) {
+        $query = 'SELECT p.*, w.nama_lengkap FROM pengaduan p JOIN warga w ON p.id_warga = w.id_warga WHERE 1=1';
+        
+        if ($tgl_mulai) {
+            $query .= ' AND p.tanggal_aduan >= :tgl_mulai';
+        }
+        if ($tgl_selesai) {
+            $query .= ' AND p.tanggal_aduan <= :tgl_selesai';
+        }
+        
+        $query .= ' ORDER BY p.tanggal_aduan DESC';
+        
+        $this->db->query($query);
+        if ($tgl_mulai) $this->db->bind('tgl_mulai', $tgl_mulai . ' 00:00:00');
+        if ($tgl_selesai) $this->db->bind('tgl_selesai', $tgl_selesai . ' 23:59:59');
+        
         return $this->db->resultSet();
     }
 
@@ -31,6 +56,38 @@ class PengaduanModel {
         $this->db->bind('nilai_prioritas', $data['nilai_prioritas']);
         $this->db->bind('prioritas', $data['prioritas']);
 
+        return $this->db->execute();
+    }
+
+    public function updatePengaduan($data) {
+        if (!empty($data['file_bukti'])) {
+            $query = "UPDATE pengaduan 
+                      SET judul_aduan = :judul_aduan, isi_aduan = :isi_aduan, kategori_aduan = :kategori_aduan, file_bukti = :file_bukti, nilai_prioritas = :nilai_prioritas, prioritas = :prioritas, updated_at = NOW()
+                      WHERE id_pengaduan = :id_pengaduan AND id_warga = :id_warga AND status = 'menunggu'";
+        } else {
+            $query = "UPDATE pengaduan 
+                      SET judul_aduan = :judul_aduan, isi_aduan = :isi_aduan, kategori_aduan = :kategori_aduan, nilai_prioritas = :nilai_prioritas, prioritas = :prioritas, updated_at = NOW()
+                      WHERE id_pengaduan = :id_pengaduan AND id_warga = :id_warga AND status = 'menunggu'";
+        }
+
+        $this->db->query($query);
+        $this->db->bind('judul_aduan', $data['judul_aduan']);
+        $this->db->bind('isi_aduan', $data['isi_aduan']);
+        $this->db->bind('kategori_aduan', $data['kategori_aduan']);
+        if (!empty($data['file_bukti'])) {
+            $this->db->bind('file_bukti', $data['file_bukti']);
+        }
+        $this->db->bind('nilai_prioritas', $data['nilai_prioritas']);
+        $this->db->bind('prioritas', $data['prioritas']);
+        $this->db->bind('id_pengaduan', $data['id_pengaduan']);
+        $this->db->bind('id_warga', $data['id_warga']);
+        return $this->db->execute();
+    }
+
+    public function deletePengaduan($id_pengaduan, $id_warga) {
+        $this->db->query("DELETE FROM pengaduan WHERE id_pengaduan = :id AND id_warga = :id_warga AND status = 'menunggu'");
+        $this->db->bind('id', $id_pengaduan);
+        $this->db->bind('id_warga', $id_warga);
         return $this->db->execute();
     }
 
