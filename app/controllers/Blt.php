@@ -94,6 +94,38 @@ class Blt extends Controller {
         header('Location: ' . BASEURL . '/blt/kriteria');
         exit;
     }
+    
+    public function tambah_sub_kriteria($id_kriteria) {
+        if (!isset($_SESSION['user']) || $_SESSION['user']['level'] != 'petugas') {
+            header('Location: ' . BASEURL . '/dashboard');
+            exit;
+        }
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $bltModel = $this->model('BltModel');
+            if ($bltModel->addSubKriteria($id_kriteria, $_POST['label'], $_POST['nilai'])) {
+                $_SESSION['flash'] = ['type' => 'success', 'message' => 'Sub-kriteria berhasil ditambahkan!'];
+            } else {
+                $_SESSION['flash'] = ['type' => 'error', 'message' => 'Gagal menambahkan sub-kriteria.'];
+            }
+            header('Location: ' . BASEURL . '/blt/kriteria');
+            exit;
+        }
+    }
+    
+    public function hapus_sub_kriteria($id_sub_kriteria) {
+        if (!isset($_SESSION['user']) || $_SESSION['user']['level'] != 'petugas') {
+            header('Location: ' . BASEURL . '/dashboard');
+            exit;
+        }
+        $bltModel = $this->model('BltModel');
+        if ($bltModel->deleteSubKriteria($id_sub_kriteria)) {
+            $_SESSION['flash'] = ['type' => 'success', 'message' => 'Sub-kriteria berhasil dihapus!'];
+        } else {
+            $_SESSION['flash'] = ['type' => 'error', 'message' => 'Gagal menghapus sub-kriteria.'];
+        }
+        header('Location: ' . BASEURL . '/blt/kriteria');
+        exit;
+    }
 
     public function tambah_program() {
         if (!isset($_SESSION['user']) || $_SESSION['user']['level'] != 'petugas') {
@@ -106,6 +138,23 @@ class Blt extends Controller {
                 $_SESSION['flash'] = ['type' => 'success', 'message' => 'Program bantuan berhasil ditambahkan!'];
             } else {
                 $_SESSION['flash'] = ['type' => 'error', 'message' => 'Gagal menambahkan program bantuan.'];
+            }
+            header('Location: ' . BASEURL . '/blt/admin');
+            exit;
+        }
+    }
+
+    public function edit_program() {
+        if (!isset($_SESSION['user']) || $_SESSION['user']['level'] != 'petugas') {
+            header('Location: ' . BASEURL . '/dashboard');
+            exit;
+        }
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $bltModel = $this->model('BltModel');
+            if ($bltModel->editProgram($_POST)) {
+                $_SESSION['flash'] = ['type' => 'success', 'message' => 'Program bantuan berhasil diupdate!'];
+            } else {
+                $_SESSION['flash'] = ['type' => 'error', 'message' => 'Gagal mengupdate program bantuan.'];
             }
             header('Location: ' . BASEURL . '/blt/admin');
             exit;
@@ -127,9 +176,14 @@ class Blt extends Controller {
         exit;
     }
 
-    public function calon($id_program) {
+    public function calon($id_program = null) {
         if (!isset($_SESSION['user']) || ($_SESSION['user']['level'] != 'kades' && $_SESSION['user']['level'] != 'petugas')) {
             header('Location: ' . BASEURL . '/dashboard');
+            exit;
+        }
+        
+        if (!$id_program) {
+            header('Location: ' . BASEURL . '/blt/admin');
             exit;
         }
 
@@ -139,6 +193,21 @@ class Blt extends Controller {
         $data['kriteria'] = $bltModel->getKriteria();
         $data['calon'] = $bltModel->getCalonPenerima($id_program);
         $this->view('blt/calon', $data);
+    }
+
+    public function hapus_calon($id_program, $id_calon) {
+        if (!isset($_SESSION['user']) || $_SESSION['user']['level'] != 'petugas') {
+            header('Location: ' . BASEURL . '/dashboard');
+            exit;
+        }
+        $bltModel = $this->model('BltModel');
+        if ($bltModel->deleteCalonPenerima($id_calon)) {
+            $_SESSION['flash'] = ['type' => 'success', 'message' => 'Calon penerima berhasil dihapus!'];
+        } else {
+            $_SESSION['flash'] = ['type' => 'error', 'message' => 'Gagal menghapus calon penerima.'];
+        }
+        header('Location: ' . BASEURL . '/blt/calon/' . $id_program);
+        exit;
     }
 
     public function tambah_calon() {
@@ -158,6 +227,15 @@ class Blt extends Controller {
             }
 
             $bltModel = $this->model('BltModel');
+            
+            // Cek apakah NIK sudah ada di program yang sama
+            $isDuplicate = $bltModel->isNikExistInProgram($id_program, $warga['id_warga']);
+            if ($isDuplicate) {
+                $_SESSION['flash'] = ['type' => 'error', 'message' => 'Warga dengan NIK tersebut sudah terdaftar sebagai calon penerima di program ini.'];
+                header('Location: ' . BASEURL . '/blt/calon/' . $id_program);
+                exit;
+            }
+
             if ($bltModel->addCalonPenerima($id_program, $warga['id_warga'])) {
                 $_SESSION['flash'] = ['type' => 'success', 'message' => 'Calon penerima berhasil ditambahkan!'];
             } else {
@@ -214,6 +292,9 @@ class Blt extends Controller {
         $data['judul'] = 'Manajemen Seleksi BLT';
         $bltModel = $this->model('BltModel');
         $data['programs'] = $bltModel->getPrograms();
+        $data['program_aktif'] = count(array_filter($data['programs'], function($p) { return $p['status'] == 'aktif'; }));
+        $data['program_selesai'] = count(array_filter($data['programs'], function($p) { return $p['status'] == 'selesai'; }));
+        $data['program_direncanakan'] = count(array_filter($data['programs'], function($p) { return $p['status'] == 'direncanakan'; }));
         $this->view('blt/admin', $data);
     }
 

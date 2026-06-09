@@ -52,15 +52,15 @@
             </div>
         </div>
 
-        <!-- Program Bantuan -->
+        <!-- Program Bantuan Aktif -->
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
             <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center text-xl mb-4">
                 <i class="fas fa-hand-holding-heart"></i>
             </div>
-            <h3 class="text-gray-500 font-medium mb-1">Program Bantuan</h3>
+            <h3 class="text-gray-500 font-medium mb-1">Program Aktif</h3>
             <div class="flex items-baseline space-x-2">
-                <span class="text-3xl font-bold text-slate-900"><?= $data['total_program']; ?></span>
-                <span class="text-xs font-semibold text-purple-600 bg-purple-50 px-2 py-0.5 rounded">Aktif</span>
+                <span class="text-3xl font-bold text-slate-900"><?= $data['program_aktif']; ?></span>
+                <span class="text-xs font-semibold text-purple-600 bg-purple-50 px-2 py-0.5 rounded">BLT</span>
             </div>
         </div>
     </div>

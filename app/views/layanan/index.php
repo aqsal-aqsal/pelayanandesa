@@ -144,8 +144,8 @@
                 </div>
 
                 <div class="space-y-2">
-                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Upload Berkas Pendukung (KTP/KK)</label>
-                    <input type="file" name="file_berkas" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Upload Berkas Pendukung (KTP/KK) <span class="text-red-500">*</span></label>
+                    <input type="file" name="file_berkas" id="surat_file_berkas" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none" required>
                     <p id="surat_berkas_hint" class="text-[10px] text-gray-400 italic">Format: JPG, PNG, PDF (Maks. 2MB)</p>
                 </div>
 
@@ -265,6 +265,8 @@
         suratIdJenis.value = '';
         suratKeperluan.value = '';
         suratBerkasHint.textContent = 'Format: JPG, PNG, PDF (Maks. 2MB)';
+        document.getElementById('surat_file_berkas').required = true;
+        document.getElementById('surat_file_berkas').value = '';
         openModal('modalSurat');
     });
 
@@ -282,6 +284,8 @@
             suratKeperluan.value = btn.getAttribute('data-keperluan') || '';
             const berkas = btn.getAttribute('data-berkas');
             suratBerkasHint.textContent = berkas ? 'Kosongkan jika tidak ingin mengganti berkas.' : 'Format: JPG, PNG, PDF (Maks. 2MB)';
+            document.getElementById('surat_file_berkas').required = false;
+            document.getElementById('surat_file_berkas').value = '';
             openModal('modalSurat');
             return;
         }

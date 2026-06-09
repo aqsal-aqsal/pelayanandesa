@@ -45,7 +45,30 @@
                     <?php else: ?>
                         <?php foreach($data['kriteria'] as $k): ?>
                             <tr class="hover:bg-gray-50/50 transition">
-                                <td class="px-8 py-5 font-bold text-slate-700"><?= $k['nama_kriteria']; ?></td>
+                                <td class="px-8 py-5">
+                                    <div class="space-y-3">
+                                        <div class="font-bold text-slate-700"><?= $k['nama_kriteria']; ?></div>
+                                        <?php if(!empty($k['sub_kriteria'])): ?>
+                                            <div class="flex flex-wrap gap-2">
+                                                <?php foreach($k['sub_kriteria'] as $sk): ?>
+                                                    <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-bold flex items-center gap-2">
+                                                        <?= $sk['label']; ?> (<?= $sk['nilai']; ?>)
+                                                        <?php if($_SESSION['user']['level'] == 'petugas'): ?>
+                                                            <a href="<?= BASEURL; ?>/blt/hapus_sub_kriteria/<?= $sk['id_sub_kriteria']; ?>" onclick="return confirm('Hapus opsi ini?')" class="text-rose-600 hover:text-rose-700">
+                                                                <i class="fas fa-times"></i>
+                                                            </a>
+                                                        <?php endif; ?>
+                                                    </span>
+                                                <?php endforeach; ?>
+                                            </div>
+                                        <?php endif; ?>
+                                        <?php if($_SESSION['user']['level'] == 'petugas'): ?>
+                                            <button onclick="openSubKriteriaModal(<?= $k['id_kriteria']; ?>)" class="text-blue-600 text-xs font-bold hover:text-blue-700 transition">
+                                                <i class="fas fa-plus mr-1"></i> Tambah Opsi
+                                            </button>
+                                        <?php endif; ?>
+                                    </div>
+                                </td>
                                 <td class="px-8 py-5 text-sm text-gray-500 font-medium"><?= $k['bobot']; ?>%</td>
                                 <td class="px-8 py-5">
                                     <span class="px-3 py-1.5 text-[10px] font-black rounded-lg border uppercase tracking-wider <?= $k['tipe_kriteria'] == 'benefit' ? 'bg-blue-50 text-blue-600 border-blue-100' : 'bg-amber-50 text-amber-600 border-amber-100'; ?>">
@@ -102,6 +125,29 @@
     </div>
 </div>
 
+<div id="subKriteriaModal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm overflow-y-auto h-full w-full z-50 transition-all duration-300">
+    <div class="relative top-20 mx-auto p-10 border w-[500px] shadow-2xl rounded-[32px] bg-white mb-20">
+        <div class="text-center mb-8">
+            <h3 class="text-2xl font-black text-slate-900">Tambah Opsi (Sub-Kriteria)</h3>
+        </div>
+
+        <form id="subKriteriaForm" method="POST" class="space-y-6 text-left">
+            <div class="space-y-2">
+                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Label (Contoh: Baik, Kurang Baik)</label>
+                <input type="text" name="label" required class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+            </div>
+            <div class="space-y-2">
+                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Nilai (Contoh: 100, 70, 40)</label>
+                <input type="number" name="nilai" required class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+            </div>
+            <div class="flex space-x-3 pt-4">
+                <button type="button" onclick="closeSubKriteriaModal()" class="flex-1 py-4 bg-gray-100 text-gray-500 font-bold rounded-2xl hover:bg-gray-200 transition">Batal</button>
+                <button type="submit" class="flex-[2] py-4 bg-blue-600 text-white font-black rounded-2xl shadow-lg shadow-blue-100 hover:bg-blue-700 transition">Simpan Opsi</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
     function openKriteriaModal() {
         document.getElementById('kriteriaModal').classList.remove('hidden');
@@ -109,6 +155,15 @@
     }
     function closeKriteriaModal() {
         document.getElementById('kriteriaModal').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+    function openSubKriteriaModal(idKriteria) {
+        document.getElementById('subKriteriaForm').action = '<?= BASEURL; ?>/blt/tambah_sub_kriteria/' + idKriteria;
+        document.getElementById('subKriteriaModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeSubKriteriaModal() {
+        document.getElementById('subKriteriaModal').classList.add('hidden');
         document.body.style.overflow = 'auto';
     }
 </script>

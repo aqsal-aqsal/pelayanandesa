@@ -26,11 +26,61 @@
             <table class="w-full text-left border-collapse">
                 <thead class="bg-gray-50/50">
                     <tr>
-                        <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Prioritas</th>
-                        <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Data Warga</th>
-                        <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Jenis Surat</th>
-                        <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Tanggal Masuk</th>
-                        <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Status</th>
+                        <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                            <?php
+                                $new_order = ($data['sort_by'] == 'prioritas' && $data['sort_order'] == 'DESC') ? 'ASC' : 'DESC';
+                            ?>
+                            <a href="?sort_by=prioritas&sort_order=<?= $new_order ?>" class="flex items-center gap-1 hover:text-gray-700 transition">
+                                Prioritas
+                                <?php if ($data['sort_by'] == 'prioritas'): ?>
+                                    <span class="text-sm"><?= $data['sort_order'] == 'DESC' ? '↓' : '↑' ?></span>
+                                <?php endif; ?>
+                            </a>
+                        </th>
+                        <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                            <?php
+                                $new_order = ($data['sort_by'] == 'nama_lengkap' && $data['sort_order'] == 'ASC') ? 'DESC' : 'ASC';
+                            ?>
+                            <a href="?sort_by=nama_lengkap&sort_order=<?= $new_order ?>" class="flex items-center gap-1 hover:text-gray-700 transition">
+                                Data Warga
+                                <?php if ($data['sort_by'] == 'nama_lengkap'): ?>
+                                    <span class="text-sm"><?= $data['sort_order'] == 'ASC' ? '↑' : '↓' ?></span>
+                                <?php endif; ?>
+                            </a>
+                        </th>
+                        <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                            <?php
+                                $new_order = ($data['sort_by'] == 'nama_surat' && $data['sort_order'] == 'ASC') ? 'DESC' : 'ASC';
+                            ?>
+                            <a href="?sort_by=nama_surat&sort_order=<?= $new_order ?>" class="flex items-center gap-1 hover:text-gray-700 transition">
+                                Jenis Surat
+                                <?php if ($data['sort_by'] == 'nama_surat'): ?>
+                                    <span class="text-sm"><?= $data['sort_order'] == 'ASC' ? '↑' : '↓' ?></span>
+                                <?php endif; ?>
+                            </a>
+                        </th>
+                        <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                            <?php
+                                $new_order = ($data['sort_by'] == 'tanggal_pengajuan' && $data['sort_order'] == 'DESC') ? 'ASC' : 'DESC';
+                            ?>
+                            <a href="?sort_by=tanggal_pengajuan&sort_order=<?= $new_order ?>" class="flex items-center gap-1 hover:text-gray-700 transition">
+                                Tanggal Masuk
+                                <?php if ($data['sort_by'] == 'tanggal_pengajuan'): ?>
+                                    <span class="text-sm"><?= $data['sort_order'] == 'DESC' ? '↓' : '↑' ?></span>
+                                <?php endif; ?>
+                            </a>
+                        </th>
+                        <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                            <?php
+                                $new_order = ($data['sort_by'] == 'status' && $data['sort_order'] == 'ASC') ? 'DESC' : 'ASC';
+                            ?>
+                            <a href="?sort_by=status&sort_order=<?= $new_order ?>" class="flex items-center gap-1 hover:text-gray-700 transition">
+                                Status
+                                <?php if ($data['sort_by'] == 'status'): ?>
+                                    <span class="text-sm"><?= $data['sort_order'] == 'ASC' ? '↑' : '↓' ?></span>
+                                <?php endif; ?>
+                            </a>
+                        </th>
                         <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest text-right">Aksi</th>
                     </tr>
                 </thead>
@@ -79,6 +129,25 @@
                                     </span>
                                 </td>
                                 <td class="px-8 py-5 text-right flex justify-end items-center gap-2">
+                                    <!-- Detail Button (for everyone) -->
+                                    <button
+                                        type="button"
+                                        class="px-4 py-2 bg-blue-50 text-blue-600 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-100 transition flex items-center"
+                                        data-action="detail-surat"
+                                        data-id="<?= (int)$p['id_pengajuan']; ?>"
+                                        data-nik="<?= htmlspecialchars($p['nik'], ENT_QUOTES); ?>"
+                                        data-nama="<?= htmlspecialchars($p['nama_lengkap'], ENT_QUOTES); ?>"
+                                        data-jenis="<?= htmlspecialchars($p['nama_surat'], ENT_QUOTES); ?>"
+                                        data-keperluan="<?= htmlspecialchars($p['keperluan'] ?? '', ENT_QUOTES); ?>"
+                                        data-status="<?= htmlspecialchars($p['status'], ENT_QUOTES); ?>"
+                                        data-tanggal="<?= htmlspecialchars($p['tanggal_pengajuan'] ?? '-', ENT_QUOTES); ?>"
+                                        data-nosurat="<?= htmlspecialchars($p['no_surat'] ?? '-', ENT_QUOTES); ?>"
+                                        data-catatan="<?= htmlspecialchars($p['catatan_penolakan'] ?? '-', ENT_QUOTES); ?>"
+                                        data-berkas="<?= htmlspecialchars($p['file_berkas'] ?? '', ENT_QUOTES); ?>"
+                                        data-prioritas="<?= (int)$p['prioritas']; ?>"
+                                    >Detail</button>
+                                    
+                                    <!-- Other Action Buttons -->
                                     <?php if($_SESSION['user']['level'] == 'kades' && $p['status'] == 'diproses'): ?>
                                         <button onclick="openModal(<?= $p['id_pengajuan']; ?>, 'selesai')" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-700 transition shadow-lg shadow-blue-100 flex items-center">
                                             Tanda Tangani
@@ -88,11 +157,9 @@
                                             Verifikasi
                                         </button>
                                     <?php elseif($p['status'] == 'selesai'): ?>
-                                        <a href="<?= BASEURL; ?>/layanan/unduh/<?= $p['id_pengajuan']; ?>" target="_blank" class="px-4 py-2 bg-blue-50 text-blue-600 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-100 transition flex items-center">
+                                        <a href="<?= BASEURL; ?>/layanan/unduh/<?= $p['id_pengajuan']; ?>" target="_blank" class="px-4 py-2 bg-green-50 text-green-600 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-green-100 transition flex items-center">
                                             Unduh
                                         </a>
-                                    <?php else: ?>
-                                        <span class="text-[10px] font-black text-gray-300 uppercase tracking-widest">No Action</span>
                                     <?php endif; ?>
                                 </td>
                             </tr>
@@ -103,10 +170,75 @@
         </div>
     </div>
 </div>
+<!-- Modal Detail Surat -->
+<div id="modalDetailSurat" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-slate-900/50" data-modal-close="modalDetailSurat"></div>
+    <div class="relative min-h-full flex items-center justify-center p-4 overflow-y-auto">
+        <div class="w-full max-w-3xl bg-white rounded-[32px] shadow-2xl border border-gray-100 overflow-hidden max-h-[90vh] flex flex-col">
+            <div class="bg-slate-900 px-10 py-8 flex items-start justify-between gap-4">
+                <div>
+                    <h3 class="text-2xl font-black text-white">Detail Pengajuan Surat</h3>
+                    <p class="text-slate-200 text-sm mt-1">Berikut data pengajuan surat lengkap.</p>
+                </div>
+                <button type="button" class="text-white/80 hover:text-white" data-modal-close="modalDetailSurat"><i class="fas fa-times"></i></button>
+            </div>
 
+            <div class="p-10 space-y-6 overflow-y-auto flex-1">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-1">
+                        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">NIK Warga</div>
+                        <div id="detailSuratNik" class="font-bold text-slate-800"></div>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Nama Lengkap</div>
+                        <div id="detailSuratNama" class="font-bold text-slate-800"></div>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Jenis Surat</div>
+                        <div id="detailSuratJenis" class="font-bold text-slate-800"></div>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Prioritas</div>
+                        <div id="detailSuratPrioritas" class="font-bold text-slate-800"></div>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Status</div>
+                        <div id="detailSuratStatus" class="font-bold text-slate-800"></div>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Tanggal Pengajuan</div>
+                        <div id="detailSuratTanggal" class="font-bold text-slate-800"></div>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">No Surat</div>
+                        <div id="detailSuratNo" class="font-bold text-slate-800"></div>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Berkas Pendukung</div>
+                        <a id="detailSuratBerkas" class="font-bold text-blue-600 hover:text-blue-800 break-all" href="#" target="_blank"></a>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Keperluan</div>
+                    <div id="detailSuratKeperluan" class="text-slate-700 whitespace-pre-line"></div>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Catatan</div>
+                    <div id="detailSuratCatatan" class="text-slate-700 whitespace-pre-line"></div>
+                </div>
+
+                <div class="pt-2 flex justify-end">
+                    <button type="button" class="px-8 py-4 text-sm font-bold text-gray-500 hover:text-gray-700 transition" data-modal-close="modalDetailSurat">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Modal Update Status -->
 <div id="statusModal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm overflow-y-auto h-full w-full z-50 transition-all duration-300">
-    <div class="relative top-20 mx-auto p-10 border w-[400px] shadow-2xl rounded-[32px] bg-white">
+    <div class="relative top-20 mx-auto p-10 border w-[500px] shadow-2xl rounded-[32px] bg-white">
         <div class="text-center mb-8">
             <h3 class="text-2xl font-black text-slate-900">Update Status</h3>
             <p class="text-sm text-gray-400 mt-2">Ubah status pengajuan surat ini.</p>
@@ -114,12 +246,19 @@
         
         <form action="<?= BASEURL; ?>/layanan/update_status" method="POST" class="space-y-6 text-left">
             <input type="hidden" name="id_pengajuan" id="modal_id">
+            <input type="hidden" id="modal_file" value="">
             
-            <div class="space-y-2">
+            <!-- Tampilkan Berkas Bukti -->
+            <div id="file_view" class="space-y-2">
+                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Berkas Bukti</label>
+                <div id="berkas_bukti" class="flex items-center gap-2 p-3 bg-blue-50 border border-blue-100 rounded-xl text-sm text-blue-700"></div>
+            </div>
+            
+            <div class="space-y-2" id="status_select_wrapper">
                 <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Pilih Status</label>
                 <select name="status" id="modal_status" required class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
-                    <option value="diproses">Setujui & Proses (Petugas)</option>
-                    <option value="selesai">Selesai & Tanda Tangani (Kades)</option>
+                    <!-- Petugas Only -->
+                    <option value="diproses">Verifikasi & Lanjutkan ke Kades</option>
                     <option value="ditolak">Tolak Pengajuan</option>
                 </select>
             </div>
@@ -138,16 +277,99 @@
 </div>
 
 <script>
-    function openModal(id, status = 'diproses') {
+    // Ubah openModal untuk menerima data pengajuan
+    const pengajuanData = <?php echo json_encode($data['pengajuan']); ?>;
+    const modalDetailSurat = document.getElementById('modalDetailSurat');
+    
+    const openModal = (id) => document.getElementById(id).classList.remove('hidden');
+    const closeModal = (id) => document.getElementById(id).classList.add('hidden');
+    
+    // Handle modal close buttons
+    document.querySelectorAll('[data-modal-close]').forEach(el => {
+        el.addEventListener('click', () => {
+            const modalId = el.getAttribute('data-modal-close');
+            if(modalId) closeModal(modalId);
+        });
+    });
+    
+    function openModalStatus(id, status = 'diproses') {
+        const data = pengajuanData.find(p => p.id_pengajuan == id);
         document.getElementById('modal_id').value = id;
         document.getElementById('modal_status').value = status;
+        
+        // Tampilkan berkas bukti
+        const berkasDiv = document.getElementById('berkas_bukti');
+        if (data.file_berkas) {
+            berkasDiv.innerHTML = `
+                <i class="fas fa-file-alt"></i>
+                <span>${data.file_berkas}</span>
+                <a href="<?= BASEURL; ?>/assets/uploads/${data.file_berkas}" target="_blank" class="ml-auto text-blue-600 font-bold text-xs uppercase">Lihat</a>
+            `;
+        } else {
+            berkasDiv.innerHTML = '<span class="text-gray-400 italic">Tidak ada berkas</span>';
+        }
+
+        // Sesuaikan status untuk Kades
+        const statusSelectWrapper = document.getElementById('status_select_wrapper');
+        const statusSelect = document.getElementById('modal_status');
+        if('<?= $_SESSION['user']['level'] ?>' === 'kades') {
+            statusSelect.innerHTML = `
+                <option value="selesai">Tanda Tangani & Selesai</option>
+            `;
+        } else {
+            statusSelect.innerHTML = `
+                <option value="diproses">Verifikasi & Lanjutkan ke Kades</option>
+                <option value="ditolak">Tolak Pengajuan</option>
+            `;
+        }
+        
         document.getElementById('statusModal').classList.remove('hidden');
         document.body.style.overflow = 'hidden';
     }
-    function closeModal() {
+    
+    // Rename the old openModal function for backward compatibility
+    window.openModal = openModalStatus;
+    
+    // Handle detail surat button click
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-action="detail-surat"]');
+        if (!btn) return;
+        
+        document.getElementById('detailSuratNik').textContent = btn.getAttribute('data-nik') || '-';
+        document.getElementById('detailSuratNama').textContent = btn.getAttribute('data-nama') || '-';
+        document.getElementById('detailSuratJenis').textContent = btn.getAttribute('data-jenis') || '-';
+        document.getElementById('detailSuratPrioritas').textContent = btn.getAttribute('data-prioritas') ? btn.getAttribute('data-prioritas') : '-';
+        document.getElementById('detailSuratStatus').textContent = btn.getAttribute('data-status') || '-';
+        const tanggalRaw = btn.getAttribute('data-tanggal') || '-';
+        const tanggalIso = tanggalRaw && tanggalRaw !== '-' ? tanggalRaw.replace(' ', 'T') : null;
+        document.getElementById('detailSuratTanggal').textContent = tanggalIso ? new Date(tanggalIso).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-';
+        document.getElementById('detailSuratNo').textContent = btn.getAttribute('data-nosurat') || '-';
+
+        const berkas = btn.getAttribute('data-berkas') || '';
+        const berkasEl = document.getElementById('detailSuratBerkas');
+        if (berkas) {
+            berkasEl.textContent = berkas;
+            berkasEl.href = '<?= BASEURL; ?>/assets/uploads/' + berkas;
+            berkasEl.classList.remove('hidden');
+        } else {
+            berkasEl.textContent = '-';
+            berkasEl.href = '#';
+        }
+
+        document.getElementById('detailSuratKeperluan').textContent = btn.getAttribute('data-keperluan') || '-';
+        document.getElementById('detailSuratCatatan').textContent = btn.getAttribute('data-catatan') || '-';
+        
+        openModal('modalDetailSurat');
+        document.body.style.overflow = 'hidden';
+    });
+    
+    function closeModalStatus() {
         document.getElementById('statusModal').classList.add('hidden');
         document.body.style.overflow = 'auto';
     }
+    
+    // Rename old closeModal for backward compatibility
+    window.closeModal = closeModalStatus;
 </script>
 
 <?php $this->view('templates/footer', $data); ?>

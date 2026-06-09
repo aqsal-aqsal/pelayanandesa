@@ -34,6 +34,21 @@ class BltModel {
         return $this->db->execute();
     }
 
+    public function editProgram($data) {
+        $this->db->query('UPDATE program_bantuan 
+            SET nama_program = :nama, sumber_dana = :sumber, periode = :periode, 
+                total_anggaran = :anggaran, kuota_penerima = :kuota, status = :status, updated_at = NOW() 
+            WHERE id_program = :id');
+        $this->db->bind('nama', $data['nama_program']);
+        $this->db->bind('sumber', $data['sumber_dana']);
+        $this->db->bind('periode', $data['periode']);
+        $this->db->bind('anggaran', $data['total_anggaran'] ?? 0);
+        $this->db->bind('kuota', $data['kuota_penerima'] ?? 0);
+        $this->db->bind('status', $data['status'] ?? 'direncanakan');
+        $this->db->bind('id', $data['id_program']);
+        return $this->db->execute();
+    }
+
     public function deleteProgram($id_program) {
         $this->db->query('DELETE FROM program_bantuan WHERE id_program = :id');
         $this->db->bind('id', $id_program);
@@ -41,8 +56,35 @@ class BltModel {
     }
 
     public function getKriteria() {
-        $this->db->query('SELECT * FROM kriteria_bantuan');
+        $this->db->query('SELECT * FROM kriteria_bantuan ORDER BY id_kriteria ASC');
+        $kriteria = $this->db->resultSet();
+        
+        // Tambahkan sub-kriteria untuk setiap kriteria
+        foreach ($kriteria as &$k) {
+            $k['sub_kriteria'] = $this->getSubKriteria($k['id_kriteria']);
+        }
+        
+        return $kriteria;
+    }
+    
+    public function getSubKriteria($id_kriteria) {
+        $this->db->query('SELECT * FROM sub_kriteria WHERE id_kriteria = :id_kriteria ORDER BY nilai DESC');
+        $this->db->bind('id_kriteria', $id_kriteria);
         return $this->db->resultSet();
+    }
+    
+    public function addSubKriteria($id_kriteria, $label, $nilai) {
+        $this->db->query('INSERT INTO sub_kriteria (id_kriteria, label, nilai, created_at) VALUES (:id_kriteria, :label, :nilai, NOW())');
+        $this->db->bind('id_kriteria', $id_kriteria);
+        $this->db->bind('label', $label);
+        $this->db->bind('nilai', $nilai);
+        return $this->db->execute();
+    }
+    
+    public function deleteSubKriteria($id_sub_kriteria) {
+        $this->db->query('DELETE FROM sub_kriteria WHERE id_sub_kriteria = :id');
+        $this->db->bind('id', $id_sub_kriteria);
+        return $this->db->execute();
     }
 
     public function addKriteria($data) {
@@ -60,9 +102,47 @@ class BltModel {
     }
 
     public function getCalonPenerima($id_program) {
-        $this->db->query('SELECT c.*, w.nama_lengkap, w.nik FROM calon_penerima c JOIN warga w ON c.id_warga = w.id_warga WHERE c.id_program = :id_program');
+        $this->db->query('SELECT c.*, w.* FROM calon_penerima c JOIN warga w ON c.id_warga = w.id_warga WHERE c.id_program = :id_program ORDER BY c.created_at DESC');
         $this->db->bind('id_program', $id_program);
-        return $this->db->resultSet();
+        $calon = $this->db->resultSet();
+        
+        // Tambahkan informasi apakah nilai sudah diinput dan nilai kriteria
+        foreach ($calon as &$c) {
+            $this->db->query('SELECT COUNT(*) as total FROM nilai_kriteria_calon WHERE id_calon = :id_calon');
+            $this->db->bind('id_calon', $c['id_calon']);
+            $c['total_nilai'] = $this->db->single()['total'];
+            
+            // Ambil nilai kriteria
+            $c['nilai'] = [];
+            $this->db->query('SELECT id_kriteria, nilai_asli FROM nilai_kriteria_calon WHERE id_calon = :id_calon');
+            $this->db->bind('id_calon', $c['id_calon']);
+            $nilaiList = $this->db->resultSet();
+            foreach ($nilaiList as $n) {
+                $c['nilai'][$n['id_kriteria']] = $n['nilai_asli'];
+            }
+        }
+        
+        return $calon;
+    }
+
+    public function isNikExistInProgram($id_program, $id_warga) {
+        $this->db->query('SELECT COUNT(*) as total FROM calon_penerima WHERE id_program = :id_program AND id_warga = :id_warga');
+        $this->db->bind('id_program', $id_program);
+        $this->db->bind('id_warga', $id_warga);
+        $res = $this->db->single();
+        return $res['total'] > 0;
+    }
+
+    public function deleteCalonPenerima($id_calon) {
+        // Hapus nilai kriteria terlebih dahulu
+        $this->db->query('DELETE FROM nilai_kriteria_calon WHERE id_calon = :id_calon');
+        $this->db->bind('id_calon', $id_calon);
+        $this->db->execute();
+        
+        // Hapus calon penerima
+        $this->db->query('DELETE FROM calon_penerima WHERE id_calon = :id_calon');
+        $this->db->bind('id_calon', $id_calon);
+        return $this->db->execute();
     }
 
     public function addCalonPenerima($id_program, $id_warga) {

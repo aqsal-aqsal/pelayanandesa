@@ -14,11 +14,13 @@
         }
         
         /* Header Style */
-        .header { width: 100%; position: relative; text-align: center; padding-bottom: 10px; border-bottom: 2px solid #0f172a; }
-        .logo-img { position: absolute; left: 0; top: 0; width: 60px; height: auto; }
+        .header { width: 100%; position: relative; text-align: center; padding-bottom: 15px; border-bottom: 2px solid #0f172a; }
+        .logo-img { position: absolute; left: 0; top: 0; width: 70px; height: auto; }
         .header-text { margin-bottom: 0; }
-        .header-text .gov-name { font-weight: 800; font-size: 13pt; color: #0f172a; letter-spacing: 1px; }
-        .header-text .district-name { font-weight: 700; font-size: 11pt; color: #334155; }
+        .header-text .gov-name { font-weight: 800; font-size: 14pt; color: #0f172a; letter-spacing: 1px; }
+        .header-text .kec-name { font-weight: 700; font-size: 12pt; color: #0f172a; }
+        .header-text .desa-name { font-weight: 800; font-size: 12pt; color: #0f172a; }
+        .header-text .alamat { font-weight: 500; font-size: 10pt; color: #334155; margin-top: 5px; font-style: italic; }
 
         .report-title { text-align: center; font-weight: 800; text-transform: uppercase; font-size: 14pt; color: #0f172a; margin-top: 30px; margin-bottom: 25px; border-bottom: 2px solid #f1f5f9; display: inline-block; padding-bottom: 5px; width: 100%; }
 
@@ -42,27 +44,35 @@
 </head>
 <body>
     <?php
-        $rootPath = dirname(__DIR__, 2);
-        $logoPath = $rootPath . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'logokabbanjar.png';
-        $logoDataUri = null;
-        if (file_exists($logoPath)) {
-            $logoDataUri = 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath));
+        // Path logo ABSOLUT di server
+        $serverLogoPath = 'c:/laragon/www/pelayanandesa/public/assets/img/logokabbanjar.png';
+        
+        // Baca file dan encode ke base64
+        $logoBase64 = '';
+        if (file_exists($serverLogoPath)) {
+            $logoContent = file_get_contents($serverLogoPath);
+            $logoBase64 = 'data:image/png;base64,' . base64_encode($logoContent);
+        } else {
+            // Fallback: placeholder biru jika file tidak ada
+            $logoBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAdgAAAHYBTnsmCAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPAAAAAASUVORK5CYII=';
         }
-
+        
+        // Fungsi tgl_indo harus sebelum dipanggil!
         function tgl_indo($tanggal){
             $bulan = array (1 => 'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember');
             $split = explode('-', $tanggal);
             return $split[2] . ' ' . $bulan[ (int)$split[1] ] . ' ' . $split[0];
         }
+        
         $tgl_sekarang = tgl_indo(date('Y-m-d'));
     ?>
     <div class="header">
-        <?php if ($logoDataUri): ?>
-            <img src="<?= $logoDataUri; ?>" class="logo-img" alt="Logo">
-        <?php endif; ?>
+        <img src="<?= $logoBase64; ?>" class="logo-img" alt="Logo">
         <div class="header-text">
-            <div class="gov-name">PEMERINTAH DESA ASTAMBUL KOTA</div>
-            <div class="district-name">KECAMATAN ASTAMBUL &bull; KAB.BANJAR</div>
+            <div class="gov-name">PEMERINTAH KABUPATEN BANJAR</div>
+            <div class="kec-name">KECAMATAN ASTAMBUL</div>
+            <div class="desa-name">DESA ASTAMBUL KOTA</div>
+            <div class="alamat">Alamat: Jl. Syekh Muhammad Arsyad Al-Banjari Astambul Kota RT.04/RW.01</div>
         </div>
     </div>
 

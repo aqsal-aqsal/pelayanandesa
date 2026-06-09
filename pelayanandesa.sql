@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 02, 2026 at 12:27 AM
+-- Generation Time: Jun 09, 2026 at 01:27 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -59,9 +59,8 @@ CREATE TABLE `calon_penerima` (
 --
 
 INSERT INTO `calon_penerima` (`id_calon`, `id_warga`, `id_program`, `tanggal_usulan`, `status`, `created_at`, `updated_at`) VALUES
-(1, 4, 1, '2026-05-20', 'terpilih', '2026-05-20 01:38:22', '2026-05-24 17:05:24'),
-(2, 4, 1, '2026-05-21', 'terpilih', '2026-05-21 11:04:34', '2026-05-24 17:05:24'),
-(3, 5, 1, '2026-05-26', 'diproses', '2026-05-26 14:13:02', '2026-05-26 14:13:12');
+(1, 4, 1, '2026-05-20', 'terpilih', '2026-05-20 01:38:22', '2026-06-09 20:24:31'),
+(3, 5, 1, '2026-05-26', 'terpilih', '2026-05-26 14:13:02', '2026-06-09 20:24:31');
 
 -- --------------------------------------------------------
 
@@ -83,8 +82,8 @@ CREATE TABLE `hasil_saw_blt` (
 --
 
 INSERT INTO `hasil_saw_blt` (`id`, `id_program`, `id_calon`, `nilai_total`, `ranking`, `created_at`) VALUES
-(6, 1, 1, '0.50000', 1, '2026-05-24 17:05:24'),
-(7, 1, 2, '0.00000', 2, '2026-05-24 17:05:24');
+(14, 1, 1, '0.90333', 1, '2026-06-09 20:24:31'),
+(15, 1, 3, '0.13667', 2, '2026-06-09 20:24:31');
 
 -- --------------------------------------------------------
 
@@ -202,10 +201,14 @@ CREATE TABLE `nilai_kriteria_calon` (
 --
 
 INSERT INTO `nilai_kriteria_calon` (`id_nilai`, `id_calon`, `id_kriteria`, `nilai_asli`, `nilai_normalisasi`, `created_at`, `updated_at`) VALUES
-(1, 1, 2, '30.000', '0.000', '2026-05-21 11:07:04', '2026-05-21 11:07:25'),
+(1, 1, 2, '30.000', '1.000', '2026-05-21 11:07:04', '2026-06-09 20:23:46'),
 (2, 1, 3, '10.000', '1.000', '2026-05-21 11:07:04', '2026-05-21 11:07:25'),
 (3, 1, 4, '30.000', '1.000', '2026-05-21 11:07:04', '2026-05-21 11:07:25'),
-(4, 1, 5, '30.000', '0.000', '2026-05-21 11:07:04', '2026-05-21 11:07:25');
+(4, 1, 5, '30.000', '0.033', '2026-05-21 11:07:04', '2026-06-09 20:23:46'),
+(5, 3, 2, '1500000.000', '0.000', '2026-06-09 20:22:48', '2026-06-09 20:24:16'),
+(6, 3, 3, '1.000', '0.100', '2026-06-09 20:22:48', '2026-06-09 20:24:16'),
+(7, 3, 4, '1.000', '0.033', '2026-06-09 20:22:48', '2026-06-09 20:24:16'),
+(8, 3, 5, '1.000', '1.000', '2026-06-09 20:22:48', '2026-06-09 20:24:16');
 
 -- --------------------------------------------------------
 
@@ -315,7 +318,8 @@ INSERT INTO `pengajuan_surat` (`id_pengajuan`, `id_warga`, `id_jenis_surat`, `no
 (3, 2, 2, NULL, 'Untuk memenuhi kebutuhan UKT Kampus', '1779200355_images.png', 1, 'menunggu', NULL, NULL, NULL, '2026-05-19 22:19:15', NULL, NULL, '2026-05-19 22:19:15', '2026-05-19 22:19:15', NULL, NULL, 0, 2, NULL),
 (5, 4, 1, 'SK/5/05/2026', 'Untuk keperluan pekerjaan', '1779210521_images.png', 1, 'selesai', '', 1, 3, '2026-05-20 01:08:41', '2026-05-20 01:09:56', '2026-05-20 07:38:34', '2026-05-20 01:08:41', '2026-05-20 07:38:34', '75e82e7455387afae9728e3f66708964', 'http://localhost/pelayanandesa/public/verify/75e82e7455387afae9728e3f66708964', 1, 3, NULL),
 (6, 4, 5, 'SK/6/05/2026', 'Untuk Pindah Rumah', '1779254180_images.png', 1, 'selesai', '', 1, 3, '2026-05-20 13:16:20', '2026-05-20 13:16:38', '2026-05-20 13:16:58', '2026-05-20 13:16:20', '2026-05-20 13:16:58', 'bba98533419ed83b85b50a7ed86116b4', 'http://localhost/pelayanandesa/public/verify/bba98533419ed83b85b50a7ed86116b4', 1, 3, NULL),
-(7, 4, 6, 'SK/7/05/2026', 'Untuk Keperluan Acara Syukuran', '1779256775_images.png', 1, 'selesai', '', 1, 3, '2026-05-20 13:59:35', '2026-05-20 14:00:51', '2026-05-20 14:01:10', '2026-05-20 13:59:35', '2026-05-20 14:01:10', NULL, NULL, 1, 3, NULL);
+(7, 4, 6, 'SK/7/05/2026', 'Untuk Keperluan Acara Syukuran', '1779256775_images.png', 1, 'selesai', '', 1, 3, '2026-05-20 13:59:35', '2026-05-20 14:00:51', '2026-05-20 14:01:10', '2026-05-20 13:59:35', '2026-05-20 14:01:10', NULL, NULL, 1, 3, NULL),
+(8, 4, 6, NULL, 'tes', '1781011508_a-playful-rounded-wordmark-featuring-any_rsID7c4NVVOy4GpbLqQLhQ__8VbQRt2S1C1iiMMDb92sA-removebg-preview.png', 1, 'menunggu', NULL, NULL, NULL, '2026-06-09 21:25:08', NULL, NULL, '2026-06-09 21:25:08', '2026-06-09 21:25:08', NULL, NULL, 0, 3, NULL);
 
 -- --------------------------------------------------------
 
@@ -369,6 +373,21 @@ INSERT INTO `program_bantuan` (`id_program`, `nama_program`, `sumber_dana`, `per
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `sub_kriteria`
+--
+
+CREATE TABLE `sub_kriteria` (
+  `id_sub_kriteria` int NOT NULL,
+  `id_kriteria` int NOT NULL,
+  `label` varchar(255) NOT NULL,
+  `nilai` int NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `user`
 --
 
@@ -393,7 +412,9 @@ INSERT INTO `user` (`id_user`, `nik`, `password`, `level`, `status_aktif`, `crea
 (2, 'warga', '$2y$10$p403zowaJPWmSiz0EVdrte8LDsOoSBmWlzbF0rAZ83m2Zk8zhiyWu', 'masyarakat', 1, '2026-05-19 21:26:10', NULL, NULL, NULL),
 (3, 'kades', '$2y$10$x.9jme.kAgf0964Yf81aieyCJvuDFwGrERw4rc8hC97ezyD5QFhuq', 'kades', 1, '2026-05-19 21:26:10', NULL, NULL, NULL),
 (4, '6203011308010004', '$2y$10$lCQ710x5gyCxj4mB2dEffOR6CfSk62qAN5tvztmTh7WK8oRW3SbTu', 'masyarakat', 1, '2026-05-20 01:07:24', NULL, 'aqsalbuana@gmail.com', '081904158932'),
-(5, '6303955901532154', '$2y$10$y.gYoW6.z.SIyDrgse9XieBqcwwl/56SQXOCmNgbS2ASDuErD1Mka', 'masyarakat', 1, '2026-05-21 12:40:39', NULL, 'eko.prasetyo@gmail.com', '080174074380');
+(5, '6303955901532154', '$2y$10$y.gYoW6.z.SIyDrgse9XieBqcwwl/56SQXOCmNgbS2ASDuErD1Mka', 'masyarakat', 1, '2026-05-21 12:40:39', NULL, 'eko.prasetyo@gmail.com', '080174074380'),
+(6, '6303055288657460', '$2y$10$E6gm29b5hodUK3R5Kr1v/uz/cglfo5DFR25f5vzAj73l.1nNmr0ie', 'masyarakat', 1, '2026-06-09 20:36:52', NULL, 'ahmad.fauzi@gmail.com', '080718445865'),
+(7, '6303494811140890', '$2y$10$YUyb4tcCIPEPoYoDA3pTnOqYU70YSc.sA/rjLaeRt8/TbjxVVGMO.', 'masyarakat', 1, '2026-06-09 20:38:55', NULL, 'budi.santoso@gmail.com', '080766262824');
 
 -- --------------------------------------------------------
 
@@ -428,7 +449,9 @@ INSERT INTO `warga` (`id_warga`, `nik`, `nama_lengkap`, `tempat_lahir`, `tanggal
 (2, 'warga', 'Riswan', 'Astambul', '2004-01-01', 'L', 'Jl. Desa No. 1', NULL, 'PNS', '2500000.00', 0, NULL, NULL, '2026-05-19 21:26:10', NULL),
 (3, 'kades', 'Kepala Desa Astambul', NULL, NULL, NULL, 'Rumah Dinas Kades', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-19 21:26:10', NULL),
 (4, '6203011308010004', 'Aqsal Arya Buana', 'Banjarbaru', '2001-08-13', 'L', 'Jl. Indra Sari', '04', 'Tenaga Kontrak', '3400000.00', 1, 'kurang_layak', 'belum_kawin', '2026-05-20 01:07:23', NULL),
-(5, '6303955901532154', 'Eko Prasetyo', NULL, NULL, NULL, 'Jl. Melati No. 12, Astambul', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-21 12:40:39', NULL);
+(5, '6303955901532154', 'Eko Prasetyo', 'Banyuwangi', '1999-08-06', 'L', 'Jl. Melati No. 12, Astambul', NULL, 'Pedagang', '1500000.00', 1, NULL, NULL, '2026-05-21 12:40:39', NULL),
+(7, '6303055288657460', 'Ahmad Fauzi', 'Banjarbaru', '1991-05-26', 'L', 'RT 002 RW 001, Astambul', '01/05', 'Wiraswasta', '1500000.00', 3, 'layak', 'kawin', '2026-06-09 20:36:52', NULL),
+(8, '6303494811140890', 'Budi Santoso', 'Banjarbaru', '1990-01-14', 'L', 'Jl. Melati No. 12, Astambul', '03/02', 'Buruh', '500000.00', 1, 'tidak_layak', 'cerai', '2026-06-09 20:38:55', NULL);
 
 --
 -- Indexes for dumped tables
@@ -543,6 +566,13 @@ ALTER TABLE `program_bantuan`
   ADD PRIMARY KEY (`id_program`);
 
 --
+-- Indexes for table `sub_kriteria`
+--
+ALTER TABLE `sub_kriteria`
+  ADD PRIMARY KEY (`id_sub_kriteria`),
+  ADD KEY `id_kriteria` (`id_kriteria`);
+
+--
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
@@ -576,7 +606,7 @@ ALTER TABLE `calon_penerima`
 -- AUTO_INCREMENT for table `hasil_saw_blt`
 --
 ALTER TABLE `hasil_saw_blt`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `hasil_seleksi_saw`
@@ -606,7 +636,7 @@ ALTER TABLE `kriteria_bantuan`
 -- AUTO_INCREMENT for table `nilai_kriteria_calon`
 --
 ALTER TABLE `nilai_kriteria_calon`
-  MODIFY `id_nilai` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_nilai` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `notifications`
@@ -630,7 +660,7 @@ ALTER TABLE `pengaduan`
 -- AUTO_INCREMENT for table `pengajuan_surat`
 --
 ALTER TABLE `pengajuan_surat`
-  MODIFY `id_pengajuan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_pengajuan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `petugas`
@@ -645,16 +675,22 @@ ALTER TABLE `program_bantuan`
   MODIFY `id_program` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `sub_kriteria`
+--
+ALTER TABLE `sub_kriteria`
+  MODIFY `id_sub_kriteria` int NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_user` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `warga`
 --
 ALTER TABLE `warga`
-  MODIFY `id_warga` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_warga` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables
@@ -729,6 +765,12 @@ ALTER TABLE `pengajuan_surat`
   ADD CONSTRAINT `fk_pengajuan_kades_ttd` FOREIGN KEY (`id_kades_ttd`) REFERENCES `petugas` (`id_petugas`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_pengajuan_petugas_verif` FOREIGN KEY (`id_petugas_verif`) REFERENCES `petugas` (`id_petugas`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_pengajuan_warga` FOREIGN KEY (`id_warga`) REFERENCES `warga` (`id_warga`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `sub_kriteria`
+--
+ALTER TABLE `sub_kriteria`
+  ADD CONSTRAINT `sub_kriteria_ibfk_1` FOREIGN KEY (`id_kriteria`) REFERENCES `kriteria_bantuan` (`id_kriteria`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `user`

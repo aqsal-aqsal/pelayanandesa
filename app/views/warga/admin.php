@@ -130,6 +130,22 @@
                 </div>
             </div>
 
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">RT/RW</label>
+                    <input type="text" name="rt_rw" id="rt_rw" class="block w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Status Kawin</label>
+                    <select name="status_kawin" id="status_kawin" class="block w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        <option value="">-- Pilih --</option>
+                        <option value="belum_kawin">Belum Kawin</option>
+                        <option value="kawin">Kawin</option>
+                        <option value="cerai">Cerai</option>
+                    </select>
+                </div>
+            </div>
+
             <!-- Fields for SAW BLT Logic -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 border-t pt-6">
                 <div class="space-y-2">
@@ -139,6 +155,18 @@
                 <div class="space-y-2">
                     <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Jumlah Tanggungan</label>
                     <input type="number" name="jumlah_tanggungan" id="jumlah_tanggungan" class="block w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Kondisi Rumah</label>
+                    <select name="kondisi_rumah" id="kondisi_rumah" class="block w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        <option value="">-- Pilih --</option>
+                        <option value="layak">Layak</option>
+                        <option value="kurang_layak">Kurang Layak</option>
+                        <option value="tidak_layak">Tidak Layak</option>
+                    </select>
                 </div>
             </div>
 
@@ -181,10 +209,13 @@
             document.getElementById('tempat_lahir').value = data.tempat_lahir;
             document.getElementById('tanggal_lahir').value = data.tanggal_lahir;
             document.getElementById('alamat').value = data.alamat;
+            document.getElementById('rt_rw').value = data.rt_rw;
             document.getElementById('pekerjaan').value = data.pekerjaan;
             document.getElementById('jenis_kelamin').value = data.jenis_kelamin;
+            document.getElementById('status_kawin').value = data.status_kawin;
             document.getElementById('penghasilan').value = data.penghasilan;
             document.getElementById('jumlah_tanggungan').value = data.jumlah_tanggungan;
+            document.getElementById('kondisi_rumah').value = data.kondisi_rumah;
 
             if (mode === 'detail') {
                 inputs.forEach(input => {
@@ -211,11 +242,19 @@
         const places = ['Martapura', 'Banjarbaru', 'Banjarmasin', 'Astambul', 'Kertak Hanyar'];
         const addresses = ['Jl. Melati No. 12, Astambul', 'Jl. Mawar No. 5, Astambul Kota', 'RT 002 RW 001, Astambul', 'Kec. Astambul, Kab. Banjar'];
         const jobs = ['Petani', 'Pedagang', 'Buruh', 'PNS', 'Wiraswasta', 'IRT'];
+        const rtrw = ['01/05', '02/03', '04/06', '03/02'];
+        const penghasilanOptions = [500000, 1000000, 1500000, 2000000, 2500000];
         
         const randomName = names[Math.floor(Math.random() * names.length)];
         const randomPlace = places[Math.floor(Math.random() * places.length)];
         const randomAddress = addresses[Math.floor(Math.random() * addresses.length)];
         const randomJob = jobs[Math.floor(Math.random() * jobs.length)];
+        const randomRT = rtrw[Math.floor(Math.random() * rtrw.length)];
+        const randomPenghasilan = penghasilanOptions[Math.floor(Math.random() * penghasilanOptions.length)];
+        const randomJK = Math.random() > 0.5 ? 'L' : 'P';
+        const randomStatusKawin = ['belum_kawin', 'kawin', 'cerai'][Math.floor(Math.random() * 3)];
+        const randomKondisiRumah = ['layak', 'kurang_layak', 'tidak_layak'][Math.floor(Math.random() * 3)];
+        const randomJumlahTanggungan = Math.floor(Math.random() * 5);
         const randomNIK = '6303' + Math.floor(Math.random() * 1000000000000).toString().padStart(12, '0');
         
         // Random date between 1970 and 2005
@@ -229,10 +268,13 @@
         document.getElementById('tempat_lahir').value = randomPlace;
         document.getElementById('tanggal_lahir').value = dateStr;
         document.getElementById('alamat').value = randomAddress;
+        document.getElementById('rt_rw').value = randomRT;
         document.getElementById('pekerjaan').value = randomJob;
-        document.getElementById('jenis_kelamin').value = Math.random() > 0.5 ? 'L' : 'P';
-        document.getElementById('penghasilan').value = Math.floor(Math.random() * 50) * 100000 + 500000; // 500k to 5.5m
-        document.getElementById('jumlah_tanggungan').value = Math.floor(Math.random() * 5);
+        document.getElementById('jenis_kelamin').value = randomJK;
+        document.getElementById('status_kawin').value = randomStatusKawin;
+        document.getElementById('penghasilan').value = randomPenghasilan;
+        document.getElementById('jumlah_tanggungan').value = randomJumlahTanggungan;
+        document.getElementById('kondisi_rumah').value = randomKondisiRumah;
     }
 </script>
 

@@ -121,6 +121,13 @@ class Layanan extends Controller {
                 exit;
             }
 
+            // Validasi file upload wajib
+            if (!isset($_FILES['file_berkas']) || $_FILES['file_berkas']['error'] != 0) {
+                $_SESSION['flash'] = ['type' => 'error', 'message' => 'Upload berkas pendukung (KTP/KK) wajib diisi!'];
+                header('Location: ' . BASEURL . '/layanan');
+                exit;
+            }
+
             $suratModel = $this->model('SuratModel');
             
             // Priority Calculation Logic
@@ -167,7 +174,14 @@ class Layanan extends Controller {
         }
         $data['judul'] = 'Manajemen Layanan';
         $suratModel = $this->model('SuratModel');
-        $data['pengajuan'] = $suratModel->getAllPengajuan();
+        
+        $sort_by = isset($_GET['sort_by']) ? $_GET['sort_by'] : 'prioritas';
+        $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'DESC';
+        
+        $data['pengajuan'] = $suratModel->getAllPengajuan($sort_by, $sort_order);
+        $data['sort_by'] = $sort_by;
+        $data['sort_order'] = $sort_order;
+        
         $this->view('layanan/admin', $data);
     }
 

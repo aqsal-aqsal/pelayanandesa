@@ -19,8 +19,21 @@ class PengaduanModel {
         return $this->db->single();
     }
 
-    public function getAllPengaduan() {
-        $this->db->query('SELECT p.*, w.nama_lengkap FROM pengaduan p JOIN warga w ON p.id_warga = w.id_warga ORDER BY p.prioritas DESC, p.tanggal_aduan ASC');
+    public function getAllPengaduan($sort_by = 'prioritas', $sort_order = 'DESC') {
+        $allowed_columns = ['prioritas', 'nama_lengkap', 'tanggal_aduan', 'status'];
+        if (!in_array($sort_by, $allowed_columns)) {
+            $sort_by = 'prioritas';
+        }
+        $sort_order = strtoupper($sort_order) === 'ASC' ? 'ASC' : 'DESC';
+        
+        $order_sql = '';
+        if ($sort_by == 'nama_lengkap') {
+            $order_sql = "ORDER BY w.nama_lengkap $sort_order";
+        } else {
+            $order_sql = "ORDER BY p.$sort_by $sort_order";
+        }
+        
+        $this->db->query("SELECT p.*, w.nama_lengkap FROM pengaduan p JOIN warga w ON p.id_warga = w.id_warga $order_sql");
         return $this->db->resultSet();
     }
 

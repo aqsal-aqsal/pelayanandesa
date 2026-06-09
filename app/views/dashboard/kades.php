@@ -31,8 +31,8 @@
             <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:bg-blue-600 group-hover:text-white transition">
                 <i class="fas fa-gift"></i>
             </div>
-            <h3 class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Program Bantuan</h3>
-            <p class="text-3xl font-black text-slate-900"><?= $data['total_program']; ?></p>
+            <h3 class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Program Aktif</h3>
+            <p class="text-3xl font-black text-slate-900"><?= $data['program_aktif']; ?></p>
             <a href="<?= BASEURL; ?>/blt/admin" class="mt-4 inline-flex items-center text-[10px] font-black text-blue-600 uppercase tracking-widest hover:gap-2 transition-all">
                 Kelola Bantuan <i class="fas fa-arrow-right ml-1"></i>
             </a>

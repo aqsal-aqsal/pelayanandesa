@@ -54,12 +54,21 @@
             <div class="space-y-2">
                 <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Lampiran Bukti (Foto/Dokumen)</label>
                 <div class="relative group">
-                    <input type="file" name="file_bukti" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                    <input type="file" name="file_bukti" id="file_bukti_input" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" <?= $is_edit ? '' : 'required' ?>>
                     <div class="px-5 py-4 bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl flex items-center justify-center space-x-3 group-hover:bg-blue-50 group-hover:border-blue-200 transition">
                         <i class="fas fa-cloud-upload-alt text-gray-400 group-hover:text-blue-500"></i>
-                        <span class="text-sm text-gray-500 group-hover:text-blue-600 font-medium">Klik untuk upload file bukti</span>
+                        <span class="text-sm text-gray-500 group-hover:text-blue-600 font-medium" id="file_bukti_text">
+                            <?= $is_edit && $aduan['bukti_foto'] ? $aduan['bukti_foto'] : 'Klik untuk upload file bukti' ?>
+                        </span>
                     </div>
                 </div>
+                <?php if($is_edit && $aduan['bukti_foto']): ?>
+                    <div class="flex items-center gap-2 p-3 bg-green-50 border border-green-100 text-green-700 rounded-xl text-sm">
+                        <i class="fas fa-check-circle"></i>
+                        <span><?= $aduan['bukti_foto']; ?></span>
+                        <span class="text-[10px] ml-auto text-green-600 uppercase font-bold">Sudah Upload</span>
+                    </div>
+                <?php endif; ?>
                 <p class="text-[10px] text-gray-400 italic"><?= $is_edit ? 'Kosongkan jika tidak ingin mengganti lampiran.' : 'Maksimal ukuran file 2MB (JPG, PNG, PDF)'; ?></p>
             </div>
 
@@ -72,5 +81,19 @@
         </form>
     </div>
 </div>
+
+<script>
+    // Preview nama file bukti
+    const fileInput = document.getElementById('file_bukti_input');
+    const fileText = document.getElementById('file_bukti_text');
+    
+    if (fileInput && fileText) {
+        fileInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                fileText.textContent = this.files[0].name;
+            }
+        });
+    }
+</script>
 
 <?php $this->view('templates/footer', $data); ?>

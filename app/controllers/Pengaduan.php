@@ -187,7 +187,14 @@ class Pengaduan extends Controller {
         }
         $data['judul'] = 'Manajemen Pengaduan';
         $pengaduanModel = $this->model('PengaduanModel');
-        $data['pengaduan'] = $pengaduanModel->getAllPengaduan();
+        
+        $sort_by = isset($_GET['sort_by']) ? $_GET['sort_by'] : 'prioritas';
+        $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'DESC';
+        
+        $data['pengaduan'] = $pengaduanModel->getAllPengaduan($sort_by, $sort_order);
+        $data['sort_by'] = $sort_by;
+        $data['sort_order'] = $sort_order;
+        
         $this->view('pengaduan/admin', $data);
     }
 

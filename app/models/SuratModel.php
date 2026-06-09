@@ -39,8 +39,23 @@ class SuratModel {
         return $this->db->resultSet();
     }
 
-    public function getAllPengajuan() {
-        $this->db->query('SELECT p.*, j.nama_surat, w.nama_lengkap, w.nik FROM pengajuan_surat p JOIN jenis_surat j ON p.id_jenis_surat = j.id_jenis_surat JOIN warga w ON p.id_warga = w.id_warga ORDER BY p.prioritas DESC, p.tanggal_pengajuan ASC');
+    public function getAllPengajuan($sort_by = 'prioritas', $sort_order = 'DESC') {
+        $allowed_columns = ['prioritas', 'nama_lengkap', 'nama_surat', 'tanggal_pengajuan', 'status'];
+        if (!in_array($sort_by, $allowed_columns)) {
+            $sort_by = 'prioritas';
+        }
+        $sort_order = strtoupper($sort_order) === 'ASC' ? 'ASC' : 'DESC';
+        
+        $order_sql = '';
+        if ($sort_by == 'nama_lengkap') {
+            $order_sql = "ORDER BY w.nama_lengkap $sort_order";
+        } else if ($sort_by == 'nama_surat') {
+            $order_sql = "ORDER BY j.nama_surat $sort_order";
+        } else {
+            $order_sql = "ORDER BY p.$sort_by $sort_order";
+        }
+        
+        $this->db->query("SELECT p.*, j.nama_surat, w.nama_lengkap, w.nik FROM pengajuan_surat p JOIN jenis_surat j ON p.id_jenis_surat = j.id_jenis_surat JOIN warga w ON p.id_warga = w.id_warga $order_sql");
         return $this->db->resultSet();
     }
 

@@ -22,7 +22,7 @@
     <div class="flex-1 relative">
         <div class="absolute -top-4 -right-4 w-24 h-24 bg-blue-500 rounded-2xl -z-10 opacity-20 animate-pulse"></div>
         <div class="rounded-3xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition duration-500">
-            <img src="https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&q=80&w=800" alt="Village Office" class="w-full h-[500px] object-cover">
+            <img src="<?= BASEURL; ?>/assets/img/astambulkota.jpeg" alt="Astambul Kota" class="w-full h-[500px] object-cover">
             <div class="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-xl border border-white/20">
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-xl">

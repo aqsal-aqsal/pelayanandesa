@@ -26,6 +26,31 @@
         </div>
     <?php endif; ?>
 
+    <!-- Statistics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
+            <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl mb-4">
+                <i class="fas fa-play-circle"></i>
+            </div>
+            <h3 class="text-gray-500 font-medium mb-1">Program Aktif</h3>
+            <div class="text-3xl font-bold text-slate-900"><?= $data['program_aktif']; ?></div>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
+            <div class="w-12 h-12 bg-green-50 text-green-600 rounded-xl flex items-center justify-center text-xl mb-4">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3 class="text-gray-500 font-medium mb-1">Program Selesai</h3>
+            <div class="text-3xl font-bold text-slate-900"><?= $data['program_selesai']; ?></div>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
+            <div class="w-12 h-12 bg-gray-50 text-gray-600 rounded-xl flex items-center justify-center text-xl mb-4">
+                <i class="fas fa-clock"></i>
+            </div>
+            <h3 class="text-gray-500 font-medium mb-1">Direncanakan</h3>
+            <div class="text-3xl font-bold text-slate-900"><?= $data['program_direncanakan']; ?></div>
+        </div>
+    </div>
+
     <div class="bg-white rounded-[32px] shadow-sm border border-gray-100 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
@@ -70,6 +95,9 @@
                                         Lihat Hasil
                                     </a>
                                     <?php if($_SESSION['user']['level'] == 'petugas'): ?>
+                                        <button onclick='openEditProgramModal(<?= json_encode($p); ?>)' class="px-4 py-2 bg-amber-500 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-amber-600 transition shadow-lg shadow-amber-100 flex items-center">
+                                            Edit
+                                        </button>
                                         <a href="<?= BASEURL; ?>/blt/hapus_program/<?= $p['id_program']; ?>" onclick="return confirm('Hapus program bantuan ini?')" class="px-4 py-2 bg-rose-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-rose-700 transition shadow-lg shadow-rose-100 flex items-center">
                                             Hapus
                                         </a>
@@ -87,37 +115,38 @@
 <div id="programModal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm overflow-y-auto h-full w-full z-50 transition-all duration-300">
     <div class="relative top-20 mx-auto p-10 border w-[600px] shadow-2xl rounded-[32px] bg-white mb-20">
         <div class="text-center mb-8">
-            <h3 class="text-2xl font-black text-slate-900">Tambah Program Bantuan</h3>
+            <h3 class="text-2xl font-black text-slate-900" id="programModalTitle">Tambah Program Bantuan</h3>
             <p class="text-sm text-gray-400 mt-2">Lengkapi data program bantuan sosial.</p>
         </div>
         
-        <form action="<?= BASEURL; ?>/blt/tambah_program" method="POST" class="space-y-6 text-left">
+        <form id="programForm" action="<?= BASEURL; ?>/blt/tambah_program" method="POST" class="space-y-6 text-left">
+            <input type="hidden" name="id_program" id="program_id_input">
             <div class="space-y-2">
                 <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Nama Program</label>
-                <input type="text" name="nama_program" required class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                <input type="text" name="nama_program" id="program_nama_input" required class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-2">
                     <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Sumber Dana</label>
-                    <input type="text" name="sumber_dana" required class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                    <input type="text" name="sumber_dana" id="program_sumber_input" required class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
                 </div>
                 <div class="space-y-2">
                     <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Periode</label>
-                    <input type="text" name="periode" required class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition" placeholder="Contoh: 2026">
+                    <input type="text" name="periode" id="program_periode_input" required class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition" placeholder="Contoh: 2026">
                 </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="space-y-2">
                     <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Total Anggaran</label>
-                    <input type="number" name="total_anggaran" class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                    <input type="number" name="total_anggaran" id="program_anggaran_input" class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
                 </div>
                 <div class="space-y-2">
                     <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Kuota Penerima</label>
-                    <input type="number" name="kuota_penerima" class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                    <input type="number" name="kuota_penerima" id="program_kuota_input" class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
                 </div>
                 <div class="space-y-2">
                     <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Status</label>
-                    <select name="status" class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                    <select name="status" id="program_status_input" class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
                         <option value="direncanakan">Direncanakan</option>
                         <option value="aktif">Aktif</option>
                         <option value="selesai">Selesai</option>
@@ -134,9 +163,36 @@
 
 <script>
     function openProgramModal() {
+        document.getElementById('programModalTitle').innerText = 'Tambah Program Bantuan';
+        document.getElementById('programForm').action = '<?= BASEURL; ?>/blt/tambah_program';
+        document.getElementById('program_id_input').value = '';
+        document.getElementById('program_nama_input').value = '';
+        document.getElementById('program_sumber_input').value = '';
+        document.getElementById('program_periode_input').value = '';
+        document.getElementById('program_anggaran_input').value = '';
+        document.getElementById('program_kuota_input').value = '';
+        document.getElementById('program_status_input').value = 'direncanakan';
+        
         document.getElementById('programModal').classList.remove('hidden');
         document.body.style.overflow = 'hidden';
     }
+    
+    function openEditProgramModal(p) {
+        document.getElementById('programModalTitle').innerText = 'Edit Program Bantuan';
+        document.getElementById('programForm').action = '<?= BASEURL; ?>/blt/edit_program';
+        
+        document.getElementById('program_id_input').value = p.id_program;
+        document.getElementById('program_nama_input').value = p.nama_program;
+        document.getElementById('program_sumber_input').value = p.sumber_dana;
+        document.getElementById('program_periode_input').value = p.periode;
+        document.getElementById('program_anggaran_input').value = p.total_anggaran;
+        document.getElementById('program_kuota_input').value = p.kuota_penerima;
+        document.getElementById('program_status_input').value = p.status;
+        
+        document.getElementById('programModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+    
     function closeProgramModal() {
         document.getElementById('programModal').classList.add('hidden');
         document.body.style.overflow = 'auto';

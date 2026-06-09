@@ -31,10 +31,15 @@ class Dashboard extends Controller {
         // Analytics Data
         $all_surat = $suratModel->getAllPengajuan();
         $data['surat_perlu_ttd'] = count(array_filter($all_surat, function($s) { 
-            return $s['status'] == 'disetujui' && empty($s['id_kades_ttd']); 
+            return $s['status'] == 'diproses' && empty($s['id_kades_ttd']); 
         }));
         
-        $data['total_program'] = count($bltModel->getPrograms());
+        $programs = $bltModel->getPrograms();
+        $data['total_program'] = count($programs);
+        $data['program_aktif'] = count(array_filter($programs, function($p) { return $p['status'] == 'aktif'; }));
+        $data['program_selesai'] = count(array_filter($programs, function($p) { return $p['status'] == 'selesai'; }));
+        $data['program_direncanakan'] = count(array_filter($programs, function($p) { return $p['status'] == 'direncanakan'; }));
+        
         $data['total_warga'] = count($wargaModel->getAllWarga());
         $data['total_pengaduan'] = count($pengaduanModel->getAllPengaduan());
         
@@ -55,7 +60,12 @@ class Dashboard extends Controller {
         $data['total_surat_masuk'] = count(array_filter($suratModel->getAllPengajuan(), function($s) { return $s['status'] == 'menunggu'; }));
         $data['total_aduan_masuk'] = count(array_filter($pengaduanModel->getAllPengaduan(), function($p) { return $p['status'] == 'menunggu'; }));
         $data['total_warga'] = count($wargaModel->getAllWarga());
-        $data['total_program'] = count($bltModel->getPrograms());
+        
+        $programs = $bltModel->getPrograms();
+        $data['total_program'] = count($programs);
+        $data['program_aktif'] = count(array_filter($programs, function($p) { return $p['status'] == 'aktif'; }));
+        $data['program_selesai'] = count(array_filter($programs, function($p) { return $p['status'] == 'selesai'; }));
+        $data['program_direncanakan'] = count(array_filter($programs, function($p) { return $p['status'] == 'direncanakan'; }));
 
         $this->view('dashboard/petugas', $data);
     }

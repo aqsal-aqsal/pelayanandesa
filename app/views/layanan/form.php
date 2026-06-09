@@ -57,8 +57,19 @@
             </div>
 
             <div class="space-y-2">
-                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Upload Berkas Pendukung (KTP/KK)</label>
-                <input type="file" name="file_berkas" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
+                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Upload Berkas Pendukung (KTP/KK) <span class="text-red-500">*</span></label>
+                <input type="file" name="file_berkas" id="file_berkas_input" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none" <?= $is_edit ? '' : 'required' ?>>
+                <!-- Preview Nama File -->
+                <div id="file_preview" class="flex items-center gap-2 p-3 <?= $is_edit && $pengajuan['file_berkas'] ? 'bg-green-50 border border-green-100 text-green-700' : 'bg-gray-50 border border-gray-200 text-gray-600' ?> rounded-xl text-sm">
+                    <?php if($is_edit && $pengajuan['file_berkas']): ?>
+                        <i class="fas fa-check-circle"></i>
+                        <span><?= $pengajuan['file_berkas']; ?></span>
+                        <span class="text-[10px] ml-auto text-green-600 uppercase font-bold">Sudah Upload</span>
+                    <?php else: ?>
+                        <i class="fas fa-file"></i>
+                        <span id="file_name_display">Pilih file...</span>
+                    <?php endif; ?>
+                </div>
                 <p class="text-[10px] text-gray-400 italic"><?= $is_edit ? 'Kosongkan jika tidak ingin mengganti berkas.' : 'Format: JPG, PNG, PDF (Maks. 2MB)'; ?></p>
             </div>
 
@@ -71,5 +82,25 @@
         </form>
     </div>
 </div>
+
+<script>
+    // Preview nama file berkas
+    const fileInput = document.getElementById('file_berkas_input');
+    const fileNameDisplay = document.getElementById('file_name_display');
+    
+    if (fileInput && fileNameDisplay) {
+        fileInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                fileNameDisplay.textContent = this.files[0].name;
+                document.getElementById('file_preview').classList.remove('bg-gray-50', 'border-gray-200', 'text-gray-600');
+                document.getElementById('file_preview').classList.add('bg-blue-50', 'border-blue-100', 'text-blue-700');
+            } else {
+                fileNameDisplay.textContent = 'Pilih file...';
+                document.getElementById('file_preview').classList.remove('bg-blue-50', 'border-blue-100', 'text-blue-700');
+                document.getElementById('file_preview').classList.add('bg-gray-50', 'border-gray-200', 'text-gray-600');
+            }
+        });
+    }
+</script>
 
 <?php $this->view('templates/footer', $data); ?>

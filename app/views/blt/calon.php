@@ -40,37 +40,50 @@
                 <tbody class="divide-y divide-gray-100">
                     <?php if(empty($data['calon'])): ?>
                         <tr>
-                            <td colspan="4" class="px-8 py-12 text-center text-gray-500 italic">Belum ada calon penerima untuk program ini.</td>
+                            <td colspan="6" class="px-8 py-12 text-center text-gray-500 italic">Belum ada calon penerima.</td>
                         </tr>
                     <?php else: ?>
                         <?php foreach($data['calon'] as $c): ?>
-                            <tr class="hover:bg-gray-50/50 transition">
-                                <td class="px-8 py-5 font-mono text-sm text-slate-700"><?= $c['nik']; ?></td>
-                                <td class="px-8 py-5 font-bold text-slate-700"><?= $c['nama_lengkap']; ?></td>
-                                <td class="px-8 py-5">
-                                    <span class="px-3 py-1.5 text-[10px] font-black rounded-lg border uppercase tracking-wider bg-gray-50 text-gray-600 border-gray-100">
-                                        <?= $c['status']; ?>
-                                    </span>
-                                </td>
-                                <td class="px-8 py-5 text-right flex justify-end items-center gap-2">
-                                    <?php if($_SESSION['user']['level'] == 'petugas'): ?>
-                                        <button onclick='openNilaiModal(<?= $c['id_calon']; ?>, <?= json_encode($c); ?>)' class="px-4 py-2 bg-slate-900 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition flex items-center">
-                                            Input Nilai
-                                        </button>
-                                        <?php if($c['status'] == 'diusulkan'): ?>
-                                            <a href="<?= BASEURL; ?>/blt/ajukan_kades/<?= $data['id_program']; ?>/<?= $c['id_calon']; ?>" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-700 transition shadow-lg shadow-blue-100 flex items-center">
-                                                Ajukan Kades
-                                            </a>
-                                        <?php endif; ?>
-                                    <?php elseif($_SESSION['user']['level'] == 'kades'): ?>
-                                        <button onclick='openNilaiModal(<?= $c['id_calon']; ?>, <?= json_encode($c); ?>, true)' class="px-4 py-2 bg-blue-50 text-blue-600 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-100 transition flex items-center">
-                                            Lihat Nilai
-                                        </button>
-                                    <?php else: ?>
-                                        <span class="text-[10px] font-black text-gray-300 uppercase tracking-widest">No Action</span>
+                        <tr class="hover:bg-gray-50/50 transition">
+                            <td class="px-8 py-5 text-sm font-mono"><?= $c['nik'] ?></td>
+                            <td class="px-8 py-5 text-sm font-bold text-slate-700">
+                                <div class="flex items-center gap-2">
+                                    <?= $c['nama_lengkap'] ?>
+                                    <?php if($c['total_nilai'] > 0): ?>
+                                        <span class="px-2 py-0.5 bg-green-100 text-green-700 text-[10px] font-black rounded-full">
+                                            <i class="fas fa-check mr-1"></i> Nilai Lengkap
+                                        </span>
                                     <?php endif; ?>
-                                </td>
-                            </tr>
+                                </div>
+                            </td>
+                            <td class="px-8 py-5 text-sm text-slate-500"><?= date('d/m/Y', strtotime($c['tanggal_usulan'])) ?></td>
+                            <td class="px-8 py-5">
+                                <span class="px-3 py-1.5 text-[10px] font-black rounded-lg border uppercase tracking-wider bg-blue-50 text-blue-600 border-blue-100">
+                                    <?= $c['status'] ?>
+                                </span>
+                            </td>
+                            <td class="px-8 py-5 text-right flex justify-end items-center gap-2">
+                                <?php if($_SESSION['user']['level'] == 'petugas'): ?>
+                                    <button onclick='openNilaiModal(<?= $c['id_calon'] ?>)' class="px-4 py-2 bg-slate-900 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition flex items-center">
+                                        Input Nilai
+                                    </button>
+                                    <?php if($c['status'] == 'diusulkan'): ?>
+                                        <a href="<?= BASEURL; ?>/blt/ajukan_kades/<?= $data['id_program'] ?>/<?= $c['id_calon'] ?>" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-700 transition shadow-lg shadow-blue-100 flex items-center">
+                                            Ajukan Kades
+                                        </a>
+                                    <?php endif; ?>
+                                    <a href="<?= BASEURL; ?>/blt/hapus_calon/<?= $data['id_program'] ?>/<?= $c['id_calon'] ?>" onclick="return confirm('Hapus calon penerima ini?')" class="px-4 py-2 bg-rose-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-rose-700 transition shadow-lg shadow-rose-100 flex items-center">
+                                        Hapus
+                                    </a>
+                                <?php elseif($_SESSION['user']['level'] == 'kades'): ?>
+                                    <button onclick='openNilaiModal(<?= $c['id_calon'] ?>, true)' class="px-4 py-2 bg-blue-50 text-blue-600 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-100 transition flex items-center">
+                                        Lihat Nilai
+                                    </button>
+                                <?php else: ?>
+                                    <span class="text-[10px] font-black text-gray-300 uppercase tracking-widest">No Action</span>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
                         <?php endforeach; ?>
                     <?php endif; ?>
                 </tbody>
@@ -118,11 +131,20 @@
                     </div>
                 <?php else: ?>
                     <?php foreach($data['kriteria'] as $k): ?>
-                        <div class="space-y-2">
+                        <div class="space-y-2" data-kriteria-id="<?= $k['id_kriteria']; ?>">
                             <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">
                                 <?= $k['nama_kriteria']; ?> (<?= $k['bobot']; ?>%)
                             </label>
-                            <input type="number" step="0.001" name="kriteria_<?= $k['id_kriteria']; ?>" required class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                            <?php if(!empty($k['sub_kriteria'])): ?>
+                                <select name="kriteria_<?= $k['id_kriteria']; ?>" required class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                                    <option value="">-- Pilih Opsi --</option>
+                                    <?php foreach($k['sub_kriteria'] as $sk): ?>
+                                        <option value="<?= $sk['nilai']; ?>"><?= $sk['label']; ?> (<?= $sk['nilai']; ?>)</option>
+                                    <?php endforeach; ?>
+                                </select>
+                            <?php else: ?>
+                                <input type="number" step="0.001" name="kriteria_<?= $k['id_kriteria']; ?>" required class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                            <?php endif; ?>
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
@@ -137,6 +159,13 @@
 </div>
 
 <script>
+    // Convert calon array to object keyed by id_calon for easy lookup
+    const calonData = {};
+    <?php foreach($data['calon'] as $c): ?>
+        calonData[<?= $c['id_calon'] ?>] = <?= json_encode($c) ?>;
+    <?php endforeach; ?>
+    console.log('calonData:', calonData);
+
     function openCalonModal() {
         document.getElementById('calonModal').classList.remove('hidden');
         document.body.style.overflow = 'hidden';
@@ -146,12 +175,20 @@
         document.body.style.overflow = 'auto';
     }
 
-    function openNilaiModal(idCalon, dataCalon, isDetail = false) {
+    function openNilaiModal(idCalon, isDetail = false) {
+        const dataCalon = calonData[idCalon];
+        console.log('openNilaiModal called with idCalon:', idCalon, 'dataCalon:', dataCalon);
+        
+        if (!dataCalon) {
+            console.error('Calon not found for id:', idCalon);
+            return;
+        }
+        
         const modal = document.getElementById('nilaiModal');
         const form = document.getElementById('nilaiForm');
         const title = document.getElementById('nilaiTitle');
         const submitBtn = document.getElementById('nilaiSubmitBtn');
-        const inputs = form.querySelectorAll('input:not([type="hidden"])');
+        const inputs = form.querySelectorAll('input:not([type="hidden"]), select');
 
         document.getElementById('nilai_id_calon').value = idCalon;
         document.getElementById('nilaiSubtitle').innerText = 'NIK: ' + dataCalon.nik + ' | Nama: ' + dataCalon.nama_lengkap;
@@ -160,15 +197,38 @@
             title.innerText = 'Detail Nilai Kriteria';
             submitBtn.classList.add('hidden');
             inputs.forEach(input => input.readOnly = true);
-            
-            // Note: In a real app, you'd fetch the existing values here
-            // For now, we just show the readonly fields
         } else {
             title.innerText = 'Input Nilai Kriteria';
             submitBtn.classList.remove('hidden');
             inputs.forEach(input => input.readOnly = false);
-            form.reset();
-            document.getElementById('nilai_id_calon').value = idCalon;
+        }
+        
+        // Reset form first
+        form.reset();
+        
+        // Populate values from dataCalon.nilai
+        if (dataCalon && dataCalon.nilai) {
+            console.log('Populating values from dataCalon.nilai:', dataCalon.nilai);
+            const container = document.getElementById('nilaiInputsContainer');
+            const kriteriaDivs = container.querySelectorAll('[data-kriteria-id]');
+            
+            kriteriaDivs.forEach(div => {
+                const kriteriaId = div.getAttribute('data-kriteria-id');
+                console.log('Processing kriteriaId:', kriteriaId);
+                const input = div.querySelector('input, select');
+                console.log('Found input:', input);
+                
+                // Check both string and number keys in case json_encode changed type
+                if (input) {
+                    if (dataCalon.nilai.hasOwnProperty(kriteriaId)) {
+                        input.value = dataCalon.nilai[kriteriaId];
+                        console.log('Set input value (string key):', dataCalon.nilai[kriteriaId]);
+                    } else if (dataCalon.nilai.hasOwnProperty(parseInt(kriteriaId))) {
+                        input.value = dataCalon.nilai[parseInt(kriteriaId)];
+                        console.log('Set input value (number key):', dataCalon.nilai[parseInt(kriteriaId)]);
+                    }
+                }
+            });
         }
 
         modal.classList.remove('hidden');

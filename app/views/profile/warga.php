@@ -65,15 +65,7 @@
                             <input type="date" name="tanggal_lahir" value="<?= $data['warga']['tanggal_lahir']; ?>" class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
                         </div>
                     </div>
-                    <div class="space-y-2">
-                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Alamat Lengkap</label>
-                        <textarea name="alamat" rows="3" required class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition"><?= $data['warga']['alamat']; ?></textarea>
-                    </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="space-y-2">
-                            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Pekerjaan</label>
-                            <input type="text" name="pekerjaan" value="<?= $data['warga']['pekerjaan']; ?>" class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
-                        </div>
                         <div class="space-y-2">
                             <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Jenis Kelamin</label>
                             <select name="jenis_kelamin" class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
@@ -81,6 +73,48 @@
                                 <option value="P" <?= $data['warga']['jenis_kelamin'] == 'P' ? 'selected' : ''; ?>>Perempuan</option>
                             </select>
                         </div>
+                        <div class="space-y-2">
+                            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Status Kawin</label>
+                            <select name="status_kawin" class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                                <option value="">-- Pilih --</option>
+                                <option value="belum_kawin" <?= $data['warga']['status_kawin'] == 'belum_kawin' ? 'selected' : ''; ?>>Belum Kawin</option>
+                                <option value="kawin" <?= $data['warga']['status_kawin'] == 'kawin' ? 'selected' : ''; ?>>Kawin</option>
+                                <option value="cerai" <?= $data['warga']['status_kawin'] == 'cerai' ? 'selected' : ''; ?>>Cerai</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Alamat Lengkap</label>
+                        <textarea name="alamat" rows="3" required class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition"><?= $data['warga']['alamat']; ?></textarea>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">RT/RW</label>
+                            <input type="text" name="rt_rw" value="<?= $data['warga']['rt_rw']; ?>" class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Pekerjaan</label>
+                            <input type="text" name="pekerjaan" value="<?= $data['warga']['pekerjaan']; ?>" class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Penghasilan Bulanan (Rp)</label>
+                            <input type="number" name="penghasilan" value="<?= $data['warga']['penghasilan']; ?>" class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Jumlah Tanggungan</label>
+                            <input type="number" name="jumlah_tanggungan" value="<?= $data['warga']['jumlah_tanggungan']; ?>" class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Kondisi Rumah</label>
+                        <select name="kondisi_rumah" class="block w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                            <option value="">-- Pilih --</option>
+                            <option value="layak" <?= $data['warga']['kondisi_rumah'] == 'layak' ? 'selected' : ''; ?>>Layak</option>
+                            <option value="kurang_layak" <?= $data['warga']['kondisi_rumah'] == 'kurang_layak' ? 'selected' : ''; ?>>Kurang Layak</option>
+                            <option value="tidak_layak" <?= $data['warga']['kondisi_rumah'] == 'tidak_layak' ? 'selected' : ''; ?>>Tidak Layak</option>
+                        </select>
                     </div>
                     <div class="pt-6">
                         <button type="submit" class="w-full py-4 bg-blue-600 text-white font-black rounded-2xl shadow-lg shadow-blue-100 hover:bg-blue-700 transition uppercase tracking-widest">Simpan Perubahan</button>
