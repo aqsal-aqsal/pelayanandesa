@@ -47,9 +47,53 @@ class Blt extends Controller {
 
         $bltModel = $this->model('BltModel');
         $data['judul'] = 'Detail Seleksi BLT';
-        $data['program'] = null; // Get from DB
+        $data['id_program'] = $id_program;
         $data['hasil'] = $bltModel->getHasilSAW($id_program);
         $this->view('blt/detail', $data);
+    }
+
+    public function upload_bukti() {
+        if (!isset($_SESSION['user']) || $_SESSION['user']['level'] != 'petugas') {
+            header('Location: ' . BASEURL . '/dashboard');
+            exit;
+        }
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $id_program = $_POST['id_program'];
+            $id_calon = $_POST['id_calon'];
+            $status_penyaluran = $_POST['status_penyaluran'];
+
+            // Handle file upload
+            $uploadDir = 'assets/uploads/';
+            if (!file_exists($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+
+            $fileName = '';
+            if (isset($_FILES['bukti']) && $_FILES['bukti']['error'] == 0) {
+                $fileTmpPath = $_FILES['bukti']['tmp_name'];
+                $fileName = time() . '_' . basename($_FILES['bukti']['name']);
+                $destPath = $uploadDir . $fileName;
+                
+                if (!move_uploaded_file($fileTmpPath, $destPath)) {
+                    $_SESSION['flash'] = ['type' => 'error', 'message' => 'Gagal mengunggah file!'];
+                    header('Location: ' . BASEURL . '/blt/detail/' . $id_program);
+                    exit;
+                }
+            } else {
+                $_SESSION['flash'] = ['type' => 'error', 'message' => 'Tidak ada file yang diunggah!'];
+                header('Location: ' . BASEURL . '/blt/detail/' . $id_program);
+                exit;
+            }
+
+            $bltModel = $this->model('BltModel');
+            if ($bltModel->updateBuktiPenyaluran($id_program, $id_calon, $fileName, $status_penyaluran)) {
+                $_SESSION['flash'] = ['type' => 'success', 'message' => 'Bukti penyerahan berhasil diunggah!'];
+            } else {
+                $_SESSION['flash'] = ['type' => 'error', 'message' => 'Gagal menyimpan bukti!'];
+            }
+            header('Location: ' . BASEURL . '/blt/detail/' . $id_program);
+            exit;
+        }
     }
 
     public function kriteria() {
@@ -176,7 +220,8 @@ class Blt extends Controller {
         exit;
     }
 
-    public function calon($id_program = null) {
+    public function calon($id_program = null)
+    {
         if (!isset($_SESSION['user']) || ($_SESSION['user']['level'] != 'kades' && $_SESSION['user']['level'] != 'petugas')) {
             header('Location: ' . BASEURL . '/dashboard');
             exit;
@@ -188,10 +233,12 @@ class Blt extends Controller {
         }
 
         $bltModel = $this->model('BltModel');
+        $wargaModel = $this->model('WargaModel');
         $data['judul'] = 'Data Calon Penerima';
         $data['id_program'] = $id_program;
         $data['kriteria'] = $bltModel->getKriteria();
         $data['calon'] = $bltModel->getCalonPenerima($id_program);
+        $data['all_warga'] = $wargaModel->getAllWarga();
         $this->view('blt/calon', $data);
     }
 
@@ -210,37 +257,69 @@ class Blt extends Controller {
         exit;
     }
 
-    public function tambah_calon() {
+    public function tambah_calon()
+    {
         if (!isset($_SESSION['user']) || $_SESSION['user']['level'] != 'petugas') {
             header('Location: ' . BASEURL . '/dashboard');
             exit;
         }
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $id_program = $_POST['id_program'];
-            $nik = $_POST['nik'];
+            $id_warga_list = isset($_POST['id_warga']) ? $_POST['id_warga'] : [];
 
-            $warga = $this->model('WargaModel')->getWargaByNik($nik);
-            if (!$warga) {
-                $_SESSION['flash'] = ['type' => 'error', 'message' => 'NIK tidak ditemukan di data warga.'];
+            if (empty($id_warga_list)) {
+                $_SESSION['flash'] = ['type' => 'error', 'message' => 'Pilih minimal satu warga.'];
                 header('Location: ' . BASEURL . '/blt/calon/' . $id_program);
                 exit;
             }
 
             $bltModel = $this->model('BltModel');
+            $wargaModel = $this->model('WargaModel');
             
-            // Cek apakah NIK sudah ada di program yang sama
-            $isDuplicate = $bltModel->isNikExistInProgram($id_program, $warga['id_warga']);
-            if ($isDuplicate) {
-                $_SESSION['flash'] = ['type' => 'error', 'message' => 'Warga dengan NIK tersebut sudah terdaftar sebagai calon penerima di program ini.'];
-                header('Location: ' . BASEURL . '/blt/calon/' . $id_program);
-                exit;
-            }
+            $success_count = 0;
+            $duplicate_count = 0;
+            
+            foreach ($id_warga_list as $id_warga) {
+                $warga = $wargaModel->getWargaById($id_warga);
+                if (!$warga) continue;
+                
+                // Cek apakah NIK sudah ada di program yang sama
+                $isDuplicate = $bltModel->isNikExistInProgram($id_program, $id_warga);
+                if ($isDuplicate) {
+                    $duplicate_count++;
+                    continue;
+                }
 
-            if ($bltModel->addCalonPenerima($id_program, $warga['id_warga'])) {
-                $_SESSION['flash'] = ['type' => 'success', 'message' => 'Calon penerima berhasil ditambahkan!'];
-            } else {
-                $_SESSION['flash'] = ['type' => 'error', 'message' => 'Gagal menambahkan calon penerima.'];
+                if ($bltModel->addCalonPenerima($id_program, $id_warga)) {
+                    // Get the new calon id
+                    $this->db->query('SELECT id_calon FROM calon_penerima WHERE id_warga = :id_warga AND id_program = :id_program ORDER BY id_calon DESC LIMIT 1');
+                    $this->db->bind('id_warga', $id_warga);
+                    $this->db->bind('id_program', $id_program);
+                    $calon = $this->db->single();
+                    $id_calon = $calon['id_calon'];
+                    
+                    // Auto-fill nilai kriteria
+                    $kriteria = $bltModel->getKriteria();
+                    foreach ($kriteria as $k) {
+                        $nilai = $bltModel->getNilaiFromWargaData($k['id_kriteria'], $warga);
+                        if ($nilai !== null) {
+                            $bltModel->saveNilaiKriteria($id_calon, $k['id_kriteria'], $nilai);
+                        }
+                    }
+                    
+                    $success_count++;
+                }
             }
+            
+            $message = '';
+            if ($success_count > 0) {
+                $message .= "$success_count warga berhasil ditambahkan. ";
+            }
+            if ($duplicate_count > 0) {
+                $message .= "$duplicate_count warga sudah terdaftar. ";
+            }
+            
+            $_SESSION['flash'] = ['type' => ($success_count > 0 ? 'success' : 'error'), 'message' => $message];
             header('Location: ' . BASEURL . '/blt/calon/' . $id_program);
             exit;
         }
@@ -267,6 +346,37 @@ class Blt extends Controller {
             header('Location: ' . BASEURL . '/blt/calon/' . $id_program);
             exit;
         }
+    }
+    
+    public function auto_fill_nilai($id_program, $id_calon) {
+        if (!isset($_SESSION['user']) || $_SESSION['user']['level'] != 'petugas') {
+            header('Location: ' . BASEURL . '/dashboard');
+            exit;
+        }
+        $bltModel = $this->model('BltModel');
+        
+        // Get calon and warga data
+        $this->db->query('SELECT c.*, w.* FROM calon_penerima c JOIN warga w ON c.id_warga = w.id_warga WHERE c.id_calon = :id_calon');
+        $this->db->bind('id_calon', $id_calon);
+        $calon = $this->db->single();
+        
+        if (!$calon) {
+            $_SESSION['flash'] = ['type' => 'error', 'message' => 'Calon tidak ditemukan!'];
+            header('Location: ' . BASEURL . '/blt/calon/' . $id_program);
+            exit;
+        }
+        
+        $kriteria = $bltModel->getKriteria();
+        foreach ($kriteria as $k) {
+            $nilai = $bltModel->getNilaiFromWargaData($k['id_kriteria'], $calon);
+            if ($nilai !== null) {
+                $bltModel->saveNilaiKriteria($id_calon, $k['id_kriteria'], $nilai);
+            }
+        }
+        
+        $_SESSION['flash'] = ['type' => 'success', 'message' => 'Nilai kriteria berhasil diisi otomatis!'];
+        header('Location: ' . BASEURL . '/blt/calon/' . $id_program);
+        exit;
     }
 
     public function ajukan_kades($id_program, $id_calon) {

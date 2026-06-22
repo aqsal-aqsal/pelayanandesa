@@ -92,7 +92,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-2">
                     <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">NIK (16 Digit)</label>
-                    <input type="text" name="nik" id="nik" required class="block w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                    <input type="text" name="nik" id="nik" required maxlength="16" pattern="[0-9]{16}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="block w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
                 </div>
                 <div class="space-y-2">
                     <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Nama Lengkap</label>

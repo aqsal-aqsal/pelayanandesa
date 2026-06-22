@@ -22,14 +22,19 @@
         .header-text .desa-name { font-weight: 800; font-size: 12pt; color: #0f172a; }
         .header-text .alamat { font-weight: 500; font-size: 10pt; color: #334155; margin-top: 5px; font-style: italic; }
 
+        .program-info { margin-top: 20px; margin-bottom: 20px; padding: 10px; background: #f8fafc; border-radius: 4px; }
         .report-title { text-align: center; font-weight: 800; text-transform: uppercase; font-size: 14pt; color: #0f172a; margin-top: 30px; margin-bottom: 25px; border-bottom: 2px solid #f1f5f9; display: inline-block; padding-bottom: 5px; width: 100%; }
         table.report-table { width: 100%; border-collapse: collapse; margin-top: 10px; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; }
-        table.report-table th, table.report-table td { padding: 12px 10px; text-align: left; border-bottom: 1px solid #f1f5f9; }
-        table.report-table th { background-color: #f8fafc; font-weight: 800; text-transform: uppercase; text-align: center; color: #64748b; font-size: 8pt; letter-spacing: 0.5px; }
-        table.report-table td { color: #334155; font-size: 9pt; }
+        table.report-table th, table.report-table td { padding: 8px 5px; text-align: left; border-bottom: 1px solid #f1f5f9; }
+        table.report-table th { background-color: #f8fafc; font-weight: 800; text-transform: uppercase; text-align: center; color: #64748b; font-size: 7pt; letter-spacing: 0.5px; }
+        table.report-table td { color: #334155; font-size: 8pt; }
         table.report-table td.center { text-align: center; }
         table.report-table td.rank { font-weight: bold; text-align: center; }
         table.report-table tr:last-child td { border-bottom: none; }
+
+        .calon-section { margin-bottom: 30px; page-break-inside: avoid; }
+        .calon-name { font-size: 11pt; font-weight: 800; color: #0f172a; margin-bottom: 10px; }
+        .calon-nik { font-size: 9pt; color: #64748b; }
 
         .sig-container { width: 100%; margin-top: 40px; }
         .sig-table { width: 100%; border-collapse: collapse; }
@@ -75,26 +80,51 @@
 
     <div class="report-title"><?= $data['judul']; ?></div>
 
-    <table class="report-table">
-        <thead>
-            <tr>
-                <th width="60">Ranking</th>
-                <th width="120">NIK</th>
-                <th>Nama Lengkap</th>
-                <th width="100">Skor (SAW)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach($data['hasil'] as $h): ?>
-            <tr>
-                <td class="rank"><?= $h['ranking']; ?></td>
-                <td class="center"><?= htmlspecialchars($h['nik']); ?></td>
-                <td style="font-weight: 700; color: #0f172a;"><?= htmlspecialchars($h['nama_lengkap']); ?></td>
-                <td class="center" style="font-weight: 600;"><?= number_format($h['nilai_total'], 5); ?></td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+    <?php if (isset($data['program'])): ?>
+        <div class="program-info">
+            <div style="font-weight: 800;">Program: <?= htmlspecialchars($data['program']['nama_program']); ?></div>
+            <div>Periode: <?= htmlspecialchars($data['program']['periode']); ?></div>
+            <div>Sumber Dana: <?= htmlspecialchars($data['program']['sumber_dana']); ?></div>
+        </div>
+    <?php endif; ?>
+
+    <?php foreach($data['hasil'] as $h): ?>
+        <div class="calon-section">
+            <div class="calon-name">
+                Ranking <?= $h['ranking']; ?>: <?= htmlspecialchars($h['nama_lengkap']); ?> 
+                <span class="calon-nik"> (NIK: <?= htmlspecialchars($h['nik']); ?>)</span>
+            </div>
+            
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>Kriteria</th>
+                        <th width="80">Tipe</th>
+                        <th width="80">Bobot</th>
+                        <th width="60">Nilai Asli</th>
+                        <th width="100">Nilai Normalisasi</th>
+                        <th width="100">Nilai Terbobot</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($h['kriteria'] as $k): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($k['nama_kriteria']); ?></td>
+                        <td class="center"><?= htmlspecialchars($k['tipe']); ?></td>
+                        <td class="center"><?= htmlspecialchars($k['bobot']); ?></td>
+                        <td class="center"><?= htmlspecialchars($k['nilai_asli']); ?></td>
+                        <td class="center"><?= htmlspecialchars($k['nilai_normalisasi']); ?></td>
+                        <td class="center"><?= htmlspecialchars($k['nilai_terbobot']); ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                    <tr style="background: #f8fafc; font-weight: 800;">
+                        <td colspan="5" style="text-align: right;">Total Skor SAW:</td>
+                        <td class="center"><?= htmlspecialchars($h['nilai_total']); ?></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    <?php endforeach; ?>
 
     <div class="sig-container">
         <table class="sig-table">

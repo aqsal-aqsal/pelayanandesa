@@ -184,6 +184,71 @@
             </div>
         </div>
     </div>
+
+    <!-- New Report Sections -->
+    <div class="space-y-8">
+        <!-- Laporan Analitik Waktu Tunggu by Prioritas -->
+        <div class="bg-white p-10 rounded-[32px] shadow-sm border border-gray-100">
+            <h3 class="text-xl font-black text-slate-900 mb-8">Analitik Waktu Tunggu & Penyelesaian Layanan</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-5 py-4 text-xs font-bold uppercase tracking-widest text-gray-500">Prioritas</th>
+                            <th class="px-5 py-4 text-xs font-bold uppercase tracking-widest text-gray-500 text-center">Total Surat</th>
+                            <th class="px-5 py-4 text-xs font-bold uppercase tracking-widest text-gray-500 text-center">Selesai</th>
+                            <th class="px-5 py-4 text-xs font-bold uppercase tracking-widest text-gray-500 text-center">Rata-rata Waktu Tunggu Selesai (Jam)</th>
+                            <th class="px-5 py-4 text-xs font-bold uppercase tracking-widest text-gray-500 text-center">Rata-rata Waktu Tunggu Pending (Jam)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        <?php foreach($data['stats_surat_priority'] as $row): ?>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-5 py-4 font-bold text-slate-700"><?= $row['prioritas']; ?></td>
+                                <td class="px-5 py-4 text-center"><?= $row['total']; ?></td>
+                                <td class="px-5 py-4 text-center"><?= $row['selesai']; ?></td>
+                                <td class="px-5 py-4 text-center"><?= number_format($row['avg_wait_hours_selesai'] ?? 0, 2); ?></td>
+                                <td class="px-5 py-4 text-center"><?= number_format($row['avg_wait_hours_pending'] ?? 0, 2); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Laporan Manajerial BLT -->
+        <div class="bg-white p-10 rounded-[32px] shadow-sm border border-gray-100">
+            <h3 class="text-xl font-black text-slate-900 mb-8">Laporan Manajerial Program Bantuan</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-5 py-4 text-xs font-bold uppercase tracking-widest text-gray-500">Program</th>
+                            <th class="px-5 py-4 text-xs font-bold uppercase tracking-widest text-gray-500 text-center">Total Anggaran</th>
+                            <th class="px-5 py-4 text-xs font-bold uppercase tracking-widest text-gray-500 text-center">Kuota Penerima</th>
+                            <th class="px-5 py-4 text-xs font-bold uppercase tracking-widest text-gray-500 text-center">Total Penerima</th>
+                            <th class="px-5 py-4 text-xs font-bold uppercase tracking-widest text-gray-500 text-center">Selesai Penyaluran</th>
+                            <th class="px-5 py-4 text-xs font-bold uppercase tracking-widest text-gray-500 text-center">Dengan Bukti</th>
+                            <th class="px-5 py-4 text-xs font-bold uppercase tracking-widest text-gray-500 text-center">Rata-rata SAW</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        <?php foreach($data['stats_blt_manajerial'] as $row): ?>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-5 py-4 font-bold text-slate-700"><?= $row['nama_program']; ?></td>
+                                <td class="px-5 py-4 text-center"><?= number_format($row['total_anggaran'] ?? 0); ?></td>
+                                <td class="px-5 py-4 text-center"><?= $row['kuota_penerima'] ?? 0; ?></td>
+                                <td class="px-5 py-4 text-center"><?= $row['total_penerima'] ?? 0; ?></td>
+                                <td class="px-5 py-4 text-center"><?= $row['penerima_selesai'] ?? 0; ?></td>
+                                <td class="px-5 py-4 text-center"><?= $row['dengan_bukti'] ?? 0; ?></td>
+                                <td class="px-5 py-4 text-center"><?= number_format($row['rata_rata_nilai'] ?? 0, 4); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 <?php $this->view('templates/footer', $data); ?>

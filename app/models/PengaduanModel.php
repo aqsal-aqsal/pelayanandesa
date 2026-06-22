@@ -105,7 +105,11 @@ class PengaduanModel {
     }
 
     public function updateStatus($id, $status, $catatan = null, $petugas_id = null) {
-        $query = "UPDATE pengaduan SET status = :status, catatan_penolakan = :catatan, id_petugas_verif = :petugas_id, waktu_proses = NOW() WHERE id_pengaduan = :id";
+        if ($status == 'selesai') {
+            $query = "UPDATE pengaduan SET status = :status, catatan_penolakan = :catatan, id_petugas_verif = :petugas_id, waktu_proses = NOW(), tanggal_selesai = NOW() WHERE id_pengaduan = :id";
+        } else {
+            $query = "UPDATE pengaduan SET status = :status, catatan_penolakan = :catatan, id_petugas_verif = :petugas_id, waktu_proses = NOW() WHERE id_pengaduan = :id";
+        }
         $this->db->query($query);
         $this->db->bind('status', $status);
         $this->db->bind('catatan', $catatan);

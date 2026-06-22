@@ -178,7 +178,21 @@ class Layanan extends Controller {
         $sort_by = isset($_GET['sort_by']) ? $_GET['sort_by'] : 'prioritas';
         $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'DESC';
         
-        $data['pengajuan'] = $suratModel->getAllPengajuan($sort_by, $sort_order);
+        $pengajuan = $suratModel->getAllPengajuan($sort_by, $sort_order);
+        
+        // Sort: non-selesai first, then selesai; non-selesai sorted by priority descending
+        usort($pengajuan, function($a, $b) {
+            if ($a['status'] === 'selesai' && $b['status'] !== 'selesai') {
+                return 1;
+            }
+            if ($a['status'] !== 'selesai' && $b['status'] === 'selesai') {
+                return -1;
+            }
+            // For non-selesai, sort by priority descending
+            return $b['prioritas'] - $a['prioritas'];
+        });
+        
+        $data['pengajuan'] = $pengajuan;
         $data['sort_by'] = $sort_by;
         $data['sort_order'] = $sort_order;
         

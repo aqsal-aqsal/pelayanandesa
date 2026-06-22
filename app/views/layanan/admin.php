@@ -81,6 +81,7 @@
                                 <?php endif; ?>
                             </a>
                         </th>
+                        <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Waktu</th>
                         <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest text-right">Aksi</th>
                     </tr>
                 </thead>
@@ -128,6 +129,11 @@
                                         <?= $p['status']; ?>
                                     </span>
                                 </td>
+                                <td class="px-8 py-5">
+                                    <span class="text-[10px] font-bold text-slate-600 elapsed-time" data-start-time="<?= htmlspecialchars($p['tanggal_pengajuan']); ?>" data-status="<?= htmlspecialchars($p['status']); ?>" data-end-time="<?= htmlspecialchars($p['tanggal_selesai'] ?? ''); ?>">
+                                        --
+                                    </span>
+                                </td>
                                 <td class="px-8 py-5 text-right flex justify-end items-center gap-2">
                                     <!-- Detail Button (for everyone) -->
                                     <button
@@ -144,16 +150,17 @@
                                         data-nosurat="<?= htmlspecialchars($p['no_surat'] ?? '-', ENT_QUOTES); ?>"
                                         data-catatan="<?= htmlspecialchars($p['catatan_penolakan'] ?? '-', ENT_QUOTES); ?>"
                                         data-berkas="<?= htmlspecialchars($p['file_berkas'] ?? '', ENT_QUOTES); ?>"
-                                        data-prioritas="<?= (int)$p['prioritas']; ?>"
-                                    >Detail</button>
+                                        data-prioritas="<?= (int)$p['prioritas']; ?>">
+                                        Detail
+                                    </button>
                                     
                                     <!-- Other Action Buttons -->
                                     <?php if($_SESSION['user']['level'] == 'kades' && $p['status'] == 'diproses'): ?>
-                                        <button onclick="openModal(<?= $p['id_pengajuan']; ?>, 'selesai')" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-700 transition shadow-lg shadow-blue-100 flex items-center">
+                                        <button onclick="openModalStatus(<?= $p['id_pengajuan']; ?>, 'selesai')" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-700 transition shadow-lg shadow-blue-100 flex items-center">
                                             Tanda Tangani
                                         </button>
                                     <?php elseif($_SESSION['user']['level'] == 'petugas' && $p['status'] == 'menunggu'): ?>
-                                        <button onclick="openModal(<?= $p['id_pengajuan']; ?>)" class="px-4 py-2 bg-slate-900 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition flex items-center">
+                                        <button onclick="openModalStatus(<?= $p['id_pengajuan']; ?>)" class="px-4 py-2 bg-slate-900 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition flex items-center">
                                             Verifikasi
                                         </button>
                                     <?php elseif($p['status'] == 'selesai'): ?>
@@ -277,6 +284,59 @@
 </div>
 
 <script>
+    // Function to format elapsed time
+    function formatElapsedTime(seconds) {
+        if (seconds < 60) {
+            return seconds + ' detik';
+        } else if (seconds < 3600) {
+            return Math.floor(seconds / 60) + ' menit';
+        } else if (seconds < 86400) {
+            return Math.floor(seconds / 3600) + ' jam';
+        } else {
+            return Math.floor(seconds / 86400) + ' hari';
+        }
+    }
+
+    // Function to update all elapsed times
+    function updateElapsedTimes() {
+        const now = new Date();
+        const timeElements = document.querySelectorAll('.elapsed-time');
+        
+        timeElements.forEach(el => {
+            const startTimeStr = el.getAttribute('data-start-time');
+            const endTimeStr = el.getAttribute('data-end-time');
+            const status = el.getAttribute('data-status');
+            
+            if (!startTimeStr) return;
+            
+            const startTime = new Date(startTimeStr.replace(' ', 'T')); // Convert to ISO for Safari
+            let endTime;
+            
+            if (status === 'selesai' && endTimeStr) {
+                endTime = new Date(endTimeStr.replace(' ', 'T'));
+            } else if (status === 'ditolak') {
+                endTime = null; // Or maybe use updated_at?
+            } else {
+                endTime = now;
+            }
+            
+            let elapsedSeconds = 0;
+            if (endTime) {
+                elapsedSeconds = Math.floor((endTime - startTime) / 1000);
+            } else {
+                elapsedSeconds = Math.floor((now - startTime) / 1000);
+            }
+            
+            if (elapsedSeconds > 0) {
+                el.textContent = formatElapsedTime(elapsedSeconds);
+            }
+        });
+    }
+
+    // Run initially and then every second
+    updateElapsedTimes();
+    setInterval(updateElapsedTimes, 1000);
+
     // Ubah openModal untuk menerima data pengajuan
     const pengajuanData = <?php echo json_encode($data['pengajuan']); ?>;
     const modalDetailSurat = document.getElementById('modalDetailSurat');
@@ -344,7 +404,7 @@
         const tanggalIso = tanggalRaw && tanggalRaw !== '-' ? tanggalRaw.replace(' ', 'T') : null;
         document.getElementById('detailSuratTanggal').textContent = tanggalIso ? new Date(tanggalIso).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-';
         document.getElementById('detailSuratNo').textContent = btn.getAttribute('data-nosurat') || '-';
-
+        
         const berkas = btn.getAttribute('data-berkas') || '';
         const berkasEl = document.getElementById('detailSuratBerkas');
         if (berkas) {
@@ -355,7 +415,7 @@
             berkasEl.textContent = '-';
             berkasEl.href = '#';
         }
-
+        
         document.getElementById('detailSuratKeperluan').textContent = btn.getAttribute('data-keperluan') || '-';
         document.getElementById('detailSuratCatatan').textContent = btn.getAttribute('data-catatan') || '-';
         

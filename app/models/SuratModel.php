@@ -171,4 +171,44 @@ class SuratModel {
         $this->db->bind('id', $id);
         return $this->db->execute();
     }
+
+    public function getMonthlySuratTrend() {
+        $this->db->query("SELECT 
+            DATE_FORMAT(tanggal_pengajuan, '%Y-%m') as bulan,
+            COUNT(*) as jumlah
+            FROM pengajuan_surat
+            GROUP BY DATE_FORMAT(tanggal_pengajuan, '%Y-%m')
+            ORDER BY bulan ASC
+            LIMIT 12");
+        return $this->db->resultSet();
+    }
+
+    public function getSuratTypeDistribution() {
+        $this->db->query("SELECT 
+            j.nama_surat,
+            COUNT(p.id_pengajuan) as jumlah
+            FROM pengajuan_surat p
+            JOIN jenis_surat j ON p.id_jenis_surat = j.id_jenis_surat
+            GROUP BY p.id_jenis_surat, j.nama_surat
+            ORDER BY jumlah DESC
+            LIMIT 5");
+        return $this->db->resultSet();
+    }
+
+    public function getSuratStatsByPriority() {
+        $this->db->query("SELECT 
+            p.prioritas,
+            COUNT(*) as total,
+            COUNT(CASE WHEN p.status = 'selesai' THEN 1 END) as selesai,
+            AVG(CASE WHEN p.status = 'selesai' THEN 
+                TIMESTAMPDIFF(HOUR, p.tanggal_pengajuan, p.tanggal_selesai) 
+            END) as avg_wait_hours_selesai,
+            AVG(CASE WHEN p.status IN ('menunggu','diproses') THEN 
+                TIMESTAMPDIFF(HOUR, p.tanggal_pengajuan, NOW()) 
+            END) as avg_wait_hours_pending
+            FROM pengajuan_surat p
+            GROUP BY p.prioritas
+            ORDER BY p.prioritas DESC");
+        return $this->db->resultSet();
+    }
 }

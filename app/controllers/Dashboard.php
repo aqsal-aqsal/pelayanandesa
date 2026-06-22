@@ -43,6 +43,11 @@ class Dashboard extends Controller {
         $data['total_warga'] = count($wargaModel->getAllWarga());
         $data['total_pengaduan'] = count($pengaduanModel->getAllPengaduan());
         
+        // Chart Data
+        $data['surat_monthly_trend'] = $suratModel->getMonthlySuratTrend();
+        $data['surat_type_dist'] = $suratModel->getSuratTypeDistribution();
+        $data['blt_avg_saw'] = $bltModel->getAverageSAWPerProgram();
+        
         $this->view('dashboard/kades', $data);
     }
 
@@ -78,13 +83,13 @@ class Dashboard extends Controller {
         $data['warga'] = $wargaModel->getWargaByNik($data['user']['nik']);
         
         $suratModel = $this->model('SuratModel');
-        $my_surat = $suratModel->getPengajuanByWarga($data['warga']['id_warga']);
-        $data['surat_menunggu'] = count(array_filter($my_surat, function($s) { return $s['status'] == 'menunggu'; }));
-        $data['surat_selesai'] = count(array_filter($my_surat, function($s) { return $s['status'] == 'selesai'; }));
+        $data['pengajuan'] = $suratModel->getPengajuanByWarga($data['warga']['id_warga']);
+        $data['surat_menunggu'] = count(array_filter($data['pengajuan'], function($s) { return $s['status'] == 'menunggu'; }));
+        $data['surat_selesai'] = count(array_filter($data['pengajuan'], function($s) { return $s['status'] == 'selesai'; }));
 
         $pengaduanModel = $this->model('PengaduanModel');
-        $my_aduan = $pengaduanModel->getPengaduanByWarga($data['warga']['id_warga']);
-        $data['aduan_total'] = count($my_aduan);
+        $data['pengaduan'] = $pengaduanModel->getPengaduanByWarga($data['warga']['id_warga']);
+        $data['aduan_total'] = count($data['pengaduan']);
 
         $bltModel = $this->model('BltModel');
         $hasil_blt = $bltModel->getHasilByNik($data['user']['nik']);

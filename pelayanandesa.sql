@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 09, 2026 at 01:27 PM
+-- Generation Time: Jun 22, 2026 at 04:21 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -59,8 +59,8 @@ CREATE TABLE `calon_penerima` (
 --
 
 INSERT INTO `calon_penerima` (`id_calon`, `id_warga`, `id_program`, `tanggal_usulan`, `status`, `created_at`, `updated_at`) VALUES
-(1, 4, 1, '2026-05-20', 'terpilih', '2026-05-20 01:38:22', '2026-06-09 20:24:31'),
-(3, 5, 1, '2026-05-26', 'terpilih', '2026-05-26 14:13:02', '2026-06-09 20:24:31');
+(1, 4, 1, '2026-05-20', 'terpilih', '2026-05-20 01:38:22', '2026-06-19 14:17:40'),
+(3, 5, 1, '2026-05-26', 'terpilih', '2026-05-26 14:13:02', '2026-06-19 14:17:40');
 
 -- --------------------------------------------------------
 
@@ -82,8 +82,8 @@ CREATE TABLE `hasil_saw_blt` (
 --
 
 INSERT INTO `hasil_saw_blt` (`id`, `id_program`, `id_calon`, `nilai_total`, `ranking`, `created_at`) VALUES
-(14, 1, 1, '0.90333', 1, '2026-06-09 20:24:31'),
-(15, 1, 3, '0.13667', 2, '2026-06-09 20:24:31');
+(18, 1, 1, '0.90333', 1, '2026-06-19 14:17:40'),
+(19, 1, 3, '0.13667', 2, '2026-06-19 14:17:40');
 
 -- --------------------------------------------------------
 
@@ -244,7 +244,8 @@ CREATE TABLE `penetapan_bantuan` (
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `periode` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `jumlah_dana` decimal(12,2) DEFAULT '0.00',
-  `status_penyaluran` enum('belum','disalurkan','diterima') COLLATE utf8mb4_unicode_ci DEFAULT 'belum'
+  `status_penyaluran` enum('belum','disalurkan','diterima') COLLATE utf8mb4_unicode_ci DEFAULT 'belum',
+  `bukti_penyerahan` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -606,7 +607,7 @@ ALTER TABLE `calon_penerima`
 -- AUTO_INCREMENT for table `hasil_saw_blt`
 --
 ALTER TABLE `hasil_saw_blt`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `hasil_seleksi_saw`
