@@ -4,7 +4,7 @@
     <div class="bg-white p-10 rounded-[32px] shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
             <h2 class="text-3xl font-black text-slate-900 mb-2">Data Petugas Desa</h2>
-            <p class="text-gray-500">Kelola data petugas dan upload tanda tangan untuk kebutuhan penandatanganan surat.</p>
+            <p class="text-gray-500">Kelola data petugas dan upload QR verifikasi untuk kebutuhan legalisasi surat digital.</p>
         </div>
         <?php if($_SESSION['user']['level'] == 'petugas'): ?>
             <button onclick="openPejabatModal('tambah')" class="px-6 py-3 bg-blue-600 text-white rounded-2xl font-black text-sm hover:bg-blue-700 transition flex items-center shadow-lg shadow-blue-100">
@@ -29,7 +29,7 @@
                         <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">ID</th>
                         <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Nama</th>
                         <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Jabatan</th>
-                        <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">TTD</th>
+                        <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">QR Verifikasi</th>
                         <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest text-right">Aksi</th>
                     </tr>
                 </thead>
@@ -53,8 +53,8 @@
                                 </td>
                                 <td class="px-8 py-5 text-right flex justify-end items-center gap-2">
                                     <?php if((int)$p['id_petugas'] === (int)$_SESSION['user']['id_user'] || $_SESSION['user']['level'] == 'petugas'): ?>
-                                        <button onclick='openTtdModal(<?= json_encode($p); ?>)' class="px-4 py-2 bg-blue-50 text-blue-600 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-100 transition flex items-center">
-                                            Upload TTD
+                                        <button onclick='openQrModal(<?= json_encode($p); ?>)' class="px-4 py-2 bg-blue-50 text-blue-600 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-100 transition flex items-center">
+                                            Upload QR
                                         </button>
                                     <?php endif; ?>
                                     <?php if($_SESSION['user']['level'] == 'petugas'): ?>
@@ -112,22 +112,22 @@
     </div>
 </div>
 
-<div id="ttdModal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm overflow-y-auto h-full w-full z-50 transition-all duration-300">
+<div id="qrModal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm overflow-y-auto h-full w-full z-50 transition-all duration-300">
     <div class="relative top-20 mx-auto p-10 border w-[520px] shadow-2xl rounded-[32px] bg-white mb-20">
         <div class="text-center mb-8">
-            <h3 class="text-2xl font-black text-slate-900">Upload Tanda Tangan</h3>
-            <p class="text-sm text-gray-400 mt-2">Upload gambar tanda tangan (PNG/JPG) untuk digunakan pada surat.</p>
+            <h3 class="text-2xl font-black text-slate-900">Upload QR Verifikasi</h3>
+            <p class="text-sm text-gray-400 mt-2">Upload gambar logo atau identitas verifikator yang akan ditempatkan pada QR surat digital.</p>
         </div>
 
-        <form action="<?= BASEURL; ?>/pejabat/upload_ttd" method="POST" enctype="multipart/form-data" class="space-y-6 text-left">
-            <input type="hidden" name="id_petugas" id="ttd_id_petugas">
+        <form action="<?= BASEURL; ?>/pejabat/upload_qr" method="POST" enctype="multipart/form-data" class="space-y-6 text-left">
+            <input type="hidden" name="id_petugas" id="qr_id_petugas">
             <div class="space-y-2">
-                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">File TTD</label>
-                <input type="file" name="ttd" required class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
-                <p class="text-[10px] text-gray-400 italic">Disarankan PNG dengan background transparan.</p>
+                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">File QR / Logo</label>
+                <input type="file" name="qr_code" required class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
+                <p class="text-[10px] text-gray-400 italic">Disarankan PNG/JPG berbentuk persegi agar tampil optimal di tengah QR.</p>
             </div>
             <div class="flex space-x-3 pt-4">
-                <button type="button" onclick="closeTtdModal()" class="flex-1 py-4 bg-gray-100 text-gray-500 font-bold rounded-2xl hover:bg-gray-200 transition">Batal</button>
+                <button type="button" onclick="closeQrModal()" class="flex-1 py-4 bg-gray-100 text-gray-500 font-bold rounded-2xl hover:bg-gray-200 transition">Batal</button>
                 <button type="submit" class="flex-[2] py-4 bg-blue-600 text-white font-black rounded-2xl shadow-lg shadow-blue-100 hover:bg-blue-700 transition">Upload</button>
             </div>
         </form>
@@ -164,14 +164,14 @@
         document.body.style.overflow = 'auto';
     }
 
-    function openTtdModal(data) {
-        document.getElementById('ttd_id_petugas').value = data.id_petugas;
-        document.getElementById('ttdModal').classList.remove('hidden');
+    function openQrModal(data) {
+        document.getElementById('qr_id_petugas').value = data.id_petugas;
+        document.getElementById('qrModal').classList.remove('hidden');
         document.body.style.overflow = 'hidden';
     }
 
-    function closeTtdModal() {
-        document.getElementById('ttdModal').classList.add('hidden');
+    function closeQrModal() {
+        document.getElementById('qrModal').classList.add('hidden');
         document.body.style.overflow = 'auto';
     }
 </script>

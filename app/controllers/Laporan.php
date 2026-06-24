@@ -26,6 +26,11 @@ class Laporan extends Controller {
             'ditolak' => count(array_filter($suratModel->getAllPengajuan(), fn($s) => $s['status'] == 'ditolak')),
         ];
 
+        // New reports added
+        $data['stats_surat_priority'] = $suratModel->getSuratStatsByPriority();
+        $data['stats_blt_manajerial'] = $bltModel->getAverageSAWPerProgram();
+        $data['stats_blt_periode'] = $bltModel->getManajerialStatsPerPeriode();
+
         $this->view('laporan/index', $data);
     }
 
@@ -39,7 +44,9 @@ class Laporan extends Controller {
 
     public function cetak_blt($id_program) {
         $bltModel = $this->model('BltModel');
-        $data['hasil'] = $bltModel->getHasilSAW($id_program);
+        $data['hasil'] = $bltModel->getDetailedSAW($id_program); // Use detailed instead of simple
+        $data['kriteria'] = $bltModel->getKriteria();
+        $data['program'] = $bltModel->getProgramById($id_program);
         $data['judul'] = 'Laporan Hasil Seleksi SAW BLT';
         
         $this->generatePDF('laporan/pdf_blt', $data, 'Laporan_BLT_' . $id_program . '.pdf');

@@ -178,7 +178,21 @@ class Layanan extends Controller {
         $sort_by = isset($_GET['sort_by']) ? $_GET['sort_by'] : 'prioritas';
         $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'DESC';
         
-        $data['pengajuan'] = $suratModel->getAllPengajuan($sort_by, $sort_order);
+        $pengajuan = $suratModel->getAllPengajuan($sort_by, $sort_order);
+        
+        // Sort: non-selesai first, then selesai; non-selesai sorted by priority descending
+        usort($pengajuan, function($a, $b) {
+            if ($a['status'] === 'selesai' && $b['status'] !== 'selesai') {
+                return 1;
+            }
+            if ($a['status'] !== 'selesai' && $b['status'] === 'selesai') {
+                return -1;
+            }
+            // For non-selesai, sort by priority descending
+            return $b['prioritas'] - $a['prioritas'];
+        });
+        
+        $data['pengajuan'] = $pengajuan;
         $data['sort_by'] = $sort_by;
         $data['sort_order'] = $sort_order;
         
@@ -195,15 +209,15 @@ class Layanan extends Controller {
             $level = $_SESSION['user']['level'];
 
             if ($status == 'selesai' && $level != 'kades') {
-                $_SESSION['flash'] = ['type' => 'error', 'message' => 'Hanya Kepala Desa yang dapat menandatangani surat (status selesai).'];
+                $_SESSION['flash'] = ['type' => 'error', 'message' => 'Hanya Kepala Desa yang dapat memverifikasi surat digital (status selesai).'];
                 header('Location: ' . BASEURL . '/layanan/admin');
                 exit;
             }
 
             if ($level == 'kades' && $status == 'selesai') {
-                // Kades signing the document
+                // Kades verifies the document and activates public QR verification
                 if ($suratModel->kadesTandaTangan($id, $user_id)) {
-                    $_SESSION['flash'] = ['type' => 'success', 'message' => 'Surat berhasil ditandatangani dan selesai!'];
+                    $_SESSION['flash'] = ['type' => 'success', 'message' => 'Surat berhasil diverifikasi digital dan siap diunduh!'];
                 }
             } else {
                 // Petugas updating status
@@ -256,23 +270,18 @@ class Layanan extends Controller {
             $surat['no_surat'] = $no;
         }
 
-        $ttdDataUri = null;
-        if (!empty($surat['ttd_kades'])) {
-            $rootPath = dirname(__DIR__, 2);
-            $ttdPath = $rootPath . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . $surat['ttd_kades'];
-            if (file_exists($ttdPath)) {
-                $ext = strtolower(pathinfo($ttdPath, PATHINFO_EXTENSION));
-                $mime = $ext == 'png' ? 'image/png' : ($ext == 'jpg' || $ext == 'jpeg' ? 'image/jpeg' : null);
-                if ($mime) {
-                    $ttdDataUri = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($ttdPath));
-                }
-            }
+        if (empty($surat['qr_token']) || empty($surat['qr_url'])) {
+            $suratModel->ensureVerificationData($surat['id_pengajuan']);
+            $surat = $suratModel->getPengajuanById($id);
         }
+
+        $qrLogoPath = $this->getUploadedAssetPath($surat['qr_logo_kades'] ?? null);
+        $qrDataUri = $this->generateVerificationQrDataUri($surat['qr_url'] ?? null, $qrLogoPath);
 
         $data = [
             'judul' => $surat['nama_surat'],
             'surat' => $surat,
-            'ttd_data_uri' => $ttdDataUri
+            'qr_data_uri' => $qrDataUri
         ];
 
         if (class_exists('\\Dompdf\\Dompdf')) {
@@ -301,6 +310,42 @@ class Layanan extends Controller {
         }
 
         $this->view('surat/pdf', $data);
+    }
+
+    private function getUploadedAssetPath($filename) {
+        if (empty($filename)) {
+            return null;
+        }
+
+        $path = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . $filename;
+
+        return file_exists($path) ? $path : null;
+    }
+
+    private function generateVerificationQrDataUri($verificationUrl, $logoPath = null) {
+        if (empty($verificationUrl) || !class_exists('\\Endroid\\QrCode\\Writer\\PngWriter')) {
+            return null;
+        }
+
+        $writer = new \Endroid\QrCode\Writer\PngWriter();
+        $qrCode = new \Endroid\QrCode\QrCode(
+            data: $verificationUrl,
+            encoding: new \Endroid\QrCode\Encoding\Encoding('UTF-8'),
+            errorCorrectionLevel: \Endroid\QrCode\ErrorCorrectionLevel::High,
+            size: 180,
+            margin: 8
+        );
+
+        $logo = null;
+        if ($logoPath) {
+            $logo = new \Endroid\QrCode\Logo\Logo(
+                path: $logoPath,
+                resizeToWidth: 36,
+                punchoutBackground: true
+            );
+        }
+
+        return $writer->write($qrCode, $logo)->getDataUri();
     }
 
     public function jenis() {

@@ -73,13 +73,14 @@
                                 <?php endif; ?>
                             </a>
                         </th>
+                        <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Waktu</th>
                         <th class="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest text-right">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
                     <?php if(empty($data['pengaduan'])): ?>
                         <tr>
-                            <td colspan="7" class="px-8 py-12 text-center text-gray-500 italic">Belum ada pengaduan masyarakat yang masuk.</td>
+                            <td colspan="8" class="px-8 py-12 text-center text-gray-500 italic">Belum ada pengaduan masyarakat yang masuk.</td>
                         </tr>
                     <?php else: ?>
                         <?php foreach($data['pengaduan'] as $p): ?>
@@ -125,6 +126,11 @@
                                     ?>
                                     <span class="px-3 py-1.5 text-[10px] font-black rounded-lg border uppercase tracking-wider <?= $style; ?>">
                                         <?= $p['status']; ?>
+                                    </span>
+                                </td>
+                                <td class="px-8 py-5">
+                                    <span class="text-[10px] font-bold text-slate-600 elapsed-time" data-start-time="<?= htmlspecialchars($p['tanggal_aduan']); ?>" data-status="<?= htmlspecialchars($p['status']); ?>" data-end-time="<?= htmlspecialchars($p['tanggal_selesai'] ?? ''); ?>">
+                                        --
                                     </span>
                                 </td>
                                 <td class="px-8 py-5 text-right flex justify-end items-center gap-2">
@@ -263,6 +269,59 @@
 </div>
 
 <script>
+    // Function to format elapsed time
+    function formatElapsedTime(seconds) {
+        if (seconds < 60) {
+            return seconds + ' detik';
+        } else if (seconds < 3600) {
+            return Math.floor(seconds / 60) + ' menit';
+        } else if (seconds < 86400) {
+            return Math.floor(seconds / 3600) + ' jam';
+        } else {
+            return Math.floor(seconds / 86400) + ' hari';
+        }
+    }
+
+    // Function to update all elapsed times
+    function updateElapsedTimes() {
+        const now = new Date();
+        const timeElements = document.querySelectorAll('.elapsed-time');
+        
+        timeElements.forEach(el => {
+            const startTimeStr = el.getAttribute('data-start-time');
+            const endTimeStr = el.getAttribute('data-end-time');
+            const status = el.getAttribute('data-status');
+            
+            if (!startTimeStr) return;
+            
+            const startTime = new Date(startTimeStr.replace(' ', 'T')); // Convert to ISO for Safari
+            let endTime;
+            
+            if (status === 'selesai' && endTimeStr) {
+                endTime = new Date(endTimeStr.replace(' ', 'T'));
+            } else if (status === 'ditolak') {
+                endTime = null; // Or maybe use updated_at?
+            } else {
+                endTime = now;
+            }
+            
+            let elapsedSeconds = 0;
+            if (endTime) {
+                elapsedSeconds = Math.floor((endTime - startTime) / 1000);
+            } else {
+                elapsedSeconds = Math.floor((now - startTime) / 1000);
+            }
+            
+            if (elapsedSeconds > 0) {
+                el.textContent = formatElapsedTime(elapsedSeconds);
+            }
+        });
+    }
+
+    // Run initially and then every second
+    updateElapsedTimes();
+    setInterval(updateElapsedTimes, 1000);
+
     const pengaduanData = <?php echo json_encode($data['pengaduan']); ?>;
     
     const openModalGeneric = (id) => document.getElementById(id).classList.remove('hidden');

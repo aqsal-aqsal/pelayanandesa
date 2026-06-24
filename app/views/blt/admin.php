@@ -94,6 +94,9 @@
                                     <a href="<?= BASEURL; ?>/blt/detail/<?= $p['id_program']; ?>" class="px-4 py-2 bg-blue-50 text-blue-600 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-100 transition flex items-center">
                                         Lihat Hasil
                                     </a>
+                                    <a href="<?= BASEURL; ?>/blt/laporan/<?= $p['id_program']; ?>" class="px-4 py-2 bg-amber-50 text-amber-600 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-amber-100 transition flex items-center">
+                                        Laporan
+                                    </a>
                                     <?php if($_SESSION['user']['level'] == 'petugas'): ?>
                                         <button onclick='openEditProgramModal(<?= json_encode($p); ?>)' class="px-4 py-2 bg-amber-500 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-amber-600 transition shadow-lg shadow-amber-100 flex items-center">
                                             Edit

@@ -87,7 +87,7 @@ class SuratModel {
     }
 
     public function getPengajuanById($id_pengajuan) {
-        $this->db->query('SELECT p.*, j.nama_surat, j.kode_surat, w.nama_lengkap, w.nik, w.tempat_lahir, w.tanggal_lahir, w.jenis_kelamin, w.alamat, w.rt_rw, pt.nama_petugas AS nama_kades, pt.ttd AS ttd_kades
+        $this->db->query('SELECT p.*, j.nama_surat, j.kode_surat, w.nama_lengkap, w.nik, w.tempat_lahir, w.tanggal_lahir, w.jenis_kelamin, w.alamat, w.rt_rw, pt.nama_petugas AS nama_kades, pt.ttd AS qr_logo_kades
                           FROM pengajuan_surat p 
                           JOIN jenis_surat j ON p.id_jenis_surat = j.id_jenis_surat 
                           JOIN warga w ON p.id_warga = w.id_warga 
@@ -157,18 +157,107 @@ class SuratModel {
     }
 
     public function kadesTandaTangan($id, $kades_id) {
+        $verification = $this->buildVerificationPayload($id);
         $query = "UPDATE pengajuan_surat 
-                  SET status = 'selesai', id_kades_ttd = :kades_id, tanggal_selesai = NOW(), is_verified = 1 
+                  SET status = 'selesai', id_kades_ttd = :kades_id, tanggal_selesai = NOW(), is_verified = 1, qr_token = :qr_token, qr_url = :qr_url
                   WHERE id_pengajuan = :id";
         $this->db->query($query);
         $this->db->bind('kades_id', $kades_id);
+        $this->db->bind('qr_token', $verification['qr_token']);
+        $this->db->bind('qr_url', $verification['qr_url']);
         $this->db->bind('id', $id);
         return $this->db->execute();
+    }
+
+    public function ensureVerificationData($id_pengajuan) {
+        $this->db->query('SELECT qr_token, qr_url FROM pengajuan_surat WHERE id_pengajuan = :id');
+        $this->db->bind('id', $id_pengajuan);
+        $surat = $this->db->single();
+
+        if (!$surat) {
+            return false;
+        }
+
+        if (!empty($surat['qr_token']) && !empty($surat['qr_url'])) {
+            return $surat;
+        }
+
+        $verification = $this->buildVerificationPayload($id_pengajuan);
+        $this->db->query('UPDATE pengajuan_surat SET qr_token = :qr_token, qr_url = :qr_url, is_verified = 1, updated_at = NOW() WHERE id_pengajuan = :id');
+        $this->db->bind('qr_token', $verification['qr_token']);
+        $this->db->bind('qr_url', $verification['qr_url']);
+        $this->db->bind('id', $id_pengajuan);
+
+        if (!$this->db->execute()) {
+            return false;
+        }
+
+        return $verification;
+    }
+
+    public function getByQrToken($token) {
+        $this->db->query('SELECT p.*, j.nama_surat, w.nama_lengkap, w.nik, pt.nama_petugas AS nama_kades, pt.jabatan, pt.ttd AS qr_logo_kades
+                          FROM pengajuan_surat p
+                          JOIN jenis_surat j ON p.id_jenis_surat = j.id_jenis_surat
+                          JOIN warga w ON p.id_warga = w.id_warga
+                          LEFT JOIN petugas pt ON p.id_kades_ttd = pt.id_petugas
+                          WHERE p.qr_token = :token AND p.status = \'selesai\' AND p.is_verified = 1');
+        $this->db->bind('token', $token);
+        return $this->db->single();
+    }
+
+    private function buildVerificationPayload($id_pengajuan) {
+        $token = bin2hex(random_bytes(16));
+
+        return [
+            'qr_token' => $token,
+            'qr_url' => BASEURL . '/verify/' . $token
+        ];
     }
 
     public function deletePengajuan($id) {
         $this->db->query("DELETE FROM pengajuan_surat WHERE id_pengajuan = :id AND status = 'menunggu'");
         $this->db->bind('id', $id);
         return $this->db->execute();
+    }
+
+    public function getMonthlySuratTrend() {
+        $this->db->query("SELECT 
+            DATE_FORMAT(tanggal_pengajuan, '%Y-%m') as bulan,
+            COUNT(*) as jumlah
+            FROM pengajuan_surat
+            GROUP BY DATE_FORMAT(tanggal_pengajuan, '%Y-%m')
+            ORDER BY bulan ASC
+            LIMIT 12");
+        return $this->db->resultSet();
+    }
+
+    public function getSuratTypeDistribution() {
+        $this->db->query("SELECT 
+            j.nama_surat,
+            COUNT(p.id_pengajuan) as jumlah
+            FROM pengajuan_surat p
+            JOIN jenis_surat j ON p.id_jenis_surat = j.id_jenis_surat
+            GROUP BY p.id_jenis_surat, j.nama_surat
+            ORDER BY jumlah DESC
+            LIMIT 5");
+        return $this->db->resultSet();
+    }
+
+    public function getSuratStatsByPriority() {
+        $this->db->query("SELECT 
+            p.prioritas,
+            COUNT(*) as total,
+            COUNT(CASE WHEN p.status = 'selesai' THEN 1 END) as selesai,
+            AVG(CASE WHEN p.status = 'selesai' THEN 
+                TIMESTAMPDIFF(HOUR, p.tanggal_pengajuan, p.tanggal_selesai) 
+            END) as avg_wait_hours_selesai,
+            AVG(CASE WHEN p.status IN ('menunggu','diproses') THEN 
+                TIMESTAMPDIFF(HOUR, p.tanggal_pengajuan, NOW()) 
+            END) as avg_wait_hours_pending
+            FROM pengajuan_surat p
+            GROUP BY p.prioritas
+            ORDER BY p.prioritas DESC");
+        return $this->db->resultSet();
     }
 }

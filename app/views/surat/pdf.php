@@ -41,7 +41,7 @@
         
         .closing { margin-top: 25px; text-align: justify; color: #475569; }
         
-        /* Signature Style */
+        /* Verification Style */
         .sig-container { width: 100%; margin-top: 40px; }
         .sig-table { width: 100%; border-collapse: collapse; }
         .sig-left { width: 40%; vertical-align: bottom; }
@@ -49,10 +49,13 @@
         
         .sig-date { margin-bottom: 5px; text-align: right; padding-right: 40px; color: #64748b; font-weight: 600; font-size: 10pt; }
         .sig-role { margin-bottom: 5px; font-weight: 600; text-align: right; padding-right: 80px; color: #334155; text-transform: uppercase; font-size: 10pt; }
-        .sig-space { height: 90px; position: relative; width: 100%; text-align: right; }
-        .sig-img { height: 85px; width: auto; margin-right: 50px; opacity: 0.9; }
-        .sig-name-container { text-align: right; padding-right: 30px; }
+        .sig-space { min-height: 120px; position: relative; width: 100%; text-align: right; }
+        .qr-wrap { display: inline-block; width: 150px; text-align: center; padding: 8px; border: 1px solid #cbd5e1; border-radius: 12px; background: #ffffff; margin-right: 30px; }
+        .qr-img { width: 110px; height: 110px; display: block; margin: 0 auto 8px; }
+        .qr-caption { font-size: 8pt; color: #475569; line-height: 1.4; }
+        .sig-name-container { text-align: right; padding-right: 30px; margin-top: 10px; }
         .sig-name { font-weight: 800; color: #0f172a; font-size: 12pt; }
+        .verify-note { margin-top: 22px; padding: 10px 14px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; color: #1d4ed8; font-size: 9pt; line-height: 1.5; }
     </style>
 </head>
 <body>
@@ -105,7 +108,7 @@
             ['Alamat', $alamat]
         ];
         
-        $openingText = "Yang bertanda tangan dibawah ini Kepala Desa Astambul Kota, Kecamatan Astambul, Kabupaten Banjar, menerangkan dengan sebenarnya bahwa:";
+        $openingText = "Pemerintah Desa Astambul Kota, Kecamatan Astambul, Kabupaten Banjar, menerangkan dengan sebenarnya bahwa:";
         $closingText = "Demikian surat keterangan ini dibuat dengan sebenarnya untuk dipergunakan sebagaimana mestinya.";
 
         // Customize based on type
@@ -113,7 +116,7 @@
             $closingText = "Nama tersebut benar-benar penduduk Desa Astambul Kota, Kecamatan Astambul, Kabupaten Banjar, dan sudah tinggal dilingkungan lebih dari 6 bulan. " . $closingText;
         } elseif ($jenisKey === 'kematian') {
             $judulSurat = "SURAT KETERANGAN KEMATIAN";
-            $openingText = "Kepala Desa Astambul Kota, Kecamatan Astambul, Kabupaten Banjar menerangkan bahwa:";
+            $openingText = "Pemerintah Desa Astambul Kota, Kecamatan Astambul, Kabupaten Banjar menerangkan bahwa:";
             $closingText = "Demikian surat keterangan kematian ini dibuat untuk dapat dipergunakan sebagaimana mestinya.";
             // You might want to add death-specific fields if they exist in database, 
             // for now we use the general ones but adjust the closing.
@@ -193,6 +196,10 @@
         <div class="closing">
             <?= $closingText; ?>
         </div>
+
+        <div class="verify-note">
+            Surat ini telah diverifikasi secara digital melalui QR Code. Untuk memeriksa keaslian dokumen, pindai QR Code pada bagian bawah surat atau buka tautan verifikasi yang terhubung dengan dokumen ini.
+        </div>
     </div>
 
     <div class="sig-container">
@@ -202,10 +209,13 @@
                 </td>
                 <td class="sig-right">
                     <div class="sig-date">Astambul, <?= $tgl_cetak; ?></div>
-                    <div class="sig-role">Kepala Desa</div>
+                    <div class="sig-role">Verifikasi Digital Kepala Desa</div>
                     <div class="sig-space">
-                        <?php if (!empty($data['ttd_data_uri'])): ?>
-                            <img src="<?= $data['ttd_data_uri']; ?>" class="sig-img" alt="TTD">
+                        <?php if (!empty($data['qr_data_uri'])): ?>
+                            <div class="qr-wrap">
+                                <img src="<?= $data['qr_data_uri']; ?>" class="qr-img" alt="QR Verifikasi">
+                                <div class="qr-caption">Scan untuk cek keaslian surat</div>
+                            </div>
                         <?php endif; ?>
                     </div>
                     <div class="sig-name-container">

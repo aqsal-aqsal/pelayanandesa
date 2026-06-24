@@ -67,7 +67,7 @@ class Pejabat extends Controller {
         exit;
     }
 
-    public function upload_ttd() {
+    public function upload_qr() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $id = $_POST['id_petugas'];
             if ((int)$id !== (int)$_SESSION['user']['id_user'] && $_SESSION['user']['level'] != 'petugas') {
@@ -75,16 +75,20 @@ class Pejabat extends Controller {
                 exit;
             }
 
-            $filename = $this->uploadFile('ttd');
+            $filename = $this->uploadFile('qr_code');
             if ($filename) {
                 $this->model('PetugasModel')->updateTtd($id, $filename);
-                $_SESSION['flash'] = ['type' => 'success', 'message' => 'Tanda tangan berhasil diupload!'];
+                $_SESSION['flash'] = ['type' => 'success', 'message' => 'QR verifikasi berhasil diupload!'];
             } else {
-                $_SESSION['flash'] = ['type' => 'error', 'message' => 'Gagal upload tanda tangan.'];
+                $_SESSION['flash'] = ['type' => 'error', 'message' => 'Gagal upload QR verifikasi.'];
             }
             header('Location: ' . BASEURL . '/pejabat/admin');
             exit;
         }
+    }
+
+    public function upload_ttd() {
+        $this->upload_qr();
     }
 
     private function uploadFile($name) {
@@ -99,4 +103,3 @@ class Pejabat extends Controller {
         return null;
     }
 }
-

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 09, 2026 at 01:27 PM
+-- Generation Time: Jun 24, 2026 at 01:14 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -59,8 +59,13 @@ CREATE TABLE `calon_penerima` (
 --
 
 INSERT INTO `calon_penerima` (`id_calon`, `id_warga`, `id_program`, `tanggal_usulan`, `status`, `created_at`, `updated_at`) VALUES
-(1, 4, 1, '2026-05-20', 'terpilih', '2026-05-20 01:38:22', '2026-06-09 20:24:31'),
-(3, 5, 1, '2026-05-26', 'terpilih', '2026-05-26 14:13:02', '2026-06-09 20:24:31');
+(1, 4, 1, '2026-05-20', 'terpilih', '2026-05-20 01:38:22', '2026-06-23 21:13:59'),
+(3, 5, 1, '2026-05-26', 'terpilih', '2026-05-26 14:13:02', '2026-06-23 21:13:59'),
+(4, 8, 1, '2026-06-23', 'terpilih', '2026-06-23 19:25:26', '2026-06-23 21:13:59'),
+(12, 7, 1, '2026-06-23', 'terpilih', '2026-06-23 21:11:02', '2026-06-23 21:13:59'),
+(13, 9, 1, '2026-06-23', 'terpilih', '2026-06-23 21:13:32', '2026-06-23 21:13:59'),
+(14, 10, 4, '2026-06-23', 'terpilih', '2026-06-23 21:43:03', '2026-06-23 21:47:16'),
+(15, 9, 4, '2026-06-23', 'terpilih', '2026-06-23 21:43:09', '2026-06-23 21:47:16');
 
 -- --------------------------------------------------------
 
@@ -82,8 +87,13 @@ CREATE TABLE `hasil_saw_blt` (
 --
 
 INSERT INTO `hasil_saw_blt` (`id`, `id_program`, `id_calon`, `nilai_total`, `ranking`, `created_at`) VALUES
-(14, 1, 1, '0.90333', 1, '2026-06-09 20:24:31'),
-(15, 1, 3, '0.13667', 2, '2026-06-09 20:24:31');
+(53, 1, 1, '0.85000', 1, '2026-06-23 21:13:59'),
+(54, 1, 12, '0.77333', 2, '2026-06-23 21:13:59'),
+(55, 1, 13, '0.75333', 3, '2026-06-23 21:13:59'),
+(56, 1, 4, '0.56000', 4, '2026-06-23 21:13:59'),
+(57, 1, 3, '0.20000', 5, '2026-06-23 21:13:59'),
+(60, 4, 14, '1.00000', 1, '2026-06-23 21:47:16'),
+(61, 4, 15, '0.75833', 2, '2026-06-23 21:47:16');
 
 -- --------------------------------------------------------
 
@@ -201,14 +211,34 @@ CREATE TABLE `nilai_kriteria_calon` (
 --
 
 INSERT INTO `nilai_kriteria_calon` (`id_nilai`, `id_calon`, `id_kriteria`, `nilai_asli`, `nilai_normalisasi`, `created_at`, `updated_at`) VALUES
-(1, 1, 2, '30.000', '1.000', '2026-05-21 11:07:04', '2026-06-09 20:23:46'),
-(2, 1, 3, '10.000', '1.000', '2026-05-21 11:07:04', '2026-05-21 11:07:25'),
-(3, 1, 4, '30.000', '1.000', '2026-05-21 11:07:04', '2026-05-21 11:07:25'),
-(4, 1, 5, '30.000', '0.033', '2026-05-21 11:07:04', '2026-06-09 20:23:46'),
-(5, 3, 2, '1500000.000', '0.000', '2026-06-09 20:22:48', '2026-06-09 20:24:16'),
-(6, 3, 3, '1.000', '0.100', '2026-06-09 20:22:48', '2026-06-09 20:24:16'),
-(7, 3, 4, '1.000', '0.033', '2026-06-09 20:22:48', '2026-06-09 20:24:16'),
-(8, 3, 5, '1.000', '1.000', '2026-06-09 20:22:48', '2026-06-09 20:24:16');
+(1, 1, 2, '3.000', '1.000', '2026-05-21 11:07:04', '2026-06-23 20:44:02'),
+(2, 1, 3, '4.000', '0.800', '2026-05-21 11:07:04', '2026-06-23 21:11:51'),
+(3, 1, 4, '4.000', '0.800', '2026-05-21 11:07:04', '2026-06-23 21:11:51'),
+(4, 1, 5, '2.000', '0.500', '2026-05-21 11:07:04', '2026-06-23 20:45:26'),
+(5, 3, 2, '4.000', '0.000', '2026-06-09 20:22:48', '2026-06-23 21:39:50'),
+(6, 3, 3, '4.000', '0.200', '2026-06-09 20:22:48', '2026-06-23 21:39:50'),
+(7, 3, 4, '3.000', '0.200', '2026-06-09 20:22:48', '2026-06-23 21:39:50'),
+(8, 3, 5, '1.000', '1.000', '2026-06-09 20:22:48', '2026-06-23 21:39:50'),
+(9, 4, 2, '5.000', '0.600', '2026-06-23 19:28:49', '2026-06-23 20:45:26'),
+(10, 4, 3, '1.000', '0.200', '2026-06-23 19:28:49', '2026-06-23 21:11:50'),
+(11, 4, 4, '4.000', '0.800', '2026-06-23 19:28:49', '2026-06-23 21:11:51'),
+(12, 4, 5, '1.000', '1.000', '2026-06-23 19:28:49', '2026-06-23 20:45:26'),
+(40, 12, 2, '5.000', '0.600', '2026-06-23 21:11:02', '2026-06-23 21:11:50'),
+(41, 12, 3, '5.000', '1.000', '2026-06-23 21:11:02', '2026-06-23 21:11:50'),
+(42, 12, 4, '5.000', '1.000', '2026-06-23 21:11:02', '2026-06-23 21:11:50'),
+(43, 12, 5, '3.000', '0.333', '2026-06-23 21:11:34', '2026-06-23 21:11:50'),
+(44, 13, 2, '4.000', '0.750', '2026-06-23 21:13:32', '2026-06-23 21:13:59'),
+(45, 13, 3, '5.000', '1.000', '2026-06-23 21:13:32', '2026-06-23 21:13:59'),
+(46, 13, 4, '3.000', '0.600', '2026-06-23 21:13:32', '2026-06-23 21:13:59'),
+(47, 13, 5, '3.000', '0.333', '2026-06-23 21:13:41', '2026-06-23 21:13:59'),
+(48, 14, 2, '3.000', '1.000', '2026-06-23 21:43:03', '2026-06-23 21:44:49'),
+(49, 14, 3, '4.000', '1.000', '2026-06-23 21:43:03', '2026-06-23 21:47:16'),
+(50, 14, 4, '3.000', '1.000', '2026-06-23 21:43:03', '2026-06-23 21:44:49'),
+(51, 15, 2, '4.000', '0.750', '2026-06-23 21:43:09', '2026-06-23 21:46:52'),
+(52, 15, 3, '3.000', '0.750', '2026-06-23 21:43:09', '2026-06-23 21:47:16'),
+(53, 15, 4, '3.000', '1.000', '2026-06-23 21:43:09', '2026-06-23 21:46:52'),
+(54, 15, 5, '3.000', '0.333', '2026-06-23 21:44:17', '2026-06-23 21:46:52'),
+(55, 14, 5, '1.000', '1.000', '2026-06-23 21:44:29', '2026-06-23 21:44:49');
 
 -- --------------------------------------------------------
 
@@ -244,8 +274,16 @@ CREATE TABLE `penetapan_bantuan` (
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `periode` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `jumlah_dana` decimal(12,2) DEFAULT '0.00',
-  `status_penyaluran` enum('belum','disalurkan','diterima') COLLATE utf8mb4_unicode_ci DEFAULT 'belum'
+  `status_penyaluran` enum('belum','disalurkan','diterima') COLLATE utf8mb4_unicode_ci DEFAULT 'belum',
+  `bukti_penyerahan` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `penetapan_bantuan`
+--
+
+INSERT INTO `penetapan_bantuan` (`id_penetapan`, `id_program`, `id_calon`, `id_kades`, `no_sk`, `tanggal_penetapan`, `keterangan`, `created_at`, `updated_at`, `periode`, `jumlah_dana`, `status_penyaluran`, `bukti_penyerahan`) VALUES
+(1, 1, 1, 1, 'SK-1-1', '2026-06-23', NULL, '2026-06-23 20:44:24', '2026-06-23 20:44:24', NULL, '0.00', 'disalurkan', '1782218664_a-playful-rounded-wordmark-featuring-any_rsID7c4NVVOy4GpbLqQLhQ__8VbQRt2S1C1iiMMDb92sA-removebg-preview.png');
 
 -- --------------------------------------------------------
 
@@ -314,12 +352,11 @@ CREATE TABLE `pengajuan_surat` (
 --
 
 INSERT INTO `pengajuan_surat` (`id_pengajuan`, `id_warga`, `id_jenis_surat`, `no_surat`, `keperluan`, `file_berkas`, `nilai_prioritas`, `status`, `catatan_penolakan`, `id_petugas_verif`, `id_kades_ttd`, `tanggal_pengajuan`, `tanggal_verif`, `tanggal_selesai`, `created_at`, `updated_at`, `qr_token`, `qr_url`, `is_verified`, `prioritas`, `waktu_proses`) VALUES
-(2, 2, 1, 'SK/2/05/2026', 'Urgensi', '1779200327_images.png', 1, 'selesai', '', 1, 3, '2026-05-19 22:18:47', '2026-05-20 00:51:27', '2026-05-20 00:51:41', '2026-05-19 22:18:47', '2026-05-20 00:51:41', 'f5c20763e2b221b315d0932ab0f58934', 'http://localhost/pelayanandesa/public/verify/f5c20763e2b221b315d0932ab0f58934', 1, 3, NULL),
-(3, 2, 2, NULL, 'Untuk memenuhi kebutuhan UKT Kampus', '1779200355_images.png', 1, 'menunggu', NULL, NULL, NULL, '2026-05-19 22:19:15', NULL, NULL, '2026-05-19 22:19:15', '2026-05-19 22:19:15', NULL, NULL, 0, 2, NULL),
 (5, 4, 1, 'SK/5/05/2026', 'Untuk keperluan pekerjaan', '1779210521_images.png', 1, 'selesai', '', 1, 3, '2026-05-20 01:08:41', '2026-05-20 01:09:56', '2026-05-20 07:38:34', '2026-05-20 01:08:41', '2026-05-20 07:38:34', '75e82e7455387afae9728e3f66708964', 'http://localhost/pelayanandesa/public/verify/75e82e7455387afae9728e3f66708964', 1, 3, NULL),
 (6, 4, 5, 'SK/6/05/2026', 'Untuk Pindah Rumah', '1779254180_images.png', 1, 'selesai', '', 1, 3, '2026-05-20 13:16:20', '2026-05-20 13:16:38', '2026-05-20 13:16:58', '2026-05-20 13:16:20', '2026-05-20 13:16:58', 'bba98533419ed83b85b50a7ed86116b4', 'http://localhost/pelayanandesa/public/verify/bba98533419ed83b85b50a7ed86116b4', 1, 3, NULL),
 (7, 4, 6, 'SK/7/05/2026', 'Untuk Keperluan Acara Syukuran', '1779256775_images.png', 1, 'selesai', '', 1, 3, '2026-05-20 13:59:35', '2026-05-20 14:00:51', '2026-05-20 14:01:10', '2026-05-20 13:59:35', '2026-05-20 14:01:10', NULL, NULL, 1, 3, NULL),
-(8, 4, 6, NULL, 'tes', '1781011508_a-playful-rounded-wordmark-featuring-any_rsID7c4NVVOy4GpbLqQLhQ__8VbQRt2S1C1iiMMDb92sA-removebg-preview.png', 1, 'menunggu', NULL, NULL, NULL, '2026-06-09 21:25:08', NULL, NULL, '2026-06-09 21:25:08', '2026-06-09 21:25:08', NULL, NULL, 0, 3, NULL);
+(8, 4, 6, 'SK/8/06/2026', 'tes', '1781011508_a-playful-rounded-wordmark-featuring-any_rsID7c4NVVOy4GpbLqQLhQ__8VbQRt2S1C1iiMMDb92sA-removebg-preview.png', 1, 'selesai', '', 1, 3, '2026-06-09 21:25:08', '2026-06-23 19:15:44', '2026-06-23 22:17:00', '2026-06-09 21:25:08', '2026-06-23 22:17:00', NULL, NULL, 1, 3, NULL),
+(9, 4, 5, 'SK/9/06/2026', 'tes', '1782224182_a-playful-rounded-wordmark-featuring-any_rsID7c4NVVOy4GpbLqQLhQ__8VbQRt2S1C1iiMMDb92sA-removebg-preview.png', 1, 'selesai', '', 1, 3, '2026-06-23 22:16:22', '2026-06-23 22:17:29', '2026-06-23 22:17:55', '2026-06-23 22:16:22', '2026-06-23 22:17:55', NULL, NULL, 1, 3, NULL);
 
 -- --------------------------------------------------------
 
@@ -343,7 +380,7 @@ CREATE TABLE `petugas` (
 
 INSERT INTO `petugas` (`id_petugas`, `nama_petugas`, `jabatan`, `ttd`, `status_aktif`, `created_at`, `updated_at`) VALUES
 (1, 'admin', 'Petugas', NULL, 1, '2026-05-20 00:48:37', NULL),
-(3, 'MULYONO', 'Kepala Desa', '1779668930_2cffa9e5.png', 1, '2026-05-20 00:49:42', '2026-05-25 08:29:48');
+(3, 'Mulyono, M.IP', 'Kepala Desa', '1782263600_f033cb43.png', 1, '2026-05-20 00:49:42', '2026-06-24 09:13:20');
 
 -- --------------------------------------------------------
 
@@ -368,7 +405,8 @@ CREATE TABLE `program_bantuan` (
 --
 
 INSERT INTO `program_bantuan` (`id_program`, `nama_program`, `sumber_dana`, `periode`, `total_anggaran`, `kuota_penerima`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'MBG', 'APBN', '2026', '1900000000.00', 3000, 'direncanakan', '2026-05-20 01:38:11', '2026-05-20 01:38:11');
+(1, 'MBG', 'APBN', '2026', '1900000000.00', 3000, 'direncanakan', '2026-05-20 01:38:11', '2026-06-23 21:10:44'),
+(4, 'KDMP', 'APBD', '2026', '1000000000.00', 1000, 'aktif', '2026-06-23 21:42:54', '2026-06-23 21:42:54');
 
 -- --------------------------------------------------------
 
@@ -384,6 +422,24 @@ CREATE TABLE `sub_kriteria` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `sub_kriteria`
+--
+
+INSERT INTO `sub_kriteria` (`id_sub_kriteria`, `id_kriteria`, `label`, `nilai`, `created_at`, `updated_at`) VALUES
+(25, 2, '500000', 5, '2026-06-23 12:29:23', '2026-06-23 12:29:23'),
+(26, 2, '1500000', 4, '2026-06-23 12:29:30', '2026-06-23 12:29:30'),
+(27, 2, '2500000', 3, '2026-06-23 12:29:35', '2026-06-23 12:29:35'),
+(28, 3, '5', 5, '2026-06-23 12:29:43', '2026-06-23 12:29:43'),
+(29, 3, '4', 4, '2026-06-23 12:29:48', '2026-06-23 12:29:48'),
+(30, 4, 'SANGAT TIDAK LAYAK', 5, '2026-06-23 12:30:00', '2026-06-23 12:30:00'),
+(31, 4, 'TIDAK LAYAK', 4, '2026-06-23 12:30:07', '2026-06-23 12:30:07'),
+(32, 4, 'LAYAK', 3, '2026-06-23 12:30:16', '2026-06-23 12:30:16'),
+(33, 5, '3', 1, '2026-06-23 12:30:27', '2026-06-23 12:30:27'),
+(34, 5, '2', 2, '2026-06-23 12:30:32', '2026-06-23 12:30:32'),
+(35, 5, '1', 3, '2026-06-23 12:30:40', '2026-06-23 12:30:40'),
+(36, 3, '3', 3, '2026-06-23 13:46:39', '2026-06-23 13:46:39');
 
 -- --------------------------------------------------------
 
@@ -409,12 +465,13 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id_user`, `nik`, `password`, `level`, `status_aktif`, `created_at`, `updated_at`, `email`, `no_hp`) VALUES
 (1, 'admin', '$2y$10$bnwW3TJtYEC1dCRKNU.QQO0BU3OU6rh/cBjkoszJY5ReDAoQc2uoe', 'petugas', 1, '2026-05-19 21:26:10', NULL, NULL, NULL),
-(2, 'warga', '$2y$10$p403zowaJPWmSiz0EVdrte8LDsOoSBmWlzbF0rAZ83m2Zk8zhiyWu', 'masyarakat', 1, '2026-05-19 21:26:10', NULL, NULL, NULL),
 (3, 'kades', '$2y$10$x.9jme.kAgf0964Yf81aieyCJvuDFwGrERw4rc8hC97ezyD5QFhuq', 'kades', 1, '2026-05-19 21:26:10', NULL, NULL, NULL),
 (4, '6203011308010004', '$2y$10$lCQ710x5gyCxj4mB2dEffOR6CfSk62qAN5tvztmTh7WK8oRW3SbTu', 'masyarakat', 1, '2026-05-20 01:07:24', NULL, 'aqsalbuana@gmail.com', '081904158932'),
 (5, '6303955901532154', '$2y$10$y.gYoW6.z.SIyDrgse9XieBqcwwl/56SQXOCmNgbS2ASDuErD1Mka', 'masyarakat', 1, '2026-05-21 12:40:39', NULL, 'eko.prasetyo@gmail.com', '080174074380'),
 (6, '6303055288657460', '$2y$10$E6gm29b5hodUK3R5Kr1v/uz/cglfo5DFR25f5vzAj73l.1nNmr0ie', 'masyarakat', 1, '2026-06-09 20:36:52', NULL, 'ahmad.fauzi@gmail.com', '080718445865'),
-(7, '6303494811140890', '$2y$10$YUyb4tcCIPEPoYoDA3pTnOqYU70YSc.sA/rjLaeRt8/TbjxVVGMO.', 'masyarakat', 1, '2026-06-09 20:38:55', NULL, 'budi.santoso@gmail.com', '080766262824');
+(7, '6303494811140890', '$2y$10$YUyb4tcCIPEPoYoDA3pTnOqYU70YSc.sA/rjLaeRt8/TbjxVVGMO.', 'masyarakat', 1, '2026-06-09 20:38:55', NULL, 'budi.santoso@gmail.com', '080766262824'),
+(8, '6303812331303263', '$2y$10$96p/bXuYOypLxqJ/7d7a2ey/.L5Zv6TsjoBEmOZPO1PhvAX951k5u', 'masyarakat', 1, '2026-06-23 21:12:46', NULL, 'dewi.lestari@gmail.com', '080810250768'),
+(9, '6303841787594997', '$2y$10$m.f4eMdOeBkYiLRb/olq4eUnm9IekblOqXNtVXpEFLWj3rtTt2FNy', 'masyarakat', 1, '2026-06-23 21:12:57', NULL, 'rina.wijaya@gmail.com', '080182762958');
 
 -- --------------------------------------------------------
 
@@ -446,12 +503,13 @@ CREATE TABLE `warga` (
 
 INSERT INTO `warga` (`id_warga`, `nik`, `nama_lengkap`, `tempat_lahir`, `tanggal_lahir`, `jenis_kelamin`, `alamat`, `rt_rw`, `pekerjaan`, `penghasilan`, `jumlah_tanggungan`, `kondisi_rumah`, `status_kawin`, `created_at`, `updated_at`) VALUES
 (1, 'admin', 'Administrator Sistem', NULL, NULL, NULL, 'Kantor Desa', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-19 21:26:10', NULL),
-(2, 'warga', 'Riswan', 'Astambul', '2004-01-01', 'L', 'Jl. Desa No. 1', NULL, 'PNS', '2500000.00', 0, NULL, NULL, '2026-05-19 21:26:10', NULL),
 (3, 'kades', 'Kepala Desa Astambul', NULL, NULL, NULL, 'Rumah Dinas Kades', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-19 21:26:10', NULL),
 (4, '6203011308010004', 'Aqsal Arya Buana', 'Banjarbaru', '2001-08-13', 'L', 'Jl. Indra Sari', '04', 'Tenaga Kontrak', '3400000.00', 1, 'kurang_layak', 'belum_kawin', '2026-05-20 01:07:23', NULL),
 (5, '6303955901532154', 'Eko Prasetyo', 'Banyuwangi', '1999-08-06', 'L', 'Jl. Melati No. 12, Astambul', NULL, 'Pedagang', '1500000.00', 1, NULL, NULL, '2026-05-21 12:40:39', NULL),
 (7, '6303055288657460', 'Ahmad Fauzi', 'Banjarbaru', '1991-05-26', 'L', 'RT 002 RW 001, Astambul', '01/05', 'Wiraswasta', '1500000.00', 3, 'layak', 'kawin', '2026-06-09 20:36:52', NULL),
-(8, '6303494811140890', 'Budi Santoso', 'Banjarbaru', '1990-01-14', 'L', 'Jl. Melati No. 12, Astambul', '03/02', 'Buruh', '500000.00', 1, 'tidak_layak', 'cerai', '2026-06-09 20:38:55', NULL);
+(8, '6303494811140890', 'Budi Santoso', 'Banjarbaru', '1990-01-14', 'L', 'Jl. Melati No. 12, Astambul', '03/02', 'Buruh', '500000.00', 1, 'tidak_layak', 'cerai', '2026-06-09 20:38:55', NULL),
+(9, '6303812331303263', 'Dewi Lestari', 'Banjarmasin', '1999-09-21', 'P', 'Kec. Astambul, Kab. Banjar', '04/06', 'Wiraswasta', '1000000.00', 2, 'kurang_layak', 'cerai', '2026-06-23 21:12:46', NULL),
+(10, '6303841787594997', 'Rina Wijaya', 'Banjarbaru', '1972-06-24', 'P', 'Kec. Astambul, Kab. Banjar', '02/03', 'PNS', '500000.00', 0, 'layak', 'kawin', '2026-06-23 21:12:57', NULL);
 
 --
 -- Indexes for dumped tables
@@ -600,13 +658,13 @@ ALTER TABLE `antrian_layanan`
 -- AUTO_INCREMENT for table `calon_penerima`
 --
 ALTER TABLE `calon_penerima`
-  MODIFY `id_calon` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_calon` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `hasil_saw_blt`
 --
 ALTER TABLE `hasil_saw_blt`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `hasil_seleksi_saw`
@@ -630,13 +688,13 @@ ALTER TABLE `jenis_surat`
 -- AUTO_INCREMENT for table `kriteria_bantuan`
 --
 ALTER TABLE `kriteria_bantuan`
-  MODIFY `id_kriteria` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_kriteria` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `nilai_kriteria_calon`
 --
 ALTER TABLE `nilai_kriteria_calon`
-  MODIFY `id_nilai` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_nilai` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `notifications`
@@ -648,7 +706,7 @@ ALTER TABLE `notifications`
 -- AUTO_INCREMENT for table `penetapan_bantuan`
 --
 ALTER TABLE `penetapan_bantuan`
-  MODIFY `id_penetapan` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_penetapan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `pengaduan`
@@ -660,7 +718,7 @@ ALTER TABLE `pengaduan`
 -- AUTO_INCREMENT for table `pengajuan_surat`
 --
 ALTER TABLE `pengajuan_surat`
-  MODIFY `id_pengajuan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_pengajuan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `petugas`
@@ -672,25 +730,25 @@ ALTER TABLE `petugas`
 -- AUTO_INCREMENT for table `program_bantuan`
 --
 ALTER TABLE `program_bantuan`
-  MODIFY `id_program` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_program` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `sub_kriteria`
 --
 ALTER TABLE `sub_kriteria`
-  MODIFY `id_sub_kriteria` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_sub_kriteria` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_user` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `warga`
 --
 ALTER TABLE `warga`
-  MODIFY `id_warga` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_warga` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables
