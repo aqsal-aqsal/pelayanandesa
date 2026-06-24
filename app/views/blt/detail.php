@@ -4,6 +4,7 @@
     <div>
         <h2 class="text-2xl font-bold text-gray-900">Hasil Seleksi SAW & Penyaluran Bantuan</h2>
         <p class="text-gray-600">Daftar peringkat calon penerima bantuan dan bukti penyerahan.</p>
+<<<<<<< HEAD
     </div>
     <div class="flex gap-3">
         <a href="<?= BASEURL; ?>/blt/laporan/<?= $data['id_program']; ?>" class="px-4 py-2 bg-amber-50 text-amber-600 rounded-lg text-sm font-bold hover:bg-amber-100 transition flex items-center">
@@ -13,6 +14,12 @@
             <i class="fas fa-arrow-left mr-2"></i> Kembali
         </a>
     </div>
+=======
+    </div>
+    <a href="<?= BASEURL; ?>/blt/admin" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200">
+        <i class="fas fa-arrow-left mr-2"></i> Kembali
+    </a>
+>>>>>>> 67058ad4b903e268d3f48fd0febf82d06fceac95
 </div>
 
 <div class="bg-white rounded-[32px] shadow-sm border border-gray-100 overflow-hidden mb-8">

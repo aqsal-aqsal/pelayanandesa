@@ -355,7 +355,11 @@ class BltModel {
     }
 
     public function getHasilSAW($id_program) {
+<<<<<<< HEAD
         $this->db->query('SELECT h.*, c.status, w.nama_lengkap, w.nik, pb.bukti_penyerahan, pb.status_penyaluran 
+=======
+        $this->db->query('SELECT h.*, w.nama_lengkap, w.nik, pb.bukti_penyerahan, pb.status_penyaluran 
+>>>>>>> 67058ad4b903e268d3f48fd0febf82d06fceac95
                           FROM hasil_saw_blt h 
                           JOIN calon_penerima c ON h.id_calon = c.id_calon 
                           JOIN warga w ON c.id_warga = w.id_warga 
@@ -493,8 +497,12 @@ class BltModel {
                     $normalized = ($val > 0) ? ($max_min[$k['id_kriteria']] / $val) : 0;
                 }
                 
+<<<<<<< HEAD
                 $bobot_ratio = $k['bobot'] / 100;
                 $weighted = $normalized * $bobot_ratio;
+=======
+                $weighted = $normalized * $k['bobot'];
+>>>>>>> 67058ad4b903e268d3f48fd0febf82d06fceac95
                 $total += $weighted;
                 
                 $item['kriteria'][] = [

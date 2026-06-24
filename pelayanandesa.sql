@@ -3,7 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
+<<<<<<< HEAD
 -- Generation Time: Jun 24, 2026 at 01:14 AM
+=======
+-- Generation Time: Jun 22, 2026 at 04:21 AM
+>>>>>>> 67058ad4b903e268d3f48fd0febf82d06fceac95
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -59,6 +63,7 @@ CREATE TABLE `calon_penerima` (
 --
 
 INSERT INTO `calon_penerima` (`id_calon`, `id_warga`, `id_program`, `tanggal_usulan`, `status`, `created_at`, `updated_at`) VALUES
+<<<<<<< HEAD
 (1, 4, 1, '2026-05-20', 'terpilih', '2026-05-20 01:38:22', '2026-06-23 21:13:59'),
 (3, 5, 1, '2026-05-26', 'terpilih', '2026-05-26 14:13:02', '2026-06-23 21:13:59'),
 (4, 8, 1, '2026-06-23', 'terpilih', '2026-06-23 19:25:26', '2026-06-23 21:13:59'),
@@ -66,6 +71,10 @@ INSERT INTO `calon_penerima` (`id_calon`, `id_warga`, `id_program`, `tanggal_usu
 (13, 9, 1, '2026-06-23', 'terpilih', '2026-06-23 21:13:32', '2026-06-23 21:13:59'),
 (14, 10, 4, '2026-06-23', 'terpilih', '2026-06-23 21:43:03', '2026-06-23 21:47:16'),
 (15, 9, 4, '2026-06-23', 'terpilih', '2026-06-23 21:43:09', '2026-06-23 21:47:16');
+=======
+(1, 4, 1, '2026-05-20', 'terpilih', '2026-05-20 01:38:22', '2026-06-19 14:17:40'),
+(3, 5, 1, '2026-05-26', 'terpilih', '2026-05-26 14:13:02', '2026-06-19 14:17:40');
+>>>>>>> 67058ad4b903e268d3f48fd0febf82d06fceac95
 
 -- --------------------------------------------------------
 
@@ -87,6 +96,7 @@ CREATE TABLE `hasil_saw_blt` (
 --
 
 INSERT INTO `hasil_saw_blt` (`id`, `id_program`, `id_calon`, `nilai_total`, `ranking`, `created_at`) VALUES
+<<<<<<< HEAD
 (53, 1, 1, '0.85000', 1, '2026-06-23 21:13:59'),
 (54, 1, 12, '0.77333', 2, '2026-06-23 21:13:59'),
 (55, 1, 13, '0.75333', 3, '2026-06-23 21:13:59'),
@@ -94,6 +104,10 @@ INSERT INTO `hasil_saw_blt` (`id`, `id_program`, `id_calon`, `nilai_total`, `ran
 (57, 1, 3, '0.20000', 5, '2026-06-23 21:13:59'),
 (60, 4, 14, '1.00000', 1, '2026-06-23 21:47:16'),
 (61, 4, 15, '0.75833', 2, '2026-06-23 21:47:16');
+=======
+(18, 1, 1, '0.90333', 1, '2026-06-19 14:17:40'),
+(19, 1, 3, '0.13667', 2, '2026-06-19 14:17:40');
+>>>>>>> 67058ad4b903e268d3f48fd0febf82d06fceac95
 
 -- --------------------------------------------------------
 
@@ -664,7 +678,11 @@ ALTER TABLE `calon_penerima`
 -- AUTO_INCREMENT for table `hasil_saw_blt`
 --
 ALTER TABLE `hasil_saw_blt`
+<<<<<<< HEAD
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+=======
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+>>>>>>> 67058ad4b903e268d3f48fd0febf82d06fceac95
 
 --
 -- AUTO_INCREMENT for table `hasil_seleksi_saw`

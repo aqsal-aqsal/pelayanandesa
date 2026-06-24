@@ -316,8 +316,19 @@ class Blt extends Controller {
                     continue;
                 }
 
+<<<<<<< HEAD
                 $id_calon = $bltModel->addCalonPenerima($id_program, $id_warga);
                 if ($id_calon) {
+=======
+                if ($bltModel->addCalonPenerima($id_program, $id_warga)) {
+                    // Get the new calon id
+                    $this->db->query('SELECT id_calon FROM calon_penerima WHERE id_warga = :id_warga AND id_program = :id_program ORDER BY id_calon DESC LIMIT 1');
+                    $this->db->bind('id_warga', $id_warga);
+                    $this->db->bind('id_program', $id_program);
+                    $calon = $this->db->single();
+                    $id_calon = $calon['id_calon'];
+                    
+>>>>>>> 67058ad4b903e268d3f48fd0febf82d06fceac95
                     // Auto-fill nilai kriteria
                     $kriteria = $bltModel->getKriteria();
                     foreach ($kriteria as $k) {
@@ -376,7 +387,13 @@ class Blt extends Controller {
         $bltModel = $this->model('BltModel');
         
         // Get calon and warga data
+<<<<<<< HEAD
         $calon = $bltModel->getCalonById($id_calon);
+=======
+        $this->db->query('SELECT c.*, w.* FROM calon_penerima c JOIN warga w ON c.id_warga = w.id_warga WHERE c.id_calon = :id_calon');
+        $this->db->bind('id_calon', $id_calon);
+        $calon = $this->db->single();
+>>>>>>> 67058ad4b903e268d3f48fd0febf82d06fceac95
         
         if (!$calon) {
             $_SESSION['flash'] = ['type' => 'error', 'message' => 'Calon tidak ditemukan!'];
